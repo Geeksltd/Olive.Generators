@@ -3,6 +3,7 @@ using Olive;
 using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace OliveGenerator
 {
@@ -32,13 +33,17 @@ namespace OliveGenerator
         static void CreateOutput()
         {
             var file = Path.Combine(Context.BasePath.FullName, Context.FileName).AsFile();
-            var report = Context.Packages.OrderBy(x => x.Package).Select(x => new { x.Package, x.Version }).ToArray();
+            var nugetPackages = new XElement("packages");
+            Context.Packages.OrderBy(x => x.Package)
+                            .Select(x => new XElement("package", new XAttribute("id", x.Package), new XAttribute("version", x.Version)))
+                            .Do(x => nugetPackages.Add(x));
 
-            var json = JsonConvert.SerializeObject(report, Formatting.Indented);
-            file.WriteAllText(json);
+            file.WriteAllText(nugetPackages.ToString());
 
             Console.WriteLine($"Generating Output file \"{Context.FileName}\"  at \"{Context.BasePath.FullName}\"");
             Console.WriteLine();
         }
+
+
     }
 }
