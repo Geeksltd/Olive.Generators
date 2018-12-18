@@ -11,7 +11,7 @@ namespace OliveGenerator
 {
     class Context
     {
-        public static string PublisherService, EndpointName, NugetServer, NugetApiKey;
+        public static string EndpointName, NugetServer, NugetApiKey;
         public static FileInfo AssemblyFile;
         public static DirectoryInfo TempPath, Output, Source;
         public static Assembly AssemblyObject;
@@ -70,7 +70,7 @@ namespace OliveGenerator
                 AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndpointName) ??
                 throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndpointName}.");
 
-            EndpointName = EndpointType.FullName; // Ensure it has full namespace             
+            EndpointName = EndpointType.FullName; // Ensure it has full namespace 
         }
 
         internal static void FindExposedTypes()
