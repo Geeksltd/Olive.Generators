@@ -18,7 +18,7 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-    <PackageVersion>1.0.109</PackageVersion>
+    <PackageVersion>1.0.110</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.4.4" />
