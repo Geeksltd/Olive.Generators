@@ -15,7 +15,6 @@ namespace OliveGenerator
                 ParametersParser.LoadParameters();
 
                 Console.WriteLine("Generating Data Endpoint from...");
-                Console.WriteLine("Publisher service: " + Context.PublisherService);
                 Console.WriteLine("Assembly: " + Context.AssemblyFile);
                 Console.WriteLine("Endpoint: " + Context.EndpointName);
                 Console.WriteLine("Temp folder: " + Context.TempPath);
