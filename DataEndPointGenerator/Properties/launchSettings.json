@@ -1,7 +1,7 @@
 {
   "profiles": {
     "WebApiClientSdkGenerator": {
-      "commandName": "Project"      
+      "commandName": "Project"
     }
   }
 }
