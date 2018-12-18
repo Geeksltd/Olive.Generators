@@ -7,7 +7,7 @@
     <AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
     <RootNamespace>Olive</RootNamespace>
     <PackageId>generate-data-endpoint-proxy</PackageId>
-    <Version>1.0.109</Version>
+    <Version>1.0.111</Version>
     <Title>Olive Data Endpoint Proxy Generator</Title>
     <Authors>Geeks Ltd</Authors>
     <PackageProjectUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageProjectUrl>
