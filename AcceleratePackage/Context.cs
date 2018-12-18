@@ -14,6 +14,7 @@ namespace OliveGenerator
         public static DirectoryInfo BasePath;
         public static List<FileInfo> ProjectFiles = new List<FileInfo>();
         public static List<NugetPackage> Packages = new List<NugetPackage>();
+        public static bool Parallel;
         public static Command Command = Command.Restore;
 
         internal static string Run(string command)

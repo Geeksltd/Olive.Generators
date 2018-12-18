@@ -54,7 +54,6 @@ namespace OliveGenerator
             Console.WriteLine();
         }
 
-
         static void CreateTempDirectory()
         {
             TempProjectPath = Path.Combine(Path.GetTempPath(), $@"AcceleratePackage\" + Guid.NewGuid());
@@ -77,15 +76,21 @@ namespace OliveGenerator
             Console.WriteLine($"Adding Packges to the Project : {TempProjectName}");
             Environment.CurrentDirectory = Path.Combine(TempProjectPath, TempProjectName);
 
-            var addTasks = Context.Packages.Select(item =>
-              Task.Factory.StartNew(() =>
-              {
-                  Context.Run("dotnet add package " + item.Package);
-                  Console.WriteLine("Added nuget reference " + item.Package + "...");
-              })
-            );
+            void add(NugetPackage item)
+            {
+                Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
+                Console.WriteLine("Added nuget reference " + item.Package + " > " + item.Version + "...");
+            }
 
-            Task.Factory.RunSync(() => Task.WhenAll(addTasks));
+            if (Context.Parallel)
+            {
+                var addTasks = Context.Packages.Select(item => Task.Factory.StartNew(() => add(item)));
+                Task.Factory.RunSync(() => Task.WhenAll(addTasks));
+            }
+            else
+            {
+                Context.Packages.Do(x => add(x));
+            }
 
             Console.WriteLine();
         }
