@@ -7,7 +7,6 @@
     <AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
     <RootNamespace>Olive</RootNamespace>
     <PackageId>generate-data-endpoint-proxy</PackageId>
-    <Version>1.0.111</Version>
     <Title>Olive Data Endpoint Proxy Generator</Title>
     <Authors>Geeks Ltd</Authors>
     <PackageProjectUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageProjectUrl>
@@ -18,7 +17,7 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-    <PackageVersion>1.0.110</PackageVersion>
+    <PackageVersion>1.0.114</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.4.4" />
