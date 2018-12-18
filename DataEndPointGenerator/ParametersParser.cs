@@ -12,7 +12,7 @@ namespace OliveGenerator
         internal static bool Start(string[] args)
         {
             Args = args;
-
+            Context.Source = Environment.CurrentDirectory.AsDirectory();
 
             if (Param("assembly").IsEmpty() || Param("dataEndpoint").IsEmpty())
             {
