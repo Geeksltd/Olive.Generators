@@ -13,13 +13,6 @@ namespace OliveGenerator
         {
             Args = args;
 
-            Args = args = new string[4];
-            args[0] = @"/assembly:C:\Projects\Geeks.MS\People\Website\bin\Debug\netcoreapp2.1\website.dll";
-            args[1] = @"/dataEndpoint:RepositoriesEndpoint";
-            args[2] = @"/out:C:\Temp\PrivatePackagesEndPoint";
-            args[2] = @"/push:http://nuget.geeksms.uat.co/nuget";
-            args[3] = "/apiKey:thisIsMyApiKey";
-            Context.Source = @"C:\Projects\Geeks.MS\People\Website\Api\DataReplication".AsDirectory();
 
             if (Param("assembly").IsEmpty() || Param("dataEndpoint").IsEmpty())
             {
