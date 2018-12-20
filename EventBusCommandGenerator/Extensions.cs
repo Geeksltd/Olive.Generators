@@ -17,6 +17,7 @@ namespace OliveGenerator
         {
             return type.GetPropertiesAndFields(BindingFlags.Public | BindingFlags.Instance)
                  .Except(x => x.Name == "ID" && x.GetPropertyOrFieldType() == typeof(Guid))
+                 .Except(x => x.Name == "DeduplicationId")
                  .ToArray();
         }
     }

@@ -27,4 +27,5 @@
     <PackageReference Include="Olive.Entities" Version="2.1.102" />
     <PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.103" />
   </ItemGroup>
+  <Import Project="..\SharedProject1\SharedProject1.projitems" Label="Shared" />
 </Project>
