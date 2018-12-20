@@ -15,7 +15,7 @@ namespace OliveGenerator
             => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.DataEndpointGenerator/EndpointIcon.png";
 
         protected override string[] References
-            => new[] { "Olive", "Olive.EventBus" };
+            => new[] { "Olive", "Olive.Entities", "Olive.EventBus" };
 
         protected override void AddFiles()
         {
@@ -38,6 +38,7 @@ namespace OliveGenerator
             return new[]
             {
                 "Olive",
+                "Olive.Entities",
                 "Olive.EventBus"
             };
         }

@@ -1,7 +1,5 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OliveGenerator
 {
@@ -14,9 +12,9 @@ namespace OliveGenerator
             {
                 ParametersParser.LoadParameters();
 
-                Console.WriteLine("Generating Data Endpoint from...");
+                Console.WriteLine("Generating Event Bus Command from...");
                 Console.WriteLine("Assembly: " + Context.AssemblyFile);
-                Console.WriteLine("Endpoint: " + Context.CommandName);
+                Console.WriteLine("Command: " + Context.CommandName);
                 Console.WriteLine("Temp folder: " + Context.TempPath);
 
                 Context.LoadAssembly();

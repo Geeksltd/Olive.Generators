@@ -60,8 +60,6 @@ namespace OliveGenerator
 
             internal void Attach(LinkedListNode<CodeLine> node) => Node = node;
 
-
-
             CodeLine Previous => Node.Previous?.Value;
             CodeLine Next => Node.Next?.Value;
 

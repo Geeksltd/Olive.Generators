@@ -34,7 +34,7 @@ namespace OliveGenerator
             Param("assembly", @"File name of the assembly containing the command. Usually it's the path to the 'Website.dll'.");
             Console.WriteLine();
 
-            Param("command", @"The name of the command class. If there are multiple classes with the same name, provide the full name with namespace.");
+            Param("command", @"The name of the event bus command class. If there are multiple classes with the same name, provide the full name with namespace.");
             Console.WriteLine();
 
             Param("out", @"The full path to a directory to publish the generated nuget packages. e.g. C:\Projects\my-solution\PrivatePackages");

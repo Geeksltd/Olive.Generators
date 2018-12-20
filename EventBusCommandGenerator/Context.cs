@@ -17,7 +17,6 @@ namespace OliveGenerator
         public static Type CommandType;
         public static List<FieldInfo> CommandFields = new List<FieldInfo>();
 
-
         internal static void PrepareOutputDirectory()
         {
             if (!TempPath.Exists)
@@ -71,10 +70,6 @@ namespace OliveGenerator
                 throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {CommandName}.");
 
             CommandName = CommandType.FullName; // Ensure it has full namespace 
-
-            CommandFields = CommandType.GetFields().ToList();
         }
-
-
     }
 }
