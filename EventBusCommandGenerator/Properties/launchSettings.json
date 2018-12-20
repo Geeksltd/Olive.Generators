@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Olive.EventBusCommandGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "/assembly:C:\\Projects\\Geeks.MS\\People\\Website\\bin\\Debug\\netcoreapp2.1\\website.dll /command:FooCommand /out:C:\\Projects\\Geeks.MS\\People\\PrivatePackages"
+    }
+  }
+}

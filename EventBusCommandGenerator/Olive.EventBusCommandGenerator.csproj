@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MSharpModelProgrammer.cs" />
+    <Compile Remove="Project\MSharp46ProjectCreator.cs" />
+    <Compile Remove="Project\MSharpProjectCreator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Olive" Version="2.1.151" />
+    <PackageReference Include="Olive.EventBus" Version="2.1.106" />
+  </ItemGroup>
+
+</Project>
