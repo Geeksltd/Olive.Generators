@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -17,7 +17,4 @@
     <PackageReference Include="Olive.Entities.Data" Version="2.1.102" />
     <PackageReference Include="Olive.EventBus" Version="2.1.106" />
   </ItemGroup>
-
-  <Import Project="..\SharedProject1\SharedProject1.projitems" Label="Shared" />
-
 </Project>
