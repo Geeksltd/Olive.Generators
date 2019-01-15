@@ -2,6 +2,7 @@
 using Olive.Entities;
 using Olive.Entities.Replication;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -44,6 +45,7 @@ namespace OliveGenerator
         string AddProperty(ExposedField item)
         {
             var extraArgs = "";
+            var maxLength = 0;
             var type = item.GetPropertyType();
             var name = item.GetName();
             if (type.IsArray) type = type.GetElementType();
@@ -72,6 +74,7 @@ namespace OliveGenerator
                 case "Boolean": method = "Bool"; break;
                 case "Int32": method = "Int"; break;
                 case "Int64": method = "Decimal"; break;
+                case "String": maxLength = GetStringLength(item); if (maxLength == 0) method = "BigString"; break;
                 default: break;
             }
 
@@ -85,7 +88,16 @@ namespace OliveGenerator
                 result += ".Mandatory()";
             }
 
+            if (maxLength > 0)
+                result += $".Max({maxLength})";
+
             return result + ";";
+        }
+
+        int GetStringLength(ExposedField item)
+        {
+            var lengthAttribute = (item as ExposedPropertyInfo)?.Property?.GetCustomAttributes(typeof(StringLengthAttribute), true).FirstOrDefault();
+            return lengthAttribute != null ? ((StringLengthAttribute)lengthAttribute).MaximumLength : 0;
         }
     }
 }
