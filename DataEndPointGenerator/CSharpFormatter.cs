@@ -55,7 +55,7 @@ namespace OliveGenerator
             public CodeLine(string code)
             {
                 CodeWithAnnotation = code;
-                Code = code.TrimAfter("END_H____").Trim().TrimBefore("___END_SH_", trimPhrase: true).Trim();
+                Code = code.RemoveFrom("END_H____").Trim().RemoveBeforeAndIncluding("___END_SH_").Trim();
             }
 
             internal void Attach(LinkedListNode<CodeLine> node) => Node = node;

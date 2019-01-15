@@ -44,7 +44,7 @@ namespace OliveGenerator
             foreach (var type in DtoTypes.Enums)
             {
                 var file = Folder.GetFile("Enums.cs");
-                file.AppendLine("public enum " + type.Name.TrimBefore("+", trimPhrase: true));
+                file.AppendLine("public enum " + type.Name.RemoveBeforeAndIncluding("+"));
                 file.AppendLine("{");
                 file.AppendLine(Enum.GetNames(type).ToString(",\r\n"));
                 file.AppendLine("}\r\n");

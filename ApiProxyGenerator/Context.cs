@@ -50,7 +50,7 @@ namespace OliveGenerator
 
             if (result.StartsWith("Could not ")) throw new Exception(result);
 
-            if (result.Contains("Build FAILED")) throw new Exception(result.TrimBefore("Build FAILED"));
+            if (result.Contains("Build FAILED")) throw new Exception(result.RemoveBefore("Build FAILED"));
 
             return result;
         }
