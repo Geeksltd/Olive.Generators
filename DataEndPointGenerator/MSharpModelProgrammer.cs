@@ -32,6 +32,12 @@ namespace OliveGenerator
             r.AppendLine($"Schema(\"{Type.Namespace}\").IsRemoteCopy();");
             r.AppendLine();
 
+            if (ExposedType.IsSoftDeleteEnabled)
+            {
+                r.AppendLine("SoftDelete();");
+                r.AppendLine();
+            }
+
             foreach (var item in ExposedType.Fields)
                 r.AppendLine(AddProperty(item));
 
