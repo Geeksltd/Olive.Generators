@@ -102,7 +102,7 @@ namespace OliveGenerator
                     .SkipWhile(x => !x.StartsWith("\"Microservice\":"))
                     .SkipWhile(x => !x.StartsWith("\"Me\":"))
                     .FirstOrDefault(x => x.StartsWith("\"Name\":"))
-                    ?.TrimBefore(":", trimPhrase: true).TrimEnd(",").Trim(' ', '\"');
+                    ?.RemoveBeforeAndIncluding(":").TrimEnd(",").Trim(' ', '\"');
 
             if (value.IsEmpty())
                 throw new Exception("Failed to find Microservice:Me:Name in " + appSettings.FullName);

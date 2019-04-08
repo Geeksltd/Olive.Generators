@@ -83,7 +83,7 @@ namespace OliveGenerator
             Console.WriteLine("Press Enter to continue");
             Console.ReadLine();
 
-            return $"\"{Type.Name.TrimBefore("+", trimPhrase: true)}: No good ToString() :(\"";
+            return $"\"{Type.Name.RemoveBeforeAndIncluding("+")}: No good ToString() :(\"";
         }
 
         MemberInfo SelectDefaultToStringField()
