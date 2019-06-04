@@ -7,7 +7,7 @@
     <AssemblyName>Olive.ApiProxyGenerator</AssemblyName>
     <RootNamespace>Olive</RootNamespace>
     <PackageId>generate-api-proxy</PackageId>
-    <Version>2.0.106</Version>
+    <Version>2.0.107</Version>
     <Title>Olive Api Proxy Generator</Title>
     <Authors>Geeks Ltd</Authors>
     <PackageProjectUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageProjectUrl>
@@ -18,7 +18,7 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-api-proxy</ToolCommandName>
-    <PackageVersion>2.0.107</PackageVersion>
+    <PackageVersion>2.0.108</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.0" />
