@@ -19,6 +19,6 @@
     <PackageVersion>1.0.113</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Olive" Version="2.1.161" />
+    <PackageReference Include="Olive" Version="2.1.163" />
   </ItemGroup>
 </Project>

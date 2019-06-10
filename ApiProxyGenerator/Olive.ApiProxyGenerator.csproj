@@ -24,7 +24,7 @@
     <PackageReference Include="GCop.All.Geeks" Version="2.6.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="olive" Version="2.1.161" />
+    <PackageReference Include="olive" Version="2.1.163" />
   </ItemGroup>
   <Import Project="..\..\Shared\Shared.projitems" Label="Shared" />
 </Project>

@@ -26,9 +26,9 @@
     <Compile Remove="Project\MSharpProjectCreator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Olive" Version="2.1.161" />
-    <PackageReference Include="Olive.Entities" Version="2.1.119" />
-    <PackageReference Include="Olive.Entities.Data" Version="2.1.128" />
+    <PackageReference Include="Olive" Version="2.1.163" />
+    <PackageReference Include="Olive.Entities" Version="2.1.122" />
+    <PackageReference Include="Olive.Entities.Data" Version="2.1.131" />
     <PackageReference Include="Olive.EventBus" Version="2.1.109" />
   </ItemGroup>
 </Project>
