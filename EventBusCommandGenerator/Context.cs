@@ -1,5 +1,6 @@
 ﻿using Olive;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,12 +10,12 @@ namespace OliveGenerator
 {
     class Context
     {
-        public static string PublisherService, ControllerName, NugetServer, NugetApiKey;
+        public static string CommandName, NugetServer, NugetApiKey;
         public static FileInfo AssemblyFile;
         public static DirectoryInfo TempPath, Output, Source;
-        public static Assembly Assembly;
-        public static Type ControllerType;
-        public static MethodGenerator[] ActionMethods;
+        public static Assembly AssemblyObject;
+        public static Type CommandType;
+        public static List<FieldInfo> CommandFields = new List<FieldInfo>();
 
         internal static void PrepareOutputDirectory()
         {
@@ -50,30 +51,25 @@ namespace OliveGenerator
 
             if (result.StartsWith("Could not ")) throw new Exception(result);
 
-            if (result.Contains("Build FAILED")) throw new Exception(result.RemoveBefore("Build FAILED"));
+            if (result.Contains("Build FAILED"))
+            {
+                Console.WriteLine("Compile " + command + " manually...");
+                Console.ReadLine();
+                // throw new Exception(result.TrimBefore("Build FAILED"));
+            }
 
             return result;
         }
 
         internal static void LoadAssembly()
         {
-            Assembly = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
-            ControllerType = Assembly.GetType(ControllerName);
+            AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
-            if (ControllerType == null) // Maybe no namespace?
-            {
-                ControllerType = Assembly.GetTypes().FirstOrDefault(x => x.Name == ControllerName)
-                  ?? throw new Exception(ControllerName + " was not found.");
-            }
+            CommandType = AssemblyObject.GetType(CommandName) ??
+                AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == CommandName && x.BaseType == typeof(EventBusCommandMessage)) ??
+                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {CommandName}.");
 
-            ControllerName = ControllerType.FullName; // Ensure it has full namespace
-
-            ActionMethods = ControllerType
-                .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
-                .Select(x => new MethodGenerator(x))
-                .ToArray();
-
-            if (ActionMethods.Length == 0) throw new Exception("This controller has no action method.");
+            CommandName = CommandType.FullName; // Ensure it has full namespace 
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Olive;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -57,7 +57,7 @@ namespace OliveGenerator
             public CodeLine(string code)
             {
                 CodeWithAnnotation = code;
-                Code = code.TrimAfter("END_H____").Trim().TrimBefore("___END_SH_", trimPhrase: true).Trim();
+                Code = code.RemoveFrom("END_H____").Trim().RemoveBeforeAndIncluding("___END_SH_").Trim();
             }
 
             CodeLine Previous => Node.Previous?.Value;
