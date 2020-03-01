@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <StartupObject>OliveGenerator.Program</StartupObject>
     <AssemblyName>Olive.ApiProxyGenerator</AssemblyName>
     <RootNamespace>Olive</RootNamespace>
@@ -19,6 +19,8 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-api-proxy</ToolCommandName>
     <PackageVersion>2.0.108</PackageVersion>
+    <AssemblyVersion>2.0.109.0</AssemblyVersion>
+    <FileVersion>2.0.109.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.1" />
