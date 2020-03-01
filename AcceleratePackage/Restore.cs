@@ -5,14 +5,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace OliveGenerator
 {
     internal class Restore
     {
-        static FileInfo NugetConfigFile;
-        static DirectoryInfo TempWorkingDir;
+        static string TempProjectPath, TempProjectName;
 
         internal static void Start()
         {
@@ -23,10 +21,12 @@ namespace OliveGenerator
             Console.ResetColor();
 
             ParsePackages();
-            CreateTempNugetConfig();
-            RestorePackages();
+            CreateTempDirectory();
+            CreateTempProject();
+            AddPackages();
 
-            TempWorkingDir.Delete(recursive: true);
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            TempProjectPath.AsDirectory().Delete(recursive: true);
         }
 
         static void ParsePackages()
@@ -54,26 +54,45 @@ namespace OliveGenerator
             Console.WriteLine();
         }
 
-        static void CreateTempNugetConfig()
+        static void CreateTempDirectory()
         {
-            TempWorkingDir = Path.GetTempPath().AsDirectory().CreateSubdirectory($@"AcceleratePackage\" + Guid.NewGuid());
-            NugetConfigFile = TempWorkingDir.GetFile("packages.config");
-            var nugetPackages = new XElement("packages");
-            Context.Packages.OrderBy(x => x.Package)
-                            .Select(x => new XElement("package", new XAttribute("id", x.Package), new XAttribute("version", x.Version)))
-                            .Do(x => nugetPackages.Add(x));
-
-            NugetConfigFile.WriteAllText(nugetPackages.ToString());
-
-            Console.WriteLine($"Created Temp nuget package file in {NugetConfigFile.FullName}");
+            TempProjectPath = Path.Combine(Path.GetTempPath(), $@"AcceleratePackage\" + Guid.NewGuid());
+            Directory.CreateDirectory(TempProjectPath);
+            Console.WriteLine($"Created Temp Directory in {TempProjectPath}");
             Console.WriteLine();
         }
 
-
-        static void RestorePackages()
+        static void CreateTempProject()
         {
-            Environment.CurrentDirectory = TempWorkingDir.FullName;
-            Context.Run("nuget restore -PackagesDirectory \"%userprofile%\\.nuget\\packages\"");
+            TempProjectName = Guid.NewGuid().ToString();
+            Environment.CurrentDirectory = TempProjectPath;
+            Context.Run($@"dotnet new console -n {TempProjectName} -lang C# ");
+            Console.WriteLine($"Created Temp Project with name \"{TempProjectName}\" in \"{TempProjectPath}\"");
+            Console.WriteLine();
+        }
+
+        static void AddPackages()
+        {
+            Console.WriteLine($"Adding Packges to the Project : {TempProjectName}");
+            Environment.CurrentDirectory = Path.Combine(TempProjectPath, TempProjectName);
+
+            void add(NugetPackage item)
+            {
+                Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
+                Console.WriteLine("Added nuget reference " + item.Package + " > " + item.Version + "...");
+            }
+
+            if (Context.Parallel)
+            {
+                var addTasks = Context.Packages.Select(item => Task.Factory.StartNew(() => add(item)));
+                Task.Factory.RunSync(() => Task.WhenAll(addTasks));
+            }
+            else
+            {
+                Context.Packages.Do(x => add(x));
+            }
+
+            Console.WriteLine();
         }
     }
 }

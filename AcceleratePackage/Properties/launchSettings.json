@@ -1,9 +1,7 @@
 {
   "profiles": {
     "Olive.AcceleratePackage": {
-      "commandName": "Project",
-      "commandLineArgs": "extract --out packages.config",
-      "workingDirectory": "D:\\Temp\\Hub\\hub"
+      "commandName": "Project"
     }
   }
 }
