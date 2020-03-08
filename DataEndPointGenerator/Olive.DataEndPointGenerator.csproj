@@ -17,8 +17,8 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-    <PackageVersion>1.0.122</PackageVersion>
-    <Version>2.1.100</Version>
+    <PackageVersion>1.1.123</PackageVersion>
+    <Version>1.1.123</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.1" />
@@ -30,4 +30,5 @@
     <PackageReference Include="Olive.Entities" Version="2.1.137" />
     <PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.141" />
   </ItemGroup>
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>
