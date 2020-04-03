@@ -1,7 +1,9 @@
 {
   "profiles": {
     "WebApiClientSdkGenerator": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:ProspectsEndpoint /out:\"c:\\temp\\generated-packages\"",
+      "workingDirectory": "C:\\Projects\\Geeks.MS\\People\\Website\\bin\\Debug\\netcoreapp2.1"
     }
   }
 }

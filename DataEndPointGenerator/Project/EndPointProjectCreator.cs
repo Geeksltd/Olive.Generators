@@ -22,9 +22,6 @@ namespace OliveGenerator
             Console.Write("Adding the endpoint class...");
             Folder.GetFile($"{Context.EndpointName}.cs").WriteAllText(EndpointClassProgrammer.Generate());
             Console.WriteLine("Done");
-            // Console.Write("Adding the endpoint class mock configuration...");
-            // MockFolder.GetFile($"{Context.ControllerName}.Mock.cs").WriteAllText(EndPointClassProgrammer.GenerateMock());
-            Console.WriteLine("Done");
             Console.Write("Adding ReamMe.txt file ...");
             Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
             Console.WriteLine("Done");
