@@ -7,6 +7,7 @@ namespace OliveGenerator
     internal class ReadmeFileGenerator
     {
         static string QueueName => Context.EndpointName.Replace(".", "-");
+        static string ConsumerName => QueueName.TrimEnd("Endpoint").Split('-').Trim().Last();
 
         internal static string Generate()
         {
@@ -67,10 +68,11 @@ namespace OliveGenerator
 
             r.AppendLine("STEP 4: CREATE QUEUES");
             r.AppendLine("===================================================================");
-            r.AppendLine($"If using AWS, create one SQS queue named '{QueueName}.fifo' and another named '{QueueName}-REFRESH.fifo'.");
-            r.AppendLine("Take a note of the Queue Url and ARNs.");
+            r.AppendLine("If using AWS, create the following SQS queues, and take a note of their URLs and ARNs:");
+            r.AppendLine($"    * {QueueName}.fifo");
+            r.AppendLine($"    * {QueueName}-REFRESH.fifo");
             r.AppendLine();
-            r.AppendLine($"To secure the queues, create a new IAM policy named 'SQS--{QueueName}' with the following Json (replace the correct ARNs):");
+            r.AppendLine($"Find (or create if you don't have one already) the IAM policy named 'SQS--{ConsumerName}Service' with the following Json (replace the correct ARNs):");
             r.AppendLine();
             r.AppendLine($@"{{
     ""Version"": ""2012-10-17"",
@@ -87,28 +89,27 @@ namespace OliveGenerator
                 ""sqs:DeleteMessageBatch""
             ],
             ""Resource"": [
-                ""arn:aws:sqs:..............:{QueueName}-REFRESH.fifo"",
-                ""arn:aws:sqs:..............:{QueueName}.fifo""
+                ""arn:aws:sqs:..............:{QueueName}*.fifo""
             ]
         }}
     ]
 }}
-
 ");
-            r.AppendLine("Click on the newly created policy, and go under Policy Usage, and attach it to the runtime roles of both services.");
-            r.AppendLine();
+            r.AppendLine($"Click on the newly created policy, and go under 'Policy Usage' and attach it to '{ConsumerName}Runtime'.");
             r.AppendLine();
             r.AppendLine();
 
             r.AppendLine("STEP 5: UPDATE APP SETTINGS");
             r.AppendLine("===================================================================");
-            r.AppendLine("In appSettings.json file of both services, add the following. (Note: the url of the REFRESH queue will be inferred by Olive automatically).");
+            r.AppendLine("In appSettings.json file of both services, add the following.");
+            r.AppendLine("Don't worry about the REFRESH queue. Its URL will be inferred by Olive automatically.");
             r.AppendLine();
             r.AppendLine("\"DataReplication\": {");
             r.AppendLine($"    \"{Context.EndpointName}\": {{");
             r.AppendLine($"        \"Url\": \"https://....{QueueName}.fifo\"");
             r.AppendLine("     }");
             r.AppendLine("}");
+
 
             return r.ToString();
         }

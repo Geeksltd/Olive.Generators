@@ -64,6 +64,7 @@ namespace OliveGenerator
 
         internal static void LoadAssembly()
         {
+            AppDomain.CurrentDomain.ResolveAssemblies();
             AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
             EndpointType = AssemblyObject.GetType(EndpointName) ??

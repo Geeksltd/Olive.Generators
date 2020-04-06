@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace OliveGenerator
 {
-    class Program
+    partial class Program
     {
         static int Main(string[] args)
         {

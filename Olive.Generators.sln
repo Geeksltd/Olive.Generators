@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2016
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.ApiProxyGenerator", "ApiProxyGenerator\Olive.ApiProxyGenerator.csproj", "{EBB6B099-F319-408D-9376-64D38980F4B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.DataEndpointGenerator", "DataEndPointGenerator\Olive.DataEndpointGenerator.csproj", "{52449D24-DA0B-4113-9A60-FB1DA4FAB81D}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "..\Shared\Shared.shproj", "{419458C3-AACB-4993-B5B3-D01979CAB412}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{419458C3-AACB-4993-B5B3-D01979CAB412}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.AcceleratePackage", "AcceleratePackage\Olive.AcceleratePackage.csproj", "{0A15B1E6-4146-4E86-9213-1D90B6DC193B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olive.EventBusCommandGenerator", "EventBusCommandGenerator\Olive.EventBusCommandGenerator.csproj", "{36649C8B-5E44-492C-9832-FAB70A88F442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.EventBusCommandGenerator", "EventBusCommandGenerator\Olive.EventBusCommandGenerator.csproj", "{36649C8B-5E44-492C-9832-FAB70A88F442}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
+		Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
