@@ -4,9 +4,15 @@ using System.Collections.Generic;
 
 namespace OliveGenerator
 {
-    class EventBusCommandProjectCreator : ProjectCreator
+    class EventBusCommandProjectCreator : ProjectCreatorBase
     {
-        public EventBusCommandProjectCreator() : base("EventBusCommand") { }
+        const string NAME = "EventBusCommand";
+
+        public EventBusCommandProjectCreator() : base(
+            Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.CommandType.FullName + "." + NAME)
+            )
+        {
+        }
 
         protected override string Framework => "netstandard2.0";
 
@@ -20,11 +26,14 @@ namespace OliveGenerator
         protected override void AddFiles()
         {
             Console.Write("Adding the command class...");
-            Folder.GetFile($"{Context.CommandType.Name}.cs").WriteAllText(EventBusCommandClassProgrammer.Generate());
+            Folder.GetFile($"{Context.Current.CommandType.Name}.cs").WriteAllText(EventBusCommandClassProgrammer.Generate());
             Console.WriteLine("Done");
             Console.Write("Adding ReamMe.txt file ...");
             Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
             Console.WriteLine("Done");
+
+            DtoTypes.GenerateEnums(Folder);
+            DtoTypes.GenerateDtoClasses(Folder);
         }
 
         public override IEnumerable<string> GetTargetFiles()
@@ -33,7 +42,7 @@ namespace OliveGenerator
             return base.GetTargetFiles().Concat($@"<file src=""{readme}"" target="""" />");
         }
 
-        internal override IEnumerable<string> GetNugetDependencies()
+        public override IEnumerable<string> GetNugetDependencies()
         {
             return new[]
             {

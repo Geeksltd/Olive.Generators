@@ -3,9 +3,9 @@ using System;
 
 namespace OliveGenerator
 {
-    class MSharpProjectCreator : ProjectCreator
+    class MSharpProjectCreator : ProjectCreatorBase
     {
-        public MSharpProjectCreator() : base("MSharp") { }
+        public MSharpProjectCreator() : base(Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.ControllerType.FullName + "." + "MSharp")) { }
 
         protected override string Framework => "netcoreapp2.1";
 

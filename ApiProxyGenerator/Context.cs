@@ -4,19 +4,22 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 
 namespace OliveGenerator
 {
-    class Context
+    class Context : ContextBase
     {
-        public static string PublisherService, ControllerName, NugetServer, NugetApiKey;
-        public static FileInfo AssemblyFile;
-        public static DirectoryInfo TempPath, Output, Source;
-        public static Assembly Assembly;
-        public static Type ControllerType;
-        public static MethodGenerator[] ActionMethods;
+        public static Context Current { get; } = new Context();
 
-        internal static void PrepareOutputDirectory()
+        public string ControllerName;//, PublisherService, NugetServer, NugetApiKey;
+        //public static FileInfo AssemblyFile;
+        //public static DirectoryInfo TempPath, Output, Source;
+        //public static Assembly AssemblyObj;
+        public Type ControllerType;
+        public MethodGenerator[] ActionMethods;
+
+        internal void PrepareOutputDirectory()
         {
             if (!TempPath.Exists)
                 throw new Exception("Output directory not found: " + TempPath.FullName);
@@ -34,35 +37,17 @@ namespace OliveGenerator
             }
         }
 
-        internal static string Run(string command)
+        internal void LoadAssembly()
         {
-            var cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = false;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
-            cmd.StandardInput.WriteLine(command);
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            var result = cmd.StandardOutput.ReadToEnd().ToStringOrEmpty().Trim();
+            var pluginLocation = AssemblyFile.ExistsOrThrow().FullName;
 
-            if (result.StartsWith("Could not ")) throw new Exception(result);
+            AssemblyObj = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
-            if (result.Contains("Build FAILED")) throw new Exception(result.RemoveBefore("Build FAILED"));
-
-            return result;
-        }
-
-        internal static void LoadAssembly()
-        {
-            Assembly = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
-            ControllerType = Assembly.GetType(ControllerName);
+            ControllerType = AssemblyObj.GetType(ControllerName);
 
             if (ControllerType == null) // Maybe no namespace?
             {
-                ControllerType = Assembly.GetTypes().FirstOrDefault(x => x.Name == ControllerName)
+                ControllerType = AssemblyObj.GetTypes().FirstOrDefault(x => x.Name == ControllerName)
                   ?? throw new Exception(ControllerName + " was not found.");
             }
 
@@ -70,7 +55,7 @@ namespace OliveGenerator
 
             ActionMethods = ControllerType
                 .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
-                .Select(x => new MethodGenerator(x))
+                .Select(x => new MethodGenerator(x, ControllerType))
                 .ToArray();
 
             if (ActionMethods.Length == 0) throw new Exception("This controller has no action method.");

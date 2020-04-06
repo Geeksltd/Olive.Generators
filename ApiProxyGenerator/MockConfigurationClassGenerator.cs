@@ -50,7 +50,7 @@ namespace OliveGenerator
             r.AppendLine("}");
             r.AppendLine("}");
 
-            foreach (var method in Context.ActionMethods.Distinct(x => x.Method.Name))
+            foreach (var method in Context.Current.ActionMethods.Distinct(x => x.Method.Name))
                 r.AppendLine(GenerateApiBehaviourClass(method));
 
             r.AppendLine("}");
@@ -76,7 +76,7 @@ namespace OliveGenerator
             r.AppendLine($"{methodInfo.Method.Name}Expectations[\"\"] = new {methodInfo.Method.Name}Expectation();");
             r.AppendLine();
 
-            var overloads = Context.ActionMethods.Where(x => x.Method.Name == methodInfo.Method.Name).ToList();
+            var overloads = Context.Current.ActionMethods.Where(x => x.Method.Name == methodInfo.Method.Name).ToList();
 
             if (overloads.None(x => x.GetArgs().IsEmpty()))
             {
@@ -243,7 +243,7 @@ namespace OliveGenerator
             return r.ToString();
         }
         static string GetKey(string args) => args.Replace(",", "_");
-        static bool HasMethodsWithParams(MethodGenerator methodInfo) => Context.ActionMethods.Any(x => x.Method.Name == methodInfo.Method.Name && !x.GetArgs().IsEmpty());
+        static bool HasMethodsWithParams(MethodGenerator methodInfo) => Context.Current.ActionMethods.Any(x => x.Method.Name == methodInfo.Method.Name && !x.GetArgs().IsEmpty());
 
     }
 }

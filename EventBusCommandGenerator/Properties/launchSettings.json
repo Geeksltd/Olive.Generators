@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Olive.EventBusCommandGenerator": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "/source:\"C:\\Git\\Geeks\\geeksms.tasks.master\\Website\\bin\\Debug\\netcoreapp2.1\" /assembly:\"website.dll\" /command:\"TasksService.CreateTaskCommand\" /out:\"C:\\Git\\Geeks\""
     }
   }
 }

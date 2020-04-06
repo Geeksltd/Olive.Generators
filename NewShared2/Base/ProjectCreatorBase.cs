@@ -5,27 +5,35 @@ using System.IO;
 
 namespace OliveGenerator
 {
-    abstract class ProjectCreator
+    public abstract class ProjectCreatorBase
     {
-        internal virtual string Name => Folder.Name;
+        protected DirectoryInfo Folder { get; set; }
 
-        public DirectoryInfo Folder;
+        internal virtual string Name => Folder.Name;
 
         public DirectoryInfo MockFolder => Folder.GetOrCreateSubDirectory("Mock");
 
-        internal static string Version = LocalTime.Now.ToString("yyMMdd.HH.mmss");
+        public static string Version = LocalTime.Now.ToString("yyMMdd.HH.mmss");
 
         protected abstract string Framework { get; }
         protected abstract string[] References { get; }
 
-        protected ProjectCreator(string name)
+
+        protected ProjectCreatorBase(DirectoryInfo folder)
         {
-            Folder = Context.TempPath.GetOrCreateSubDirectory(Context.ControllerType.FullName + "." + name);
+            Folder = folder;
         }
 
-        protected abstract void AddFiles();
+        internal void Build()
+        {
+            Create();
+            AddFiles();
+            AddNugetReferences();
 
-        internal abstract string IconUrl { get; }
+            Console.Write("Building " + Folder + "...");
+            //Context.Run("dotnet build");
+            Console.WriteLine("Done");
+        }
 
         void Create()
         {
@@ -50,23 +58,20 @@ namespace OliveGenerator
             foreach (var item in References)
             {
                 Console.Write("Adding nuget reference " + item + "...");
-                Context.Run("dotnet add package " + item);
+                NugetCreatorBase.Run("dotnet add package " + item);
                 Console.WriteLine("Done");
             }
         }
+        //------------------------------------------
 
-        internal void Build()
-        {
-            Create();
-            AddFiles();
-            AddNugetReferences();
+        protected abstract void AddFiles();
 
-            Console.Write("Building " + Folder + "...");
-            Context.Run("dotnet build");
-            Console.WriteLine("Done");
-        }
+        internal abstract string IconUrl { get; }
 
-        internal virtual IEnumerable<KeyValuePair<string, string>> GetNugetDependencies()
+
+
+
+        public virtual IEnumerable<string> GetNugetDependencies()
         {
             yield break;
         }

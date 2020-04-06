@@ -1,13 +1,14 @@
 ﻿using Olive;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace OliveGenerator
 {
     class EventBusCommandClassProgrammer
     {
-        static Type Command => Context.CommandType;
+        static Type Command => Context.Current.CommandType;
         static string ClassName => Command.Name;
 
         public static string Generate()
@@ -24,10 +25,10 @@ namespace OliveGenerator
             r.AppendLine($"public class {ClassName} : EventBusMessage");
             r.AppendLine("{");
 
-            foreach (var item in Context.CommandType.GetEffectiveProperties())
+            foreach (var item in Context.Current.CommandType.GetEffectiveProperties())
             {
                 var propertyTypeString = AddProperty(item.GetPropertyOrFieldType());
-                r.AppendLine($"public {propertyTypeString} {item.Name} {{ get; set; }}");
+                r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(item)} {{ get; set; }}");
             }
 
             r.AppendLine();
@@ -38,6 +39,11 @@ namespace OliveGenerator
             r.AppendLine("}");
 
             return new CSharpFormatter(r.ToString()).Format();
+        }
+        static string GetPropertyOrFieldName(MemberInfo member)
+        { 
+            if (DtoTypes.DomainEntities.Contains(member.GetPropertyOrFieldType())) return $"{member.Name}Id";
+            return member.Name;
         }
 
         static string AddProperty(Type propertyType)
@@ -66,6 +72,8 @@ namespace OliveGenerator
                 case "String": method = "string"; break;
                 default: break;
             }
+
+            if (DtoTypes.DomainEntities.Contains(type)) return "Guid?";
 
             return method + extraType;
         }
