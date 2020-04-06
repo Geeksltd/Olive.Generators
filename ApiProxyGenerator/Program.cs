@@ -41,17 +41,10 @@ namespace OliveGenerator
 
                 var proxyCreator = new ProxyProjectCreator();
                 proxyCreator.Build();
-                //new NugetCreator(proxyCreator).Create();
 
+                new NugetCreator(proxyCreator).Create();
 
-                DtoTypes.GenerateMSharps();
-                //if (DtoTypes.All.Any())
-                //{
-                //    var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
-                //    projectCreators.AsParallel().Do(x => x.Build());
-                //    //new NugetCreator(projectCreators).Create();
-                //}
-
+                GenerateMSharps();
 
                 if (Context.Current.Output != null)
                     Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
@@ -67,6 +60,16 @@ namespace OliveGenerator
             }
         }
 
+
+        public static void GenerateMSharps()
+        {
+            if (DtoTypes.All.Any())
+            {
+                var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
+                projectCreators.AsParallel().Do(x => x.Build());
+                new NugetCreator(projectCreators).Create();
+            }
+        }
 
     }
 }

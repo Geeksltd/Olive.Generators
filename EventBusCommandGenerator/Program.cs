@@ -34,8 +34,8 @@ namespace OliveGenerator
                 proxyCreator.Build();
 
 
-                if (Context.Current.Output != null)
-                    Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
+                //if (Context.Current.Output != null)
+                //    Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
 
                 new NugetCreator(proxyCreator).Create();
 

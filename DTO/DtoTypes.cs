@@ -92,17 +92,6 @@ namespace OliveGenerator
             }
         }
 
-
-        public static void GenerateMSharps()
-        {
-            ////if (DtoTypes.All.Any())
-            ////{
-            ////    var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
-            ////    projectCreators.AsParallel().Do(x => x.Build());
-            ////    //new NugetCreator(projectCreators).Create();
-            ////}
-        }
-
         public static void GenerateDtoClasses(DirectoryInfo destFolder)
         {
             foreach (var type in DtoTypes.All)
