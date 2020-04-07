@@ -7,17 +7,20 @@ namespace OliveGenerator
 {
     static class Extensions
     {
-        public static CustomAttributeData GetAttribute(this MemberInfo type, string attributeName)
-        {
-            return type.GetCustomAttributesData()
-               .FirstOrDefault(x => x.AttributeType.Name == attributeName + "Attribute");
-        }
+        //public static MemberInfo[] GetEffectiveProperties(this Type type)
+        //{
+        //    return type.GetPropertiesAndFields(BindingFlags.Public | BindingFlags.Instance)
+        //         .Except(x => x.Name == "ID" && x.GetPropertyOrFieldType() == typeof(Guid))
+        //         .Except(x => x.Name == "DeduplicationId")
+        //         .ToArray();
+        //}
 
-        public static MemberInfo[] GetEffectiveProperties(this Type type)
+        public static Type[] GetFiledTypes(this Type @this)
         {
-            return type.GetPropertiesAndFields(BindingFlags.Public | BindingFlags.Instance)
-                 .Except(x => x.Name == "ID" && x.GetPropertyOrFieldType() == typeof(Guid))
-                 .Except(x => x.Name == "DeduplicationId")
+            return @this.GetPropertiesAndFields(BindingFlags.Public | BindingFlags.Instance)
+                 .ExceptNull()
+                .Except(x => x.Name == "DeduplicationId")
+                 .Select(x=>x.GetPropertyOrFieldType())
                  .ToArray();
         }
     }

@@ -13,18 +13,20 @@ namespace OliveGenerator
         string[] RouteParams;
 
         public string ReturnType => Method.GetApiMethodReturnType()?.Name;
+        Type ControllerType;
 
-        public MethodGenerator(MethodInfo method)
+        public MethodGenerator(MethodInfo method, Type controllerType)
         {
             Method = method;
+            ControllerType = controllerType;
             RouteParams = new RouteTemplate(Route()).Parameters.Select(x => x.Key).ToArray();
         }
 
-        public string Generate()
+        public string Generate(string PublisherService)
         {
             var r = new StringBuilder();
 
-            r.Append($"/// <summary>Sends a Http{HttpVerb()} request to {Route()} of the {Context.PublisherService} service.");
+            r.Append($"/// <summary>Sends a Http{HttpVerb()} request to {Route()} of the {PublisherService} service.");
 
             if (Method.GetExplicitAuthorizeServiceAttribute().HasValue())
                 r.Append($" As the target Api declares [{Method.GetExplicitAuthorizeServiceAttribute()}], I will call AsServiceUser() automatically.");
@@ -48,7 +50,7 @@ namespace OliveGenerator
             else r.AppendLine($"var url = \"{Route()}\";");
 
             r.AppendLine();
-            r.AppendLine($"var client = Microservice.Of(\"{Context.PublisherService}\").Api(url);");
+            r.AppendLine($"var client = Microservice.Of(\"{PublisherService}\").Api(url);");
             r.AppendLine("foreach (var config in Configurators) config(client);");
             r.AppendLine();
             r.AppendLine(GetReturnStatement());
@@ -117,7 +119,7 @@ namespace OliveGenerator
 
         string Route()
         {
-            var classRouteAttr = Context.ControllerType
+            var classRouteAttr = ControllerType
                       .GetAttribute("Route")
                       ?.ConstructorArguments
                       .FirstOrDefault().Value.ToString();

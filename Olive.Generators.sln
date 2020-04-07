@@ -13,9 +13,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.AcceleratePackage", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.EventBusCommandGenerator", "EventBusCommandGenerator\Olive.EventBusCommandGenerator.csproj", "{36649C8B-5E44-492C-9832-FAB70A88F442}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DTO", "DTO\DTO.shproj", "{41EEBC19-C4F0-462D-81F2-324D0D8E760C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedNew", "SharedNew\SharedNew.shproj", "{A72D274D-454C-43BE-B540-CB1AC96D3D9A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DTO\DTO.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
 		Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
+		DTO\DTO.projitems*{41eebc19-c4f0-462d-81f2-324d0d8e760c}*SharedItemsImports = 13
+		Shared\Shared.projitems*{52449d24-da0b-4113-9a60-fb1da4fab81d}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{a72d274d-454c-43be-b540-cb1ac96d3d9a}*SharedItemsImports = 13
+		DTO\DTO.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
