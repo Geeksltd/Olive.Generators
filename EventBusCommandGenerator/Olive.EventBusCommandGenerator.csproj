@@ -10,12 +10,12 @@
     <ToolCommandName>generate-eventbus-command-proxy</ToolCommandName>
     <Authors>Geeks Ltd</Authors>
     <Description>Generates event bus command packages</Description>
-    <Copyright>Copyright ©2018 Geeks Ltd - All rights reserved.</Copyright>
+    <Copyright>Copyright ©2020 Geeks Ltd - All rights reserved.</Copyright>
     <PackageLicenseUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageLicenseUrl>
     <PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackAsTool>true</PackAsTool>
-    <PackageVersion>2.1.103</PackageVersion>
+    <PackageVersion>2.1.104</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
