@@ -18,7 +18,6 @@ namespace OliveGenerator
         protected abstract string Framework { get; }
         protected abstract string[] References { get; }
 
-
         protected ProjectCreatorBase(DirectoryInfo folder)
         {
             Folder = folder;
@@ -31,7 +30,7 @@ namespace OliveGenerator
             AddNugetReferences();
 
             Console.Write("Building " + Folder + "...");
-            //Context.Run("dotnet build");
+            NugetCreatorBase.Run("dotnet build");
             Console.WriteLine("Done");
         }
 
@@ -47,6 +46,7 @@ namespace OliveGenerator
   <PropertyGroup>
       <TargetFramework>{Framework}</TargetFramework>
       <DocumentationFile>{BinFolder}\{Name}.xml</DocumentationFile>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 </Project>");
 
