@@ -6,7 +6,7 @@
     <RootNamespace>Olive</RootNamespace>
     <StartupObject>OliveGenerator.Program</StartupObject>
     <PackageId>generate-eventbus-command-proxy</PackageId>
-    <Version>1.1.100</Version>
+    <Version>2.1.106</Version>
     <ToolCommandName>generate-eventbus-command-proxy</ToolCommandName>
     <Authors>Geeks Ltd</Authors>
     <Description>Generates event bus command packages</Description>
@@ -15,7 +15,7 @@
     <PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackAsTool>true</PackAsTool>
-    <PackageVersion>2.1.105</PackageVersion>
+    <PackageVersion>2.1.106</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;NU1701</NoWarn>

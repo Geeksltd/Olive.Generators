@@ -17,10 +17,10 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-api-proxy</ToolCommandName>
-    <Version>2.0.111</Version>
-    <PackageVersion>2.0.111</PackageVersion>
-    <AssemblyVersion>2.0.111.0</AssemblyVersion>
-    <FileVersion>2.0.111.0</FileVersion>
+    <Version>2.0.112</Version>
+    <PackageVersion>2.0.112</PackageVersion>
+    <AssemblyVersion>2.0.112.0</AssemblyVersion>
+    <FileVersion>2.0.112.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.1" />
