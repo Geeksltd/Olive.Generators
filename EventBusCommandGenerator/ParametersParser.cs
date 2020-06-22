@@ -5,14 +5,20 @@ using System.Linq;
 
 namespace OliveGenerator
 {
-    class ParametersParser
+    internal class ParametersParser : ParametersParserBase
     {
-        static string[] Args;
+        //public static ParametersParser SetArgs(string[] args) { return Current = new ParametersParser(Context.Current, args); }
+        public static void SetArgs(string[] args) { Current = new ParametersParser(Context.Current, args); }
 
-        internal static bool Start(string[] args)
+        public static ParametersParser Current { get; private set; }
+
+        protected ParametersParser(ContextBase context, string[] args) : base(context, args)
         {
-            Args = args;
-            Context.Source = Environment.CurrentDirectory.AsDirectory();
+        }
+
+        public override bool Start()
+        {
+            base.Start();
 
             if (Param("assembly").IsEmpty() || Param("command").IsEmpty())
             {
@@ -23,29 +29,10 @@ namespace OliveGenerator
             return Param("assembly").HasValue() || Param("command").HasValue();
         }
 
-        public static void LoadParameters()
+        public override void LoadParameters(string defaultName)
         {
-            Context.CommandName = Param("command");
-            Context.Output = Param("out")?.AsDirectory();
-
-            if (Context.Output?.Exists == false)
-                throw new Exception("The specified output folder does not exist.");
-
-            Context.NugetServer = Param("push");
-            Context.NugetApiKey = Param("apiKey");
-
-            Context.AssemblyFile = Context.Source
-                .GetFile(Param("assembly").Or("Website.dll"))
-                .ExistsOrThrow();
-
-            Context.TempPath = Path.GetTempPath().AsDirectory()
-                .GetOrCreateSubDirectory("eventbuscommand-generator").CreateSubdirectory(Guid.NewGuid().ToString());
-        }
-
-        static string Param(string key)
-        {
-            var decorateKey = "/" + key + ":";
-            return Args.FirstOrDefault(x => x.StartsWith(decorateKey))?.TrimStart(decorateKey).OrNullIfEmpty();
+            Context.Current.CommandName = Param("command");
+            base.LoadParameters("eventbuscommand-generator");
         }
     }
 }

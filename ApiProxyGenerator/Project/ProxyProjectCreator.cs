@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace OliveGenerator
 {
-    class ProxyProjectCreator : ProjectCreator
+    class ProxyProjectCreator : ProjectCreatorBase
     {
-        public ProxyProjectCreator() : base("Proxy") { }
+        public ProxyProjectCreator() : base(Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.ControllerType.FullName + "." + "Proxy")
+            ) { }
 
         protected override string Framework => "netstandard2.0";
 
@@ -20,46 +21,19 @@ namespace OliveGenerator
         protected override void AddFiles()
         {
             Console.Write("Adding the proxy class...");
-            Folder.GetFile($"{Context.ControllerName}.cs").WriteAllText(ProxyClassProgrammer.Generate());
+            Folder.GetFile($"{Context.Current.ControllerName}.cs").WriteAllText(ProxyClassProgrammer.Generate());
             Console.WriteLine("Done");
             Console.Write("Adding the proxy class mock configuration...");
-            MockFolder.GetFile($"{Context.ControllerName}.Mock.cs").WriteAllText(ProxyClassProgrammer.GenerateMock());
+            MockFolder.GetFile($"{Context.Current.ControllerName}.Mock.cs").WriteAllText(ProxyClassProgrammer.GenerateMock());
             Console.WriteLine("Done");
             Console.Write("Adding ReamMe.txt file ...");
             Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
             Console.WriteLine("Done");
 
-            GenerateEnums();
-            GenerateDtoClasses();
+            DtoTypes.GenerateEnums(Folder);
+            DtoTypes.GenerateDtoClasses(Folder);
             GenerateDataProviderClasses();
             GenerateMockConfiguration();
-        }
-
-        void GenerateEnums()
-        {
-            if (DtoTypes.Enums.None()) return;
-
-            Console.Write("Adding Enums ...");
-
-            foreach (var type in DtoTypes.Enums)
-            {
-                var file = Folder.GetFile("Enums.cs");
-                file.AppendLine("public enum " + type.Name.RemoveBeforeAndIncluding("+"));
-                file.AppendLine("{");
-                file.AppendLine(Enum.GetNames(type).ToString(",\r\n"));
-                file.AppendLine("}\r\n");
-            }
-        }
-
-        void GenerateDtoClasses()
-        {
-            foreach (var type in DtoTypes.All)
-            {
-                Console.Write("Adding DTO class " + type.Name + "...");
-                var dto = new DtoProgrammer(type);
-                Folder.GetFile(type.Name + ".cs").WriteAllText(dto.Generate());
-                Console.WriteLine("Done");
-            }
         }
 
         void GenerateDataProviderClasses()
@@ -70,7 +44,7 @@ namespace OliveGenerator
                 var dto = new DtoProgrammer(type);
                 Folder.GetFile(type.Name + ".cs").WriteAllText(dto.Generate());
 
-                var dataProvider = new DtoDataProviderClassGenerator(type).Generate();
+                var dataProvider = new DtoDataProviderClassGenerator(type, Context.Current).Generate();
                 if (dataProvider.HasValue())
                     Folder.GetFile(type.Name + "DataProvider.cs").WriteAllText(dataProvider);
 
@@ -80,9 +54,9 @@ namespace OliveGenerator
 
         void GenerateMockConfiguration()
         {
-            var generator = new MockConfigurationClassGenerator(Context.ControllerType);
-            Console.Write($"Adding class {Context.ControllerName}MockConfiguration");
-            MockFolder.GetFile($"{Context.ControllerName}MockConfiguration.cs").WriteAllText(generator.Generate());
+            var generator = new MockConfigurationClassGenerator(Context.Current.ControllerType);
+            Console.Write($"Adding class {Context.Current.ControllerName}MockConfiguration");
+            MockFolder.GetFile($"{Context.Current.ControllerName}MockConfiguration.cs").WriteAllText(generator.Generate());
             Console.WriteLine("Done");
         }
 

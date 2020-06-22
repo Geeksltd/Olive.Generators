@@ -6,16 +6,16 @@
     <RootNamespace>Olive</RootNamespace>
     <StartupObject>OliveGenerator.Program</StartupObject>
     <PackageId>generate-eventbus-command-proxy</PackageId>
-    <Version>1.1.100</Version>
+    <Version>2.1.106</Version>
     <ToolCommandName>generate-eventbus-command-proxy</ToolCommandName>
     <Authors>Geeks Ltd</Authors>
     <Description>Generates event bus command packages</Description>
-    <Copyright>Copyright ©2018 Geeks Ltd - All rights reserved.</Copyright>
+    <Copyright>Copyright ©2020 Geeks Ltd - All rights reserved.</Copyright>
     <PackageLicenseUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageLicenseUrl>
     <PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackAsTool>true</PackAsTool>
-    <PackageVersion>1.1.102</PackageVersion>
+    <PackageVersion>2.1.106</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
@@ -26,9 +26,11 @@
     <Compile Remove="Project\MSharpProjectCreator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Olive" Version="2.1.181" />
-    <PackageReference Include="Olive.Entities" Version="2.1.139" />
-    <PackageReference Include="Olive.Entities.Data" Version="2.1.150" />
-    <PackageReference Include="Olive.EventBus" Version="2.1.117" />
+    <PackageReference Include="Olive" Version="2.1.190" />
+    <PackageReference Include="Olive.Entities" Version="2.1.140" />
+    <PackageReference Include="Olive.Entities.Data" Version="2.1.152" />
+    <PackageReference Include="Olive.EventBus" Version="2.1.119" />
   </ItemGroup>
+  <Import Project="..\DTO\DTO.projitems" Label="Shared" />
+  <Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />
 </Project>

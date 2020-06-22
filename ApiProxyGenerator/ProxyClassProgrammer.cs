@@ -6,7 +6,7 @@ namespace OliveGenerator
 {
     class ProxyClassProgrammer
     {
-        static Type Controller => Context.ControllerType;
+        static Type Controller => Context.Current.ControllerType;
         static string ClassName => Controller.Name;
 
         static bool ServiceOnly() => Controller.GetExplicitAuthorizeServiceAttribute().HasValue();
@@ -22,7 +22,7 @@ namespace OliveGenerator
             r.AppendLine("using System.Collections.Generic;");
             r.AppendLine("using Olive;");
             r.AppendLine();
-            r.Append("/// <summary>Provides access to the " + ClassName + " api of the " + Context.PublisherService + " service.");
+            r.Append("/// <summary>Provides access to the " + ClassName + " api of the " + Context.Current.PublisherService + " service.");
             if (ServiceOnly())
                 r.Append($" As the target Api declares [{Controller.GetExplicitAuthorizeServiceAttribute()}], my constructor will call AsServiceUser() automatically.");
             r.AppendLine("</summary>");
@@ -53,9 +53,9 @@ namespace OliveGenerator
             r.AppendLine($"public static {ClassName} As(CachePolicy policy) => new {ClassName}().Cache(policy, DefaultCacheExpiry);");
             r.AppendLine();
 
-            foreach (var method in Context.ActionMethods)
+            foreach (var method in Context.Current.ActionMethods)
             {
-                r.AppendLine(method.Generate().Trim());
+                r.AppendLine(method.Generate(Context.Current.PublisherService).Trim());
                 r.AppendLine();
             }
 
@@ -89,7 +89,7 @@ namespace OliveGenerator
             r.AppendLine("</summary>");
             r.AppendLine($"public static void Mock(Action<{ClassName}MockConfiguration> mockConfiguration, bool enabled = true)");
             r.AppendLine("{");
-            r.AppendLine($"MockConfig.Enabled = Config.Get(GetMockConfigKey(\"{Context.PublisherService}\")).Or(enabled.ToString()).To<bool>();");
+            r.AppendLine($"MockConfig.Enabled = Config.Get(GetMockConfigKey(\"{Context.Current.PublisherService}\")).Or(enabled.ToString()).To<bool>();");
             r.AppendLine("mockConfiguration(MockConfig);");
             //Method Mock ends here
             r.AppendLine("}");

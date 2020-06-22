@@ -5,36 +5,28 @@ using System.Linq;
 
 namespace OliveGenerator
 {
-    class ParametersParser
+    class ParametersParser : ParametersParserBase
     {
-        static string[] Args;
+        public static ParametersParser SetArgs(string[] args) { return Current = new ParametersParser(Context.Current, args); }
 
-        internal static bool Start(string[] args)
+        public static ParametersParser Current { get; private set; }
+
+        public ParametersParser(ContextBase context, string[] args) : base(context, args)
         {
-            Args = args;
-            Context.Source = Environment.CurrentDirectory.AsDirectory();
+        }
+
+        public virtual bool Start()
+        {
+            base.Start();
+
             if (Param("controller").IsEmpty()) return false;
             return Param("out").HasValue() || Param("push").HasValue();
         }
 
-        public static void LoadParameters()
+        public override void LoadParameters(string defaultName)
         {
-            Context.ControllerName = Param("controller");
-            Context.Output = Param("out")?.AsDirectory();
-
-            if (Context.Output?.Exists == false)
-                throw new Exception("The specified output folder does not exist.");
-
-            Context.NugetServer = Param("push");
-            Context.NugetApiKey = Param("apiKey");
-
-            Context.PublisherService = GetServiceName();
-            Context.AssemblyFile = Context.Source
-                .GetFile(Param("assembly").Or("Website.dll"))
-                .ExistsOrThrow();
-
-            Context.TempPath = Path.GetTempPath().AsDirectory()
-                .GetOrCreateSubDirectory("api-proxy").CreateSubdirectory(Guid.NewGuid().ToString());
+            Context.Current.ControllerName = Param("controller");
+            base.LoadParameters("api-proxy");
         }
 
         // static bool LoadFromControllerFile(FileInfo file)
@@ -91,9 +83,9 @@ namespace OliveGenerator
         //    return true;
         // }
 
-        static string GetServiceName()
+        string GetServiceName()
         {
-            var value = Param("serviceName");
+            var value = base.Param("serviceName");
             if (value.HasValue()) return value;
 
             var appSettings = FindAppSettings();
@@ -112,7 +104,7 @@ namespace OliveGenerator
 
         static FileInfo FindAppSettings()
         {
-            var dir = Context.Source.Parent;
+            var dir = Context.Current.Source.Parent;
             while (dir.Root.FullName != dir.FullName)
             {
                 var result = dir.GetFile("appSettings.json");
@@ -123,10 +115,10 @@ namespace OliveGenerator
             throw new Exception("Failed to find appSettings.json in any of the parent directories.");
         }
 
-        static string Param(string key)
-        {
-            var decorateKey = "/" + key + ":";
-            return Args.FirstOrDefault(x => x.StartsWith(decorateKey))?.TrimStart(decorateKey).OrNullIfEmpty();
-        }
+        //static string Param(string key)
+        //{
+        //    var decorateKey = "/" + key + ":";
+        //    return Args.FirstOrDefault(x => x.StartsWith(decorateKey))?.TrimStart(decorateKey).OrNullIfEmpty();
+        //}
     }
 }

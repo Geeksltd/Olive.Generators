@@ -11,11 +11,13 @@ namespace OliveGenerator
         Type Type;
         internal MethodInfo ApiMethod;
         bool ApiMethodReturnsList => ApiMethod.GetApiMethodReturnType().IsIEnumerableOf(Type);
+        Context Context;
 
-        public DtoDataProviderClassGenerator(Type type)
+        public DtoDataProviderClassGenerator(Type type, Context context)
         {
             Type = type;
             ApiMethod = type.FindDatabaseGetMethod();
+            Context = context;
         }
 
         internal string Generate()
@@ -135,7 +137,7 @@ namespace OliveGenerator
 
         public static void ValidateRemoteDataProviderAttributes()
         {
-            var relevantMethods = Context.ActionMethods.Select(x => x.Method)
+            var relevantMethods = Context.Current.ActionMethods.Select(x => x.Method)
                 .Select(m => new
                 {
                     Method = m,

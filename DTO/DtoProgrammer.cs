@@ -38,7 +38,7 @@ namespace OliveGenerator
         string GenerateDto()
         {
             var r = new StringBuilder();
-            r.AppendLine($"/// <summary>The {Type.Name} DTO type (Data Transfer Object) to be used with {Context.ControllerType.Name} Api.</summary>");
+            //r.AppendLine($"/// <summary>The {Type.Name} DTO type (Data Transfer Object) to be used with {Context2.ControllerType.Name} Api.</summary>");
             r.AppendLine("[Olive.Entities.CacheObjects(false)]");
             r.AppendLine("public class " + Type.Name + " : Olive.Entities.GuidEntity");
             r.AppendLine("{");

@@ -17,16 +17,19 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-api-proxy</ToolCommandName>
-    <Version>2.0.111</Version>
-    <PackageVersion>2.0.111</PackageVersion>
-    <AssemblyVersion>2.0.111.0</AssemblyVersion>
-    <FileVersion>2.0.111.0</FileVersion>
+    <Version>2.0.112</Version>
+    <PackageVersion>2.0.112</PackageVersion>
+    <AssemblyVersion>2.0.112.0</AssemblyVersion>
+    <FileVersion>2.0.112.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="olive" Version="2.1.181" />
+    <PackageReference Include="olive" Version="2.1.190" />
+    <PackageReference Include="Olive.Entities" Version="2.1.140" />
   </ItemGroup>
-  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+  <Import Project="..\DTO\DTO.projitems" Label="Shared" />
+  <Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />
 </Project>

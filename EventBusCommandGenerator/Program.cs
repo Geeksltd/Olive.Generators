@@ -1,30 +1,44 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OliveGenerator
 {
-    class Program
+    partial class Program
     {
         static int Main(string[] args)
         {
-            if (!ParametersParser.Start(args)) return -1;
+            ParametersParser.SetArgs(args);
+
+            if (!ParametersParser.Current.Start()) return -1;
             try
             {
-                ParametersParser.LoadParameters();
+                ParametersParser.Current.LoadParameters(null);
 
                 Console.WriteLine("Generating Event Bus Command from...");
-                Console.WriteLine("Assembly: " + Context.AssemblyFile);
-                Console.WriteLine("Command: " + Context.CommandName);
-                Console.WriteLine("Temp folder: " + Context.TempPath);
+                Console.WriteLine("Assembly: " + Context.Current.AssemblyFile);
+                Console.WriteLine("Command: " + Context.Current.CommandName);
+                Console.WriteLine("Temp folder: " + Context.Current.TempPath);
 
-                Context.LoadAssembly();
-                Context.PrepareOutputDirectory();
+                Context.Current.LoadAssembly();
+                Context.Current.PrepareOutputDirectory();
 
-                new List<ProjectCreator> { new EventBusCommandProjectCreator() };
 
-                var eventBusCommandProjectCreator = new EventBusCommandProjectCreator();
-                eventBusCommandProjectCreator.Build();
-                new NugetCreator(eventBusCommandProjectCreator).Create();
+                DtoTypes.FindAll(Context.Current.CommandType.GetFiledTypes(), Context.Current.AssemblyObj);
+
+
+                new List<ProjectCreatorBase> { new EventBusCommandProjectCreator() };
+
+                var proxyCreator = new EventBusCommandProjectCreator();
+                proxyCreator.Build();
+
+
+                //if (Context.Current.Output != null)
+                //    Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
+
+                new NugetCreator(proxyCreator).Create();
+
 
                 Console.WriteLine("Add done");
                 return 0;

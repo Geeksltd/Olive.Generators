@@ -13,34 +13,42 @@ namespace OliveGenerator
     {
         static int Main(string[] args)
         {
+            ParametersParser.SetArgs(args);
+
             if (!Initialize(args)) return -1;
 
             try
             {
-                ParametersParser.LoadParameters();
+                ParametersParser.Current.LoadParameters(null);
 
                 Console.WriteLine("Generating Client SDK proxy from...");
-                Console.WriteLine("Publisher service: " + Context.PublisherService);
-                Console.WriteLine("Api assembly: " + Context.AssemblyFile);
-                Console.WriteLine("Api controller: " + Context.ControllerName);
-                Console.WriteLine("Temp folder: " + Context.TempPath);
-                Context.LoadAssembly();
-                Context.PrepareOutputDirectory();
-                DtoTypes.FindAll();
+                Console.WriteLine("Publisher service: " + Context.Current.PublisherService);
+                Console.WriteLine("Api assembly: " + Context.Current.AssemblyFile);
+                Console.WriteLine("Api controller: " + Context.Current.ControllerName);
+                Console.WriteLine("Temp folder: " + Context.Current.TempPath);
+                
+                Context.Current.LoadAssembly();
+                Context.Current.PrepareOutputDirectory();
+
+
+                DtoTypes.FindAll(
+                    Context.Current.ActionMethods.SelectMany(x => x.GetArgAndReturnTypes()).ToArray()
+                    , Context.Current.AssemblyObj);
+
                 DtoDataProviderClassGenerator.ValidateRemoteDataProviderAttributes();
 
-                new List<ProjectCreator> { new ProxyProjectCreator() };
+                new List<ProjectCreatorBase> { new ProxyProjectCreator() };
 
                 var proxyCreator = new ProxyProjectCreator();
                 proxyCreator.Build();
+
                 new NugetCreator(proxyCreator).Create();
 
-                if (DtoTypes.All.Any())
-                {
-                    var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
-                    projectCreators.AsParallel().Do(x => x.Build());
-                    new NugetCreator(projectCreators).Create();
-                }
+                GenerateMSharps();
+
+                if (Context.Current.Output != null)
+                    Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
+
 
                 Console.WriteLine("Add done");
                 return 0;
@@ -52,6 +60,16 @@ namespace OliveGenerator
             }
         }
 
+
+        public static void GenerateMSharps()
+        {
+            if (DtoTypes.All.Any())
+            {
+                var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
+                projectCreators.AsParallel().Do(x => x.Build());
+                new NugetCreator(projectCreators).Create();
+            }
+        }
 
     }
 }

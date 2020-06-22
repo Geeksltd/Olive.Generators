@@ -53,7 +53,7 @@ namespace OliveGenerator
 
             var method = type.Name;
 
-            if (type.Assembly == Context.Assembly)
+            if (type.Assembly == Context.Current.AssemblyObj)
             {
                 method = "Associate" + "<" + type.Name + ">";
                 if (type.IsEnum) method = "String";
@@ -69,7 +69,7 @@ namespace OliveGenerator
 
             var result = method + "(\"" + name + "\")";
 
-            if (type.Assembly == Context.Assembly && propertyType.IsArray)
+            if (type.Assembly == Context.Current.AssemblyObj && propertyType.IsArray)
                 result += ".MaxCardinality(null)";
 
             if (!isNullable)
