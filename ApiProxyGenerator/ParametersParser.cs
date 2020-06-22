@@ -27,6 +27,7 @@ namespace OliveGenerator
         {
             Context.Current.ControllerName = Param("controller");
             base.LoadParameters("api-proxy");
+            GetServiceName();
         }
 
         // static bool LoadFromControllerFile(FileInfo file)
@@ -114,11 +115,5 @@ namespace OliveGenerator
 
             throw new Exception("Failed to find appSettings.json in any of the parent directories.");
         }
-
-        //static string Param(string key)
-        //{
-        //    var decorateKey = "/" + key + ":";
-        //    return Args.FirstOrDefault(x => x.StartsWith(decorateKey))?.TrimStart(decorateKey).OrNullIfEmpty();
-        //}
     }
 }
