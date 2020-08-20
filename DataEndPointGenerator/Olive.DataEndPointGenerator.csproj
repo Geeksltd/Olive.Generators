@@ -26,9 +26,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Olive" Version="2.1.190" />
-    <PackageReference Include="Olive.Entities" Version="2.1.140" />
-    <PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.146" />
+    <PackageReference Include="Olive" Version="2.1.194" />
+    <PackageReference Include="Olive.Entities" Version="2.1.143" />
+    <PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.147" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>

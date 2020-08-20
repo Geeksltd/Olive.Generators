@@ -26,10 +26,10 @@
     <Compile Remove="Project\MSharpProjectCreator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Olive" Version="2.1.190" />
-    <PackageReference Include="Olive.Entities" Version="2.1.140" />
-    <PackageReference Include="Olive.Entities.Data" Version="2.1.152" />
-    <PackageReference Include="Olive.EventBus" Version="2.1.119" />
+    <PackageReference Include="Olive" Version="2.1.194" />
+    <PackageReference Include="Olive.Entities" Version="2.1.143" />
+    <PackageReference Include="Olive.Entities.Data" Version="2.1.160" />
+    <PackageReference Include="Olive.EventBus" Version="2.1.120" />
   </ItemGroup>
   <Import Project="..\DTO\DTO.projitems" Label="Shared" />
   <Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />
