@@ -7,7 +7,7 @@ namespace OliveGenerator
     {
         public MSharpProjectCreator() : base("MSharp") { }
 
-        protected override string Framework => "netcoreapp2.1";
+        protected override string Framework => "netcoreapp3.1";
 
         [EscapeGCop]
         internal override string IconUrl => "http://licensing.msharp.co.uk/images/icon.png";
