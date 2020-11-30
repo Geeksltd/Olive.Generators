@@ -2,8 +2,8 @@
   "profiles": {
     "WebApiClientSdkGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:ProspectsEndpoint /out:\"c:\\temp\\generated-packages\"",
-      "workingDirectory": "C:\\Projects\\Geeks.MS\\People\\Website\\bin\\Debug\\netcoreapp3.1"
+      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:UserEndPoint /out:\"D:\\test\"",
+      "workingDirectory": "C:\\Projects\\JWS\\jwseagon.users\\Website\\bin\\Debug\\netcoreapp3.1"
     }
   }
 }
