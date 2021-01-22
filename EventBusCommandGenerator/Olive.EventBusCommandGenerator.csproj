@@ -15,7 +15,7 @@
     <PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackAsTool>true</PackAsTool>
-    <PackageVersion>3.1.106</PackageVersion>
+    <PackageVersion>3.1.107</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
