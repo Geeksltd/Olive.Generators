@@ -2,8 +2,8 @@
   "profiles": {
     "WebApiClientSdkGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:WarningsEndpoint /push:http://nuget.geeksms.uat.co/nuget /apiKey:thisIsMyApiKey",
-      "workingDirectory": "D:\\Projects\\Geeks.MS\\People\\Website\\bin\\Debug\\netcoreapp3.1"
+      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:SaferPetDeviceService.HistoryEndpoint /push:http://nuget.geeksms.uat.co/nuget /apiKey:thisIsMyApiKey",
+      "workingDirectory": "D:\\Projects\\SaferPet\\saferpet.device\\Website\\bin\\Debug\\netcoreapp3.1"
     }
   }
 }

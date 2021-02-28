@@ -13,6 +13,7 @@ namespace OliveGenerator
         {
             Args = args;
             Context.Source = Environment.CurrentDirectory.AsDirectory();
+            Context.MSharp = Context.Source.SolutionDirectory().GetSubDirectory("M#");
 
             if (Param("assembly").IsEmpty() || Param("dataEndpoint").IsEmpty())
             {
