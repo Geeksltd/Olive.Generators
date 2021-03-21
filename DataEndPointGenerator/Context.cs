@@ -13,7 +13,8 @@ namespace OliveGenerator
     {
         public static string EndpointName, NugetServer, NugetApiKey;
         public static FileInfo AssemblyFile;
-        public static DirectoryInfo TempPath, Output, Source;
+        public static DirectoryInfo TempPath, Output, Source, MSharp;
+
         public static Assembly AssemblyObject;
         public static Type EndpointType;
         public static List<ExposedType> ExposedTypes = new List<ExposedType>();
@@ -73,6 +74,8 @@ namespace OliveGenerator
 
             EndpointName = EndpointType.FullName; // Ensure it has full namespace 
         }
+
+
 
         internal static void FindExposedTypes()
         {

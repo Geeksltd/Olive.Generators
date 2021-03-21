@@ -12,10 +12,15 @@ namespace OliveGenerator
     internal class MSharpModelProgrammer
     {
         ExposedType ExposedType;
+        MSharpProjectCreator ProjectCreator;
 
         Type Type => ExposedType.GetType();
 
-        public MSharpModelProgrammer(ExposedType type) => ExposedType = type;
+        public MSharpModelProgrammer(MSharpProjectCreator projectCreator, ExposedType type)
+        {
+            ProjectCreator = projectCreator;
+            ExposedType = type;
+        }
 
         internal string Generate()
         {
@@ -39,7 +44,7 @@ namespace OliveGenerator
             }
 
             foreach (var item in ExposedType.Fields)
-                r.AppendLine(AddProperty(item));
+                r.AppendLine(AddProperty(Type, item));
 
             r.AppendLine("}");
             r.AppendLine("}");
@@ -48,7 +53,7 @@ namespace OliveGenerator
             return new CSharpFormatter(r.ToString()).Format();
         }
 
-        string AddProperty(ExposedField item)
+        string AddProperty(Type entityType, ExposedField item)
         {
             var extraArgs = "";
             var maxLength = 0;
@@ -93,6 +98,10 @@ namespace OliveGenerator
             {
                 result += ".Mandatory()";
             }
+
+            var scale = ProjectCreator.TryGetMetadataValueFor<int>(entityType, name, "Scale");
+            if (scale != null)
+                result += $".Scale({scale})";
 
             if (maxLength > 0)
                 result += $".Max({maxLength})";

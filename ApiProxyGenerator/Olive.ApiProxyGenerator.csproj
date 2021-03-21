@@ -24,11 +24,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.6.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="olive" Version="2.1.194" />
-    <PackageReference Include="Olive.Entities" Version="2.1.143" />
+    <PackageReference Include="olive" Version="2.1.199" />
+    <PackageReference Include="Olive.Entities" Version="2.1.148" />
   </ItemGroup>
   <Import Project="..\DTO\DTO.projitems" Label="Shared" />
   <Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />
