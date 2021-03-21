@@ -33,7 +33,7 @@ namespace OliveGenerator
                 {
                     var propertyName = property["Title"]?.InnerText;
                     if (propertyName.IsEmpty()) continue;
-                    result[typeName].Add(propertyName, new Dictionary<string, string>());
+                    result[typeName][propertyName] = new Dictionary<string, string>();
 
                     foreach (XmlNode attr in property.ChildNodes)
                         result[typeName][propertyName].Add(attr.Name, attr.InnerText);
