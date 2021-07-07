@@ -47,6 +47,8 @@ namespace OliveGenerator
       <TargetFramework>{Framework}</TargetFramework>
       <DocumentationFile>{BinFolder}\{Name}.xml</DocumentationFile>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Version>{Version}</Version>
+      <PackageIconUrl>{IconUrl}</PackageIconUrl>
   </PropertyGroup>
 </Project>");
 
