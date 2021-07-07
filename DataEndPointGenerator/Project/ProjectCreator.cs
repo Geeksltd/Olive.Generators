@@ -40,6 +40,9 @@ namespace OliveGenerator
       <TargetFramework>{Framework}</TargetFramework>
       <DocumentationFile>{BinFolder}\{Name}.xml</DocumentationFile>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Version>{Version}</Version>
+      <PackageIconUrl>{IconUrl}</PackageIconUrl>
+      <Description>Auto-generated package for data endpoint: {Name}</Description>
   </PropertyGroup>
 </Project>");
 

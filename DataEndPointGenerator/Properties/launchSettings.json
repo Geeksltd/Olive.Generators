@@ -2,7 +2,7 @@
   "profiles": {
     "WebApiClientSdkGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:WorkWatchEndpoint /out:\"c:\\temp\\generated-packages\"",
+      "commandLineArgs": "/assembly:\"website.dll\" /dataEndpoint:PeopleService.RecipesEndpoint  /push:http://nuget.geeksms.uat.co/nuget /apiKey:thisIsMyApiKey",
       "workingDirectory": "E:\\Geeks.MS\\People\\Website\\bin\\Debug\\netcoreapp3.1"
     }
   }

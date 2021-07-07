@@ -9,16 +9,15 @@
     <PackageId>generate-data-endpoint-proxy</PackageId>
     <Title>Olive Data Endpoint Proxy Generator</Title>
     <Authors>Geeks Ltd</Authors>
-    <PackageProjectUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Geeksltd/Olive.Generators/tree/master/DataEndPointGenerator</PackageProjectUrl>
     <PackageIconUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageIconUrl>
-    <Copyright>Copyright ©2020 Geeks Ltd. All rights reserved.</Copyright>
+    <Copyright>Copyright ©2021 Geeks Ltd. All rights reserved.</Copyright>
     <Description>Generates Data Endpoint packages for Olive data replication</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-    <PackageVersion>2.1.141</PackageVersion>
-    <Version>2.1.141</Version>
+    <Version>2.1.142</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
