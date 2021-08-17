@@ -13,7 +13,7 @@ namespace OliveGenerator
 
         public DirectoryInfo MockFolder => Folder.GetOrCreateSubDirectory("Mock");
 
-        internal static string Version = LocalTime.Now.ToString("yyMMdd.HH.mmss");
+        internal static string Version = LocalTime.Now.ToString("yyMM.ddHH.mmss");
 
         protected abstract string Framework { get; }
         protected abstract string[] References { get; }
