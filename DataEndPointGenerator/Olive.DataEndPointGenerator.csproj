@@ -1,29 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>OliveGenerator.Program</StartupObject>
-    <AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
-    <RootNamespace>Olive</RootNamespace>
-    <PackageId>generate-data-endpoint-proxy</PackageId>
-    <Title>Olive Data Endpoint Proxy Generator</Title>
-    <Authors>Geeks Ltd</Authors>
-    <PackageProjectUrl>https://github.com/Geeksltd/Olive.Generators/tree/master/DataEndPointGenerator</PackageProjectUrl>
-    <PackageIconUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageIconUrl>
-    <Copyright>Copyright ©2021 Geeks Ltd. All rights reserved.</Copyright>
-    <Description>Generates Data Endpoint packages for Olive data replication</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <NoWarn>1701;1702;1705;NU1701</NoWarn>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-    <Version>2.1.142</Version>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Olive" Version="2.1.268" />
-    <PackageReference Include="Olive.Entities" Version="2.1.158" />
-    <PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.163" />
-  </ItemGroup>
-  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<StartupObject>OliveGenerator.Program</StartupObject>
+		<AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
+		<RootNamespace>Olive</RootNamespace>
+		<PackageId>generate-data-endpoint-proxy</PackageId>
+		<Title>Olive Data Endpoint Proxy Generator</Title>
+		<Authors>Geeks Ltd</Authors>
+		<PackageProjectUrl>https://github.com/Geeksltd/Olive.Generators/tree/master/DataEndPointGenerator</PackageProjectUrl>
+		<PackageIconUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageIconUrl>
+		<Copyright>Copyright ©2021 Geeks Ltd. All rights reserved.</Copyright>
+		<Description>Generates Data Endpoint packages for Olive data replication</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<NoWarn>1701;1702;1705;NU1701</NoWarn>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
+		<Version>2.1.143</Version>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Olive" Version="2.1.268" />
+		<PackageReference Include="Olive.Entities" Version="2.1.158" />
+		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.163" />
+	</ItemGroup>
+	<Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>
