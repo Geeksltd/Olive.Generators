@@ -2,7 +2,7 @@ name: Publish Olive Generator Package
 
 on:
   push:
-    branches: [ Add-Publish-Action ]
+    branches: [ master ]
 
 jobs:
  build:
