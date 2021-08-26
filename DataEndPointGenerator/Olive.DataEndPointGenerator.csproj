@@ -6,8 +6,8 @@
 		<StartupObject>OliveGenerator.Program</StartupObject>
 		<AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
 		<RootNamespace>Olive</RootNamespace>
-		<PackageId>generate-data-endpoint-proxy</PackageId>
-		<Title>Olive Data Endpoint Proxy Generator</Title>
+		<PackageId>generate-data-endpoint-proxy-test</PackageId>
+		<Title>Olive Data Endpoint Proxy Generator test</Title>
 		<Authors>Geeks Ltd</Authors>
 		<PackageProjectUrl>https://github.com/Geeksltd/Olive.Generators/tree/master/DataEndPointGenerator</PackageProjectUrl>
 		<PackageIconUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageIconUrl>
