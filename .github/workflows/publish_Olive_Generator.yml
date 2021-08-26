@@ -1,0 +1,22 @@
+name: Publish Olive Generator Package
+
+on:
+  push:
+    branches: [ Add-Publish-Action ]
+
+jobs:
+ build:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+   
+    - name: Publish Olive Data End Point Generator Package
+      uses: brandedoutcast/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
