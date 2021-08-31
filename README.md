@@ -42,3 +42,16 @@ TODO: msharp-build /update-nuget...
 
 
 TODO: Move all microservice ops here.
+
+
+# Debugging the Generators
+If you are experiencing a problem using the generators, try the following:
+
+1. Pull the source code of this repository on your local machine
+2. Open the solution in Visual Studio
+3. Set the generator you're trying to use as the *StartUp project* (e.g. **DataEndPointGenerator**)
+4. Right click no the project and select *Properties*
+5. Go under the `Debug` tab.
+6. Set the Working Directory to the folder of your test project for which you want to generate (e.g. `C:\MyProject\Website\bin\debug\netcoreapp3.1`)
+7. Set the other command line parameters
+8. In Visual Studio, press F5 to run the generator on your target test project. Now you can see what is hapenning.
