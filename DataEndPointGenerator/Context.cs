@@ -75,8 +75,6 @@ namespace OliveGenerator
             EndpointName = EndpointType.FullName; // Ensure it has full namespace 
         }
 
-
-
         internal static void FindExposedTypes()
         {
             ExposedTypes = EndpointType.CreateInstance<SourceEndpoint>()
