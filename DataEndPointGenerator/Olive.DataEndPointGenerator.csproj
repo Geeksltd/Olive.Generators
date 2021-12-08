@@ -17,13 +17,13 @@
 		<NoWarn>1701;1702;1705;NU1701</NoWarn>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-		<Version>2.1.149</Version>
+		<Version>2.1.150</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Olive" Version="2.1.289" />
-		<PackageReference Include="Olive.Entities" Version="2.1.162" />
-		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.169" />
+		<PackageReference Include="Olive" Version="2.1.291" />
+		<PackageReference Include="Olive.Entities" Version="2.1.163" />
+		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.170" />
 	</ItemGroup>
 	<Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>
