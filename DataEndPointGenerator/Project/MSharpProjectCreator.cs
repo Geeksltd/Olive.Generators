@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -10,13 +11,15 @@ namespace OliveGenerator
 {
     class MSharpProjectCreator : ProjectCreator
     {
-        const string NETCOREAPP3_1 = "netcoreapp3.1";
+        static DirectoryInfo FrameworkDirectoryInfo = Context.MSharp.GetSubDirectory("lib").GetDirectories().WithMax(x => x.Name.StartsWith("net"));
+        protected override string Framework => FrameworkDirectoryInfo?.Name;
+
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _MSharpMetadata;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> MSharpMetadata { get { return _MSharpMetadata ??= LoadMsharpMetadata(); } }
 
         public static Dictionary<string, Dictionary<string, Dictionary<string, string>>> LoadMsharpMetadata()
         {
-            var workingDir = Context.MSharp.GetSubDirectory($"lib\\{NETCOREAPP3_1}");
+            var workingDir = FrameworkDirectoryInfo;
             var data = System.Threading.Tasks.Task.Factory.RunSync(() => "dotnet msharp.dsl.dll".Run(c => c.WorkingDirectory = workingDir.FullName));
 
             var result = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
@@ -48,7 +51,6 @@ namespace OliveGenerator
 
         public MSharpProjectCreator() : base("MSharp") { }
 
-        protected override string Framework => NETCOREAPP3_1;
 
         [EscapeGCop]
         internal override string IconUrl => "http://licensing.msharp.co.uk/images/icon.png";
