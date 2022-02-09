@@ -17,7 +17,7 @@
 		<NoWarn>1701;1702;1705;NU1701</NoWarn>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
-		<Version>2.1.158</Version>
+		<Version>2.1.159</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
