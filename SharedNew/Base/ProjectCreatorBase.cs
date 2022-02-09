@@ -49,6 +49,7 @@ namespace OliveGenerator
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Version>{Version}</Version>
       <PackageIconUrl>{IconUrl}</PackageIconUrl>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 </Project>");
 

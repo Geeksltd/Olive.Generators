@@ -9,7 +9,7 @@ namespace OliveGenerator
         const string NAME = "EventBusCommand";
 
         public EventBusCommandProjectCreator() : base(
-            Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.CommandType.FullName + "." + NAME)
+            Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.CommandType.FullName)
             )
         {
         }
