@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Olive</RootNamespace>
     <StartupObject>OliveGenerator.Program</StartupObject>
     <PackageId>generate-eventbus-command-proxy</PackageId>
