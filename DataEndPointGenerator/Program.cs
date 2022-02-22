@@ -1,4 +1,5 @@
 ﻿using Olive;
+using Olive.SharedHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,17 @@ namespace OliveGenerator
 
                 Context.LoadAssembly();
                 Context.FindExposedTypes();
+
+                /// hashonly argument added to Olive.Endpoint Generator to help CI/CD process to identify modified Endpoints faster using hash function
+                /// by detecting "hashonly" in aruments list, Olive.Endpoint.Generator generates a hash to help CI agent to identify modified Endpoints
+                if (args.Any(x => x.ToLower().Contains("/hashonly")))
+                {
+                    var hashvalue = HashHelper.HashExposedType(Context.ExposedTypes);
+                    Console.Out.WriteLine();
+                    Console.Out.WriteLine($"Endpoint Hash = {hashvalue}");
+                    return 0;
+                }
+
                 Context.PrepareOutputDirectory();
 
                 new List<ProjectCreator> { new EndpointProjectCreator() };
