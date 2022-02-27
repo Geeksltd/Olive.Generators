@@ -13,10 +13,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2.287.1
+    - uses: actions/checkout@v2
    
     - name: Publish Olive Data End Point Generator Package
-      uses: rohith/publish-nuget@v2.287.1
+      uses: rohith/publish-nuget@v2
       with:
         PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
