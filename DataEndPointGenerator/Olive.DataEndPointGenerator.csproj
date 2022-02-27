@@ -18,7 +18,6 @@
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>generate-data-endpoint-proxy</ToolCommandName>
 		<Version>6.1.5</Version>
-		<BaseOutputPath>bin\</BaseOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

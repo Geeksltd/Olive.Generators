@@ -21,4 +21,4 @@ jobs:
         PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         NUGET_SOURCE: https://api.nuget.org/v3/index.json
-        PACKAGE_NAME: generate-data-endpoint-proxy
+        TAG_COMMIT: false
