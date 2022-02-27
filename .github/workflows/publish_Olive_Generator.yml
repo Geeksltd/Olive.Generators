@@ -5,12 +5,9 @@ on:
     branches: [ master ]
 
 jobs:
- build:
-    strategy:
-      matrix:
-        configuration: [Release]
-
-    runs-on: windows-latest
+ Release:
+    name: Release to Nuget
+    runs-on: ubuntu-latest
       
     steps:
 
