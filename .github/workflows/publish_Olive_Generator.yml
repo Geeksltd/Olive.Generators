@@ -5,23 +5,18 @@ on:
     branches: [ master ]
 
 jobs:
- Release:
-    name: Release to Nuget
-    runs-on: ubuntu-latest
-      
+ build:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest
+
     steps:
-
-    - name: Check out Repo
-      uses: actions/checkout@v2
-
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-  
-      with:
-       dotnet-version: 6.0.x
-
-    - name: Pack Olive Data End Point Generator
-      run: dotnet pack DataEndPointGenerator/Olive.DataEndPointGenerator.csproj -c Release
-
+    - uses: actions/checkout@v2
+   
     - name: Publish Olive Data End Point Generator Package
-      run: dotnet nuget push /home/runner/work/DataEndPointGenerator/DataEndPointGenerator/DataEndPointGenerator/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate`
+      uses: rohith/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
