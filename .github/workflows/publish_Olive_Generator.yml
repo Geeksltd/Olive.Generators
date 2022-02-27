@@ -11,9 +11,20 @@ jobs:
         configuration: [Release]
 
     runs-on: windows-latest
-
+      
     steps:
+
+    - name: Check out Repo
+      uses: actions/checkout@v2
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+  
+      with:
+       dotnet-version: 6.0.x
+
+    - name: Pack Olive Data End Point Generator
+      run: dotnet pack DataEndPointGenerator/Olive.DataEndPointGenerator.csproj -c Release
+
     - name: Publish Olive Data End Point Generator Package
-      run: dotnet pack -c Release -o . DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
-    - name: Publish
-      run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push /home/runner/work/DataEndPointGenerator/DataEndPointGenerator/DataEndPointGenerator/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate`
