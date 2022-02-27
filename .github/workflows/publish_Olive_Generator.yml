@@ -13,8 +13,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-   
     - name: Publish Olive Data End Point Generator Package
       run: dotnet pack -c Release -o . DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
     - name: Publish
