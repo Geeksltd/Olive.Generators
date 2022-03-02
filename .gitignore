@@ -269,3 +269,7 @@ bin
 /Olive.MvcJs
 nuget.exe
 /Utils/MSharp.Build/Properties/launchSettings.json
+AcceleratePackage/Properties/launchSettings.json
+ApiProxyGenerator/Properties/launchSettings.json
+DataEndPointGenerator/Properties/launchSettings.json
+EventBusCommandGenerator/Properties/launchSettings.json
