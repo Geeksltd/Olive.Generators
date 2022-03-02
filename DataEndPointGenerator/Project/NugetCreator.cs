@@ -61,7 +61,7 @@
     <iconUrl>{creator.IconUrl}</iconUrl>
     <description>Provides an easy method to invoke the Api functions of {Context.EndpointName}</description>
     <dependencies>
-    {creator.GetNugetDependencies().Select(x => $"<dependency id=\"{x}\" version=\"{GetLatestNugetVersion(x)}\" />").ToLinesString()}
+    {creator.GetNugetDependencies().Select(x => $"<dependency id=\"{x.Package}\" version=\"{x.Version}\" />").ToLinesString()}
     </dependencies>   
   </metadata>
   <files>
@@ -72,13 +72,13 @@
             NuspecFile.WriteAllText(nuspec);
         }
 
-        static string GetLatestNugetVersion(string package)
-        {
-            var html = $"https://www.nuget.org/packages/{package}".AsUri().Download()
-                .RiskDeadlockAndAwaitResult();
+        //static string GetLatestNugetVersion(string package)
+        //{
+        //    var html = $"https://www.nuget.org/packages/{package}".AsUri().Download()
+        //        .RiskDeadlockAndAwaitResult();
 
-            var pref = "<meta property=\"og:title\" content=\"" + package + " ";
-            return html.Substring(pref, "\"", inclusive: false);
-        }
+        //    var pref = "<meta property=\"og:title\" content=\"" + package + " ";
+        //    return html.Substring(pref, "\"", inclusive: false);
+        //}
     }
 }

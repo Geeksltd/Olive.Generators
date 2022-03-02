@@ -9,7 +9,7 @@ namespace Olive.SharedHelper
     internal class HashHelper
     {
 
-        public static string HashExposedType(IEnumerable<ExposedType> exposedType)
+        public static string HashExposedType(IEnumerable<dynamic> exposedType)
         {
             if (exposedType.HasAny() == false) return String.Empty;
             string exposedTypeToStr = null;

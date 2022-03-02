@@ -17,7 +17,7 @@ namespace OliveGenerator
 
         public static Assembly AssemblyObject;
         public static Type EndpointType;
-        public static List<ExposedType> ExposedTypes = new List<ExposedType>();
+        public static List<dynamic> ExposedTypes = new List<dynamic>();
 
         internal static void PrepareOutputDirectory()
         {
@@ -77,14 +77,14 @@ namespace OliveGenerator
 
         internal static void FindExposedTypes()
         {
-            ExposedTypes = EndpointType.CreateInstance<SourceEndpoint>()
-                .GetTypes()
-                .Select(x => x.CreateInstance<ExposedType>())
+            ExposedTypes = (((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>)
+                .Select(x => x.CreateInstance())
                 .ToList();
 
             if (ExposedTypes.None()) throw new Exception("This endpoint has no exposed data types.");
 
-            ExposedTypes.Do(x => x.Define());
+            foreach (var type in ExposedTypes)
+                type.Define();
         }
     }
 }

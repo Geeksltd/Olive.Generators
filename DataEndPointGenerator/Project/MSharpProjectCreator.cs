@@ -55,14 +55,18 @@ namespace OliveGenerator
         [EscapeGCop]
         internal override string IconUrl => "http://licensing.msharp.co.uk/images/icon.png";
 
-        protected override string[] References => new[] { "Olive", "MSharp" };
+        protected override PackageReference[] References => new[]
+        {
+           PackageReference.Olive,
+           PackageReference.MSharp
+        };
 
         protected override void AddFiles()
         {
             foreach (var item in Context.ExposedTypes)
             {
                 Console.Write("Adding M# model class " + item.GetType().Name + "...");
-                Folder.GetFile(item.GetType().Name + ".cs").WriteAllText(new MSharpModelProgrammer(this, item).Generate());
+                Folder.GetFile((string)item.GetType().Name + ".cs").WriteAllText(new MSharpModelProgrammer(this, item).Generate());
                 Console.WriteLine("Done");
             }
         }

@@ -16,7 +16,7 @@ namespace OliveGenerator
         internal static string Version = LocalTime.Now.ToString("yyMM.ddHH.mmss");
 
         protected abstract string Framework { get; }
-        protected abstract string[] References { get; }
+        protected abstract PackageReference[] References { get; }
 
         protected ProjectCreator(string name)
         {
@@ -53,8 +53,8 @@ namespace OliveGenerator
         {
             foreach (var item in References)
             {
-                Console.Write("Adding nuget reference " + item + "...");
-                Context.Run("dotnet add package " + item);
+                Console.Write("Adding nuget reference " + item.Package + " version : " + item.Version + "...");
+                Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
                 Console.WriteLine("Done");
             }
         }
@@ -70,7 +70,7 @@ namespace OliveGenerator
             Console.WriteLine("Done");
         }
 
-        internal virtual IEnumerable<string> GetNugetDependencies()
+        internal virtual IEnumerable<PackageReference> GetNugetDependencies()
         {
             yield break;
         }
@@ -90,4 +90,6 @@ namespace OliveGenerator
             yield return $@"<file src=""{OutputFile(".xml")}"" target=""lib\{Framework}\"" />";
         }
     }
+
+
 }

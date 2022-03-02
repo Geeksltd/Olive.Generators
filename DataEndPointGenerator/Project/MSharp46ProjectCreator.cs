@@ -9,6 +9,6 @@
 
         protected override string Framework => "net46";
 
-        protected override string[] References => new[] { "MSharp" };
+        protected override PackageReference[] References => new[] { PackageReference.MSharp };
     }
 }

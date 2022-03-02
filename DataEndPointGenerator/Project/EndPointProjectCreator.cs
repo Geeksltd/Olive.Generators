@@ -14,8 +14,10 @@ namespace OliveGenerator
         internal override string IconUrl
             => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.DataEndpointGenerator/EndpointIcon.png";
 
-        protected override string[] References
-            => new[] { "Olive", "Olive.Entities", "Olive.Entities.Data.Replication" };
+        protected override PackageReference[] References
+            => new[] {
+                PackageReference.Olive_Entities_Data_Replication
+            };
 
         protected override void AddFiles()
         {
@@ -33,13 +35,11 @@ namespace OliveGenerator
             return base.GetTargetFiles().Concat($@"<file src=""{readme}"" target="""" />");
         }
 
-        internal override IEnumerable<string> GetNugetDependencies()
+        internal override IEnumerable<PackageReference> GetNugetDependencies()
         {
             return new[]
             {
-                "Olive",
-                "Olive.Entities",
-                "Olive.Entities.Data.Replication",
+                PackageReference.Olive_Entities_Data_Replication
             };
         }
     }
