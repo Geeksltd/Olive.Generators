@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "WebApiClientSdkGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "/controller:CompaniesHouseService.DownloadCompanyReportApi /out:D:\\Projects\\Geeks.MS\\CompaniesHouse\\PrivatePackages",
-      "workingDirectory": "D:\\Projects\\Geeks.MS\\CompaniesHouse\\Website\\bin\\Debug\\netcoreapp3.1"
-    }
-  }
-}

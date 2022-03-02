@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "Olive.EventBusCommandGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": " /assembly:website.dll /command:CreateAndSendCommand /push:http://nuget.geeksms.uat.co/nuget /apiKey:thisIsMyApiKey",
-      "workingDirectory": "E:\\Geeks.MS\\Contracts\\Website\\bin\\Debug\\netcoreapp3.1\\"
-    }
-  }
-}
