@@ -16,16 +16,14 @@ namespace OliveGenerator
 
             r.AppendLine("namespace " + Endpoint.Namespace);
             r.AppendLine("{");
-            r.AppendLine("using System;");
-            r.AppendLine("using System.Threading.Tasks;");
-            r.AppendLine("using Olive.Entities;");
+            r.AppendLine("using Olive;");
             r.AppendLine("using Olive.Entities.Replication;");
             r.AppendLine();
 
             r.AppendLine($"public class {ClassName} : DestinationEndpoint");
             r.AppendLine("{");
 
-            r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{Endpoint.FullName}:Url\");");
+            r.AppendLine($"public override string QueueUrl => Olive.Config.Get(\"DataReplication:{Endpoint.FullName}:Url\").Or(Olive.Entities.Data.Replication.QueueUrlProvider.UrlProvider.GetUrl(GetType()));");
             r.AppendLine();
 
             foreach (var item in Context.ExposedTypes)

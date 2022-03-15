@@ -13,6 +13,7 @@ class PackageReference
     public static PackageReference Olive => new PackageReference { Package = nameof(Olive), Version = "2.1.204" };
     public static PackageReference Olive_Entities => new PackageReference { Package = ToPackageName(nameof(Olive_Entities)), Version = "2.1.161" };
     public static PackageReference Olive_Entities_Data_Replication => new PackageReference { Package = ToPackageName(nameof(Olive_Entities_Data_Replication)), Version = "2.1.150" };
+    public static PackageReference Olive_Entities_Data_Replication_QueueUrlProvider => new PackageReference { Package = ToPackageName(nameof(Olive_Entities_Data_Replication_QueueUrlProvider)), Version = "1.0.0" };
     private static string ToPackageName(string packageName) => packageName.Replace("_", ".");
 
 }

@@ -16,7 +16,8 @@ namespace OliveGenerator
 
         protected override PackageReference[] References
             => new[] {
-                PackageReference.Olive_Entities_Data_Replication
+                PackageReference.Olive_Entities_Data_Replication,
+                PackageReference.Olive_Entities_Data_Replication_QueueUrlProvider,
             };
 
         protected override void AddFiles()
@@ -37,10 +38,11 @@ namespace OliveGenerator
 
         internal override IEnumerable<PackageReference> GetNugetDependencies()
         {
-            return new[]
-            {
-                PackageReference.Olive_Entities_Data_Replication
-            };
+            yield break;
+            //return new[]
+            //{
+            //    PackageReference.Olive_Entities_Data_Replication
+            //};
         }
     }
 }
