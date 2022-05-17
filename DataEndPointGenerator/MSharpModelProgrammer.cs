@@ -35,6 +35,10 @@ namespace OliveGenerator
             r.AppendLine("public " + Type.Name + "()");
             r.AppendLine("{");
             r.AppendLine($"Schema(\"{Type.Namespace}\").IsRemoteCopy();");
+
+            if (ExposedType.ToStringExpression.HasValue())
+                r.AppendLine($"ToStringExpression(\"{CSharpFormatter.EscapeString(ExposedType.ToStringExpression)}\");");
+
             r.AppendLine();
 
             if (ExposedType.IsSoftDeleteEnabled)

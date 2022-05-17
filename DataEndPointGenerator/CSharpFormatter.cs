@@ -45,6 +45,18 @@ namespace OliveGenerator
             return CodeLines.ToLinesString();
         }
 
+        public static string EscapeString(string literal)
+        {
+            if (literal.IsEmpty()) return string.Empty;
+
+            return literal
+                .Replace("\\", @"\\")
+                .Replace("\"", @"\""")
+                .Replace("\t", @"\t")
+                .Replace("\r", @"\r")
+                .Replace("\n", @"\n");
+        }
+
         class CodeLine
         {
             LinkedListNode<CodeLine> Node;
