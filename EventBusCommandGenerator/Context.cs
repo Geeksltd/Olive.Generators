@@ -14,6 +14,7 @@ namespace OliveGenerator
 
         public string CommandName;
         public Type CommandType;
+        public static Assembly AssemblyObject;
         public List<FieldInfo> CommandFields = new List<FieldInfo>();
 
         internal void PrepareOutputDirectory()
@@ -36,12 +37,11 @@ namespace OliveGenerator
 
         internal void LoadAssembly()
         {
-            var pluginLocation = AssemblyFile.ExistsOrThrow().FullName;
+            AppDomain.CurrentDomain.ResolveAssemblies();
+            AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
-            AssemblyObj = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
-
-            CommandType = AssemblyObj.GetType(CommandName) ??
-                AssemblyObj.GetTypes().FirstOrDefault(x => x.Name == CommandName && x.BaseType == typeof(EventBusCommandMessage)) ??
+            CommandType = AssemblyObject.GetType(CommandName) ??
+                AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == CommandName) ??
                 throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {CommandName}.");
 
             CommandName = CommandType.FullName; // Ensure it has full namespace 
