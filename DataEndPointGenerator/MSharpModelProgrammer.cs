@@ -35,6 +35,10 @@ namespace OliveGenerator
             r.AppendLine("public " + Type.Name + "()");
             r.AppendLine("{");
             r.AppendLine($"Schema(\"{Type.Namespace}\").IsRemoteCopy();");
+
+            if (ExposedType.ToStringExpression.HasValue())
+                r.AppendLine($"ToStringExpression(\"{CSharpFormatter.EscapeString(ExposedType.ToStringExpression)}\");");
+
             r.AppendLine();
 
             if (ExposedType.IsSoftDeleteEnabled)
@@ -65,31 +69,31 @@ namespace OliveGenerator
             if (isNullable = type.IsNullable())
                 type = type.GetGenericArguments().Single();
 
-            var method = type.Name.ToPascalCaseId();
+            var method = type.Name.ToPascalCaseId() + "(";
 
             if (item.IsAssociation)
             {
-                method = "Associate" + "<" + type.Name + ">";
-                if (type.IsEnum) method = "String";
+                method = "Associate" + "(\"" + type.Name + "\", ";
+                if (type.IsEnum) method = "String(";
             }
 
             if (item is ExposedPropertyInfo p && p.IsInverseAssociation)
             {
                 type = type.GetGenericArguments().Single();
-                method = "InverseAssociate<" + type.Name + ">";
+                method = "InverseAssociate<" + type.Name + ">(";
                 extraArgs += ", inverseOf: \"" + p.Property.GetCustomAttribute<InverseOfAttribute>()?.Association + "\"";
             }
 
             switch (method)
             {
-                case "Boolean": method = "Bool"; break;
-                case "Int32": method = "Int"; break;
-                case "Int64": method = "Decimal"; break;
-                case "String": maxLength = GetStringLength(item); if (maxLength == 0) method = "BigString"; break;
+                case "Boolean": method = "Bool("; break;
+                case "Int32": method = "Int("; break;
+                case "Int64": method = "Decimal("; break;
+                case "String": maxLength = GetStringLength(item); if (maxLength == 0) method = "BigString("; break;
                 default: break;
             }
 
-            var result = method + $"(\"{name}\"{extraArgs})";
+            var result = method + $"\"{name}\"{extraArgs})";
 
             if (type.Assembly == Context.AssemblyObject && type.IsArray)
                 result += ".MaxCardinality(null)";
