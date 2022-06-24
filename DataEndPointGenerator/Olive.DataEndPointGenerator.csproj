@@ -23,7 +23,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.182" />
+		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.186" />
 	</ItemGroup>
 	<Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>
