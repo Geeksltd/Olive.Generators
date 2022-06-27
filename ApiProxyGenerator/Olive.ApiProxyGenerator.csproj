@@ -24,8 +24,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="olive" Version="2.1.319" />
-    <PackageReference Include="Olive.Entities" Version="2.1.168" />
+    <PackageReference Include="olive" Version="2.1.320" />
+    <PackageReference Include="Olive.Entities" Version="2.1.175" />
   </ItemGroup>
   <Import Project="..\DTO\DTO.projitems" Label="Shared" />
   <Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />

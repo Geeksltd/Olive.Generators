@@ -69,7 +69,7 @@ namespace OliveGenerator
             if (isNullable = type.IsNullable())
                 type = type.GetGenericArguments().Single();
 
-            var method = type.Name.ToPascalCaseId() + "(";
+            var method = type.Name.ToPascalCaseId();
 
             if (item.IsAssociation)
             {
