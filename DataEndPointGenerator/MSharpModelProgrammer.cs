@@ -69,7 +69,7 @@ namespace OliveGenerator
             if (isNullable = type.IsNullable())
                 type = type.GetGenericArguments().Single();
 
-            var method = type.Name.ToPascalCaseId();
+            var method = type.Name.ToPascalCaseId() + "(";
 
             if (item.IsAssociation)
             {
@@ -86,16 +86,11 @@ namespace OliveGenerator
 
             switch (method)
             {
-                case "Boolean": method = "Bool("; break;
-                case "Int32": method = "Int("; break;
-                case "Int64": method = "Decimal("; break;
-                case "String": maxLength = GetStringLength(item); method = (maxLength == 0) ? "BigString(" : "String("; break;
+                case "Boolean(": method = "Bool("; break;
+                case "Int32(": method = "Int("; break;
+                case "Int64(": method = "Decimal("; break;
+                case "String(": maxLength = GetStringLength(item); method = (maxLength == 0) ? "BigString(" : "String("; break;
                 default: break;
-            }
-
-            if (type.IsTypeDefinition && method.Contains("(") == false)
-            {
-                method += "(";
             }
 
             var result = method + $"\"{name}\"{extraArgs})";
