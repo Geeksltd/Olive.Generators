@@ -93,6 +93,11 @@ namespace OliveGenerator
                 default: break;
             }
 
+            if (type.IsTypeDefinition && method.Contains("(") == false)
+            {
+                method += "(";
+            }
+
             var result = method + $"\"{name}\"{extraArgs})";
 
             if (type.Assembly == Context.AssemblyObject && type.IsArray)
