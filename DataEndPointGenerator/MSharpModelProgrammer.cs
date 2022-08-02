@@ -13,13 +13,14 @@ namespace OliveGenerator
     {
         ExposedType ExposedType;
         MSharpProjectCreator ProjectCreator;
-
+        Type? IDType;
         Type Type => ExposedType.GetType();
 
         public MSharpModelProgrammer(MSharpProjectCreator projectCreator, ExposedType type)
         {
             ProjectCreator = projectCreator;
             ExposedType = type;
+            IDType = ExposedType?.DomainType?.GetProperty("ID")?.PropertyType;
         }
 
         internal string Generate()
@@ -40,6 +41,35 @@ namespace OliveGenerator
                 r.AppendLine($"ToStringExpression(\"{CSharpFormatter.EscapeString(ExposedType.ToStringExpression)}\");");
 
             r.AppendLine();
+
+            if (IDType?.Name != "Guid")
+            {
+                switch (IDType.Name)
+                {
+                    case "Byte":
+                        r.AppendLine("PrimaryKeyType(\"byte\");");
+                        break;
+
+                    case "Int16":
+                        r.AppendLine("PrimaryKeyType(\"short\");");
+                        break;
+
+                    case "Int32":
+                        r.AppendLine("PrimaryKeyType(\"int\");");
+                        break;
+
+                    case "Int64":
+                        r.AppendLine("PrimaryKeyType(\"long\");");
+                        break;
+
+                    case "String":
+                        r.AppendLine("PrimaryKeyType(\"string\");");
+                        break;
+                }
+
+                r.AppendLine();
+            }
+
 
             if (ExposedType.IsSoftDeleteEnabled)
             {
