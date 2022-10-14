@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace OliveGenerator
 {
@@ -44,26 +45,39 @@ namespace OliveGenerator
       <PackageIconUrl>{IconUrl}</PackageIconUrl>
       <Description>Auto-generated package for data endpoint: {Name}</Description>
   </PropertyGroup>
+  <ItemGroup>
+    {GetNugetReferences()}
+  </ItemGroup>
 </Project>");
 
             Environment.CurrentDirectory = Folder.FullName;
         }
 
-        void AddNugetReferences()
+        string GetNugetReferences()
         {
+            var builder = new StringBuilder();
             foreach (var item in References)
             {
-                Console.Write("Adding nuget reference " + item.Package + " version : " + item.Version + "...");
-                Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
-                Console.WriteLine("Done");
+                builder.AppendLine($"    <PackageReference Include=\"{item.Package}\" Version=\"{item.Version}\" />");
             }
+            return builder.ToString();
         }
+
+        //void AddNugetReferences()
+        //{
+        //    foreach (var item in References)
+        //    {
+        //        Console.Write("Adding nuget reference " + item.Package + " version : " + item.Version + "...");
+        //        Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
+        //        Console.WriteLine("Done");
+        //    }
+        //}
 
         internal void Build()
         {
             Create();
             AddFiles();
-            AddNugetReferences();
+            //AddNugetReferences();
 
             Console.Write("Building " + Folder + "...");
             Context.Run("dotnet build");
