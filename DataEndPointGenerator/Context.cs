@@ -77,9 +77,9 @@ namespace OliveGenerator
 
         internal static void FindExposedTypes()
         {
-            ExposedTypes = (((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>)
-                .Select(x => x.CreateInstance())
-                .ToList();
+            var existingTypes= ((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>;
+
+            ExposedTypes = existingTypes.Select(x => x.CreateInstance()).ToList();
 
             if (ExposedTypes.None()) throw new Exception("This endpoint has no exposed data types.");
 
