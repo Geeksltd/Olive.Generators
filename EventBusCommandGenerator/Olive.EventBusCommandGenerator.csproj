@@ -15,7 +15,7 @@
 		<PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackAsTool>true</PackAsTool>
-		<PackageVersion>6.1.0</PackageVersion>
+		<PackageVersion>6.1.1</PackageVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;1705;NU1701</NoWarn>
@@ -26,10 +26,10 @@
 		<Compile Remove="Project\MSharpProjectCreator.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Olive" Version="2.1.320" />
-		<PackageReference Include="Olive.Entities" Version="2.1.175" />
-		<PackageReference Include="Olive.Entities.Data" Version="2.1.182" />
-		<PackageReference Include="Olive.EventBus" Version="2.1.132" />
+		<PackageReference Include="Olive" Version="2.1.327" />
+		<PackageReference Include="Olive.Entities" Version="2.1.178" />
+		<PackageReference Include="Olive.Entities.Data" Version="2.1.186" />
+		<PackageReference Include="Olive.EventBus" Version="2.1.133" />
 	</ItemGroup>
 	<Import Project="..\DTO\DTO.projitems" Label="Shared" />
 	<Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />
