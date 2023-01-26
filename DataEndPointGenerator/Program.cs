@@ -35,8 +35,6 @@ namespace OliveGenerator
 
                 Context.PrepareOutputDirectory();
 
-                new List<ProjectCreator> { new EndpointProjectCreator() };
-
                 var endPointCreator = new EndpointProjectCreator();
                 endPointCreator.Build();
                 new NugetCreator(endPointCreator).Create();
