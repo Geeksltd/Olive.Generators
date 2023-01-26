@@ -7,6 +7,7 @@ namespace OliveGenerator
         static int Main(string[] args)
         {
             if (!ParametersParser.Start(args)) return -1;
+
             try
             {
                 ParametersParser.LoadParameters();

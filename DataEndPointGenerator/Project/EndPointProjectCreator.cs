@@ -1,6 +1,6 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -39,10 +39,10 @@ namespace OliveGenerator
         internal override IEnumerable<PackageReference> GetNugetDependencies()
         {
             yield break;
-            //return new[]
-            //{
+            // return new[]
+            // {
             //    PackageReference.Olive_Entities_Data_Replication
-            //};
+            // };
         }
     }
 }

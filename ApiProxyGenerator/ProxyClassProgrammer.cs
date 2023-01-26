@@ -1,6 +1,6 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -23,8 +23,10 @@ namespace OliveGenerator
             r.AppendLine("using Olive;");
             r.AppendLine();
             r.Append("/// <summary>Provides access to the " + ClassName + " api of the " + Context.Current.PublisherService + " service.");
+
             if (ServiceOnly())
                 r.Append($" As the target Api declares [{Controller.GetExplicitAuthorizeServiceAttribute()}], my constructor will call AsServiceUser() automatically.");
+
             r.AppendLine("</summary>");
             r.AppendLine($"public partial class {ClassName} : StronglyTypedApiProxy");
             r.AppendLine("{");
@@ -81,23 +83,23 @@ namespace OliveGenerator
             r.AppendLine("</summary>");
             r.AppendLine($"public partial class {ClassName}");
             r.AppendLine("{");
-            //Adding mock configuration field
+            // Adding mock configuration field
             r.AppendLine($"static {ClassName}MockConfiguration MockConfig = new {ClassName}MockConfiguration();");
             r.AppendLine();
-            //Method Mock starts here
+            // Method Mock starts here
             r.Append($"/// <summary>set the mock configuration for {ClassName}");
             r.AppendLine("</summary>");
             r.AppendLine($"public static void Mock(Action<{ClassName}MockConfiguration> mockConfiguration, bool enabled = true)");
             r.AppendLine("{");
             r.AppendLine($"MockConfig.Enabled = Config.Get(GetMockConfigKey(\"{Context.Current.PublisherService}\")).Or(enabled.ToString()).To<bool>();");
             r.AppendLine("mockConfiguration(MockConfig);");
-            //Method Mock ends here
+            // Method Mock ends here
             r.AppendLine("}");
             r.AppendLine("private static string GetMockConfigKey(string serviceName) => $\"Microservice:{ serviceName}:Mock\";");
-            //class defination ends here
+            // class defination ends here
             r.AppendLine("}");
 
-            //Namespace defination ends here
+            // Namespace defination ends here
             r.AppendLine("}");
 
             return new CSharpFormatter(r.ToString()).Format();

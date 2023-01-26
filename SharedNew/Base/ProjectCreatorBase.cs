@@ -1,7 +1,7 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -18,10 +18,7 @@ namespace OliveGenerator
         protected abstract string Framework { get; }
         protected abstract string[] References { get; }
 
-        protected ProjectCreatorBase(DirectoryInfo folder)
-        {
-            Folder = folder;
-        }
+        protected ProjectCreatorBase(DirectoryInfo folder) => Folder = folder;
 
         internal void Build()
         {
@@ -42,7 +39,8 @@ namespace OliveGenerator
 
             Console.WriteLine("Creating a new class library project at " + Folder.FullName + "...");
 
-            Folder.GetFile(Name + ".csproj").WriteAllText($@"<Project Sdk=""Microsoft.NET.Sdk"">
+            Folder.GetFile(Name + ".csproj")
+                .WriteAllText($@"<Project Sdk=""Microsoft.NET.Sdk"">
   <PropertyGroup>
       <TargetFramework>{Framework}</TargetFramework>
       <DocumentationFile>{BinFolder}\{Name}.xml</DocumentationFile>
@@ -65,14 +63,11 @@ namespace OliveGenerator
                 Console.WriteLine("Done");
             }
         }
-        //------------------------------------------
+        // ------------------------------------------
 
         protected abstract void AddFiles();
 
         internal abstract string IconUrl { get; }
-
-
-
 
         public virtual IEnumerable<string> GetNugetDependencies()
         {

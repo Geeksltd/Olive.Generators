@@ -1,19 +1,18 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using Olive;
 
 namespace OliveGenerator
 {
     class ParametersParser : ParametersParserBase
     {
-        public static ParametersParser SetArgs(string[] args) { return Current = new ParametersParser(Context.Current, args); }
-
-        public static ParametersParser Current { get; private set; }
-
         public ParametersParser(ContextBase context, string[] args) : base(context, args)
         {
         }
+        public static ParametersParser SetArgs(string[] args) { return Current = new ParametersParser(Context.Current, args); }
+
+        public static ParametersParser Current { get; private set; }
 
         public virtual bool Start()
         {
@@ -106,6 +105,7 @@ namespace OliveGenerator
         static FileInfo FindAppSettings()
         {
             var dir = Context.Current.Source.Parent;
+
             while (dir.Root.FullName != dir.FullName)
             {
                 var result = dir.GetFile("appSettings.json");

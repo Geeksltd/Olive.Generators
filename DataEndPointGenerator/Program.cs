@@ -1,8 +1,7 @@
-﻿using Olive;
-using Olive.SharedHelper;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using Olive;
+using Olive.SharedHelper;
 
 namespace OliveGenerator
 {
@@ -11,6 +10,7 @@ namespace OliveGenerator
         static int Main(string[] args)
         {
             if (!ParametersParser.Start(args)) return -1;
+
             try
             {
                 ParametersParser.LoadParameters();

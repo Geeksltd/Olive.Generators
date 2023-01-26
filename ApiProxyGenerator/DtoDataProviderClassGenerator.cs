@@ -1,8 +1,8 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -41,6 +41,7 @@ namespace OliveGenerator
             r.AppendLine($"public class {type} : LimitedDataProvider");
             r.AppendLine("{");
             r.AppendLine($"static Action<{Context.ControllerType.Name}> Configurator;");
+
             if (ApiMethodReturnsList)
             {
                 r.AppendLine($"static {Type.Name}[] LatestListResult;");
@@ -106,9 +107,11 @@ namespace OliveGenerator
                 r.Append($"return await api.{ApiMethod.Name}(");
 
                 var paramType = ApiMethod.GetParameters().Single().ParameterType;
+
                 if (paramType == typeof(Guid)) r.Append("guid");
                 else if (paramType == typeof(string)) r.Append("id.ToString()");
                 else r.Append($"id.ToString().To<{paramType.Name}>()");
+
                 r.AppendLine(");");
             }
 

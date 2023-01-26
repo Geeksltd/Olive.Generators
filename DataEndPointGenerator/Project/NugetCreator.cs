@@ -1,9 +1,9 @@
 ﻿namespace OliveGenerator
 {
-    using Olive;
     using System;
     using System.IO;
     using System.Linq;
+    using Olive;
 
     class NugetCreator
     {
@@ -72,13 +72,13 @@
             NuspecFile.WriteAllText(nuspec);
         }
 
-        //static string GetLatestNugetVersion(string package)
-        //{
+        // static string GetLatestNugetVersion(string package)
+        // {
         //    var html = $"https://www.nuget.org/packages/{package}".AsUri().Download()
         //        .RiskDeadlockAndAwaitResult();
 
         //    var pref = "<meta property=\"og:title\" content=\"" + package + " ";
         //    return html.Substring(pref, "\"", inclusive: false);
-        //}
+        // }
     }
 }

@@ -1,11 +1,7 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -26,10 +22,9 @@ namespace OliveGenerator
                 Console.WriteLine("Api assembly: " + Context.Current.AssemblyFile);
                 Console.WriteLine("Api controller: " + Context.Current.ControllerName);
                 Console.WriteLine("Temp folder: " + Context.Current.TempPath);
-                
+
                 Context.Current.LoadAssembly();
                 Context.Current.PrepareOutputDirectory();
-
 
                 DtoTypes.FindAll(
                     Context.Current.ActionMethods.SelectMany(x => x.GetArgAndReturnTypes()).ToArray()
@@ -49,7 +44,6 @@ namespace OliveGenerator
                 if (Context.Current.Output != null)
                     Context.Current.TempPath.CopyTo(Context.Current.Output.FullName, true);
 
-
                 Console.WriteLine("Add done");
                 return 0;
             }
@@ -60,7 +54,6 @@ namespace OliveGenerator
             }
         }
 
-
         public static void GenerateMSharps()
         {
             if (DtoTypes.All.Any())
@@ -70,6 +63,5 @@ namespace OliveGenerator
                 new NugetCreator(projectCreators).Create();
             }
         }
-
     }
 }

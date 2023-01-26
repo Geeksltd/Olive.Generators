@@ -31,7 +31,6 @@ namespace OliveGenerator
                  .ToArray();
         }
 
-
         public static Type GetMethodReturnType(this MethodInfo @this)
         {
             return @this.GetAttribute("Returns")?.ConstructorArguments.Single().Value as Type;

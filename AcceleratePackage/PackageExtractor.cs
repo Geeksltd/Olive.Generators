@@ -1,7 +1,7 @@
-﻿using Olive;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Xml;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -11,6 +11,7 @@ namespace OliveGenerator
         {
             var xml = new XmlDocument();
             xml.Load(project.FullName);
+
             var containerNode =
                 xml.SelectNodes(@"/Project/ItemGroup")
                 .Cast<XmlNode>()

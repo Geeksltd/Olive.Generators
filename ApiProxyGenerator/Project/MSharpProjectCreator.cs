@@ -1,5 +1,5 @@
-﻿using Olive;
-using System;
+﻿using System;
+using Olive;
 
 namespace OliveGenerator
 {

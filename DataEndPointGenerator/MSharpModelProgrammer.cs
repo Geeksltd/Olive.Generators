@@ -1,11 +1,11 @@
-﻿using Olive;
-using Olive.Entities;
-using Olive.Entities.Replication;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Olive;
+using Olive.Entities;
+using Olive.Entities.Replication;
 
 namespace OliveGenerator
 {
@@ -70,7 +70,6 @@ namespace OliveGenerator
                 r.AppendLine();
             }
 
-
             if (ExposedType.IsSoftDeleteEnabled)
             {
                 r.AppendLine("SoftDelete();");
@@ -96,6 +95,7 @@ namespace OliveGenerator
             if (type.IsArray) type = type.GetElementType();
 
             bool isNullable;
+
             if (isNullable = type.IsNullable())
                 type = type.GetGenericArguments().Single();
 
@@ -134,11 +134,9 @@ namespace OliveGenerator
             }
 
             var scale = ProjectCreator.TryGetMetadataValueFor<int>(entityType, name, "Scale");
-            if (scale != null)
-                result += $".Scale({scale})";
+            if (scale != null) result += $".Scale({scale})";
 
-            if (maxLength > 0)
-                result += $".Max({maxLength})";
+            if (maxLength > 0) result += $".Max({maxLength})";
 
             return result + ";";
         }

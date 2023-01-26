@@ -1,7 +1,7 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -26,6 +26,7 @@ namespace OliveGenerator
             r.AppendLine("{");
 
             r.AppendLine("HasExternallyDomainClass();");
+
             if (Type.FindDatabaseGetMethod() == null)
                 r.AppendLine("DatabaseMode(DatabaseOption.Transient);");
             else r.AppendLine("DatabaseMode(DatabaseOption.Custom);");
@@ -46,6 +47,7 @@ namespace OliveGenerator
             if (type.IsArray) type = type.GetElementType();
 
             bool isNullable;
+
             if (isNullable = type.IsNullable())
             {
                 type = type.GetGenericArguments().Single();

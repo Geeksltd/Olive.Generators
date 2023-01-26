@@ -1,11 +1,11 @@
-﻿using Olive;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Olive;
 
 namespace System
 {
@@ -35,23 +35,19 @@ namespace System
                     var output = new StringBuilder();
                     var error = new StringBuilder();
 
-
                     using var outputWaitHandle = new AutoResetEvent(false);
                     using var errorWaitHandle = new AutoResetEvent(false);
 
                     cmd.OutputDataReceived += (sender, e) =>
                     {
-                        if (e.Data == null)
-                            outputWaitHandle.Set();
-                        else
-                            output.Append(e.Data);
+                        if (e.Data == null) outputWaitHandle.Set();
+                        else output.Append(e.Data);
                     };
+
                     cmd.ErrorDataReceived += (sender, e) =>
                     {
-                        if (e.Data == null)
-                            errorWaitHandle.Set();
-                        else
-                            error.Append(e.Data);
+                        if (e.Data == null) errorWaitHandle.Set();
+                        else error.Append(e.Data);
                     };
 
                     config?.Invoke(cmd.StartInfo);
@@ -71,7 +67,7 @@ namespace System
             });
         }
 
-        private static void Cmd_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        static void Cmd_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             throw new NotImplementedException();
         }
@@ -79,11 +75,11 @@ namespace System
         internal static DirectoryInfo SolutionDirectory(this DirectoryInfo child)
         {
             var folders = new List<string>();
+
             for (var result = child; result != null; result = result.Parent)
             {
                 folders.Add(result.FullName);
-                if (result.GetFiles("*.sln").Any())
-                    return result;
+                if (result.GetFiles("*.sln").Any()) return result;
             }
 
             throw new Exception($"Could not find the solution folder. Looked in [{folders.ToString(",")}]");

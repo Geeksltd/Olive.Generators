@@ -1,8 +1,8 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -40,8 +40,9 @@ namespace OliveGenerator
 
             return new CSharpFormatter(r.ToString()).Format();
         }
+
         static string GetPropertyOrFieldName(MemberInfo member)
-        { 
+        {
             if (DtoTypes.DomainEntities.Contains(member.GetPropertyOrFieldType())) return $"{member.Name}Id";
             return member.Name;
         }
@@ -50,6 +51,7 @@ namespace OliveGenerator
         {
             var type = propertyType;
             var extraType = "";
+
             if (type.IsArray)
             {
                 type = type.GetElementType();
@@ -57,6 +59,7 @@ namespace OliveGenerator
             }
 
             bool isNullable;
+
             if (isNullable = type.IsNullable())
             {
                 type = type.GetGenericArguments().Single();

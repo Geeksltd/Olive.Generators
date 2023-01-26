@@ -1,8 +1,8 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -36,7 +36,8 @@ namespace OliveGenerator
 
             Console.WriteLine("Creating a new class library project at " + Folder.FullName + "...");
 
-            Folder.GetFile(Name + ".csproj").WriteAllText($@"<Project Sdk=""Microsoft.NET.Sdk"">
+            Folder.GetFile(Name + ".csproj")
+                .WriteAllText($@"<Project Sdk=""Microsoft.NET.Sdk"">
   <PropertyGroup>
       <TargetFramework>{Framework}</TargetFramework>
       <DocumentationFile>{BinFolder}\{Name}.xml</DocumentationFile>
@@ -56,28 +57,30 @@ namespace OliveGenerator
         string GetNugetReferences()
         {
             var builder = new StringBuilder();
+
             foreach (var item in References)
             {
                 builder.AppendLine($"    <PackageReference Include=\"{item.Package}\" Version=\"{item.Version}\" />");
             }
+
             return builder.ToString();
         }
 
-        //void AddNugetReferences()
-        //{
+        // void AddNugetReferences()
+        // {
         //    foreach (var item in References)
         //    {
         //        Console.Write("Adding nuget reference " + item.Package + " version : " + item.Version + "...");
         //        Context.Run("dotnet add package " + item.Package + " -v " + item.Version);
         //        Console.WriteLine("Done");
         //    }
-        //}
+        // }
 
         internal void Build()
         {
             Create();
             AddFiles();
-            //AddNugetReferences();
+            // AddNugetReferences();
 
             Console.Write("Building " + Folder + "...");
             Context.Run("dotnet build");
@@ -104,6 +107,4 @@ namespace OliveGenerator
             yield return $@"<file src=""{OutputFile(".xml")}"" target=""lib\{Framework}\"" />";
         }
     }
-
-
 }

@@ -1,7 +1,6 @@
-﻿using Olive;
-using System;
-using System.Linq;
+﻿using System;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -14,7 +13,7 @@ namespace OliveGenerator
         {
             if (Endpoint.Namespace?.EndsWith("Service") != true) throw new Exception("Endpoint namespace should ends with 'Service' keyword");
             if (!Endpoint.Name.EndsWith("Endpoint")) throw new Exception("Endpoint class name should ends with 'Endpoint' keyword");
-            if(Endpoint.FullName.Contains("_")) throw new Exception("Endpoint class name or namespace should not contains '_'");
+            if (Endpoint.FullName.Contains("_")) throw new Exception("Endpoint class name or namespace should not contains '_'");
 
             var r = new StringBuilder();
 
@@ -32,12 +31,15 @@ namespace OliveGenerator
 
             foreach (var item in Context.ExposedTypes)
                 r.AppendLine($"public static EndpointSubscriber {item.GetType().Name} {{ get; private set; }}");
+
             r.AppendLine();
 
             r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
+
             foreach (var item in Context.ExposedTypes)
                 r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
+
             r.AppendLine("}");
             r.AppendLine();
 
@@ -46,7 +48,5 @@ namespace OliveGenerator
 
             return new CSharpFormatter(r.ToString()).Format();
         }
-
-
     }
 }

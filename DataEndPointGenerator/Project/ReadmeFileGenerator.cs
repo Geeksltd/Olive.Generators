@@ -1,6 +1,6 @@
-﻿using Olive;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -109,7 +109,6 @@ namespace OliveGenerator
             r.AppendLine($"        \"Url\": \"https://....{QueueName}.fifo\"");
             r.AppendLine("     }");
             r.AppendLine("}");
-
 
             return r.ToString();
         }

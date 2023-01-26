@@ -1,12 +1,8 @@
-﻿using Olive;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -30,6 +26,7 @@ namespace OliveGenerator
                 Helper.ShowHelp();
                 return false;
             }
+
             return true;
         }
 

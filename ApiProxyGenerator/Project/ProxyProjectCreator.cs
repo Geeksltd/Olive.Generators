@@ -1,13 +1,14 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Olive;
 
 namespace OliveGenerator
 {
     class ProxyProjectCreator : ProjectCreatorBase
     {
         public ProxyProjectCreator() : base(Context.Current.TempPath.GetOrCreateSubDirectory(Context.Current.ControllerType.FullName + "." + "Proxy")
-            ) { }
+            )
+        { }
 
         protected override string Framework => "netstandard2.0";
 
@@ -24,7 +25,8 @@ namespace OliveGenerator
             Folder.GetFile($"{Context.Current.ControllerName}.cs").WriteAllText(ProxyClassProgrammer.Generate());
             Console.WriteLine("Done");
             Console.Write("Adding the proxy class mock configuration...");
-            MockFolder.GetFile($"{Context.Current.ControllerName}.Mock.cs").WriteAllText(ProxyClassProgrammer.GenerateMock());
+            MockFolder.GetFile($"{Context.Current.ControllerName}.Mock.cs")
+                .WriteAllText(ProxyClassProgrammer.GenerateMock());
             Console.WriteLine("Done");
             Console.Write("Adding ReamMe.txt file ...");
             Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
@@ -45,6 +47,7 @@ namespace OliveGenerator
                 Folder.GetFile(type.Name + ".cs").WriteAllText(dto.Generate());
 
                 var dataProvider = new DtoDataProviderClassGenerator(type, Context.Current).Generate();
+
                 if (dataProvider.HasValue())
                     Folder.GetFile(type.Name + "DataProvider.cs").WriteAllText(dataProvider);
 
@@ -56,7 +59,8 @@ namespace OliveGenerator
         {
             var generator = new MockConfigurationClassGenerator(Context.Current.ControllerType);
             Console.Write($"Adding class {Context.Current.ControllerName}MockConfiguration");
-            MockFolder.GetFile($"{Context.Current.ControllerName}MockConfiguration.cs").WriteAllText(generator.Generate());
+            MockFolder.GetFile($"{Context.Current.ControllerName}MockConfiguration.cs")
+                .WriteAllText(generator.Generate());
             Console.WriteLine("Done");
         }
 

@@ -1,6 +1,6 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -26,7 +26,8 @@ namespace OliveGenerator
         protected override void AddFiles()
         {
             Console.Write("Adding the command class...");
-            Folder.GetFile($"{Context.Current.CommandType.Name}.cs").WriteAllText(EventBusCommandClassProgrammer.Generate());
+            Folder.GetFile($"{Context.Current.CommandType.Name}.cs")
+                .WriteAllText(EventBusCommandClassProgrammer.Generate());
             Console.WriteLine("Done");
             Console.Write("Adding ReamMe.txt file ...");
             Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());

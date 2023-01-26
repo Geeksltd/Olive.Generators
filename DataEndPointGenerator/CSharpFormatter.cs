@@ -1,7 +1,7 @@
-﻿using Olive;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -72,8 +72,6 @@ namespace OliveGenerator
 
             internal void Attach(LinkedListNode<CodeLine> node) => Node = node;
 
-
-
             CodeLine Previous => Node.Previous?.Value;
             CodeLine Next => Node.Next?.Value;
 
@@ -121,6 +119,7 @@ namespace OliveGenerator
                 var result = new StringBuilder();
 
                 var indent = EffectiveIndent();
+
                 for (var i = 0; i < indent; i++)
                     result.Append("    ");
 

@@ -1,7 +1,7 @@
-﻿using Olive;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -107,6 +107,7 @@ namespace OliveGenerator
                 var result = new StringBuilder();
 
                 var indent = EffectiveIndent();
+
                 for (var i = 0; i < indent; i++)
                     result.Append("    ");
 

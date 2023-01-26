@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
-
 using Olive;
 
 namespace OliveGenerator
@@ -33,7 +31,6 @@ namespace OliveGenerator
             var global = Environment.GetEnvironmentVariable("ProgramFiles").AsDirectory()
                 .GetSubDirectory("dotnet\\shared\\Microsoft.AspNetCore.App");
 
-
             var chosen = SearchInGlobal(global, fileName, version);
 
             if (chosen != null) return chosen;
@@ -50,7 +47,7 @@ namespace OliveGenerator
             return null;
         }
 
-        private static Assembly SearchInGlobal(DirectoryInfo folder, string fileName, Version version)
+        static Assembly SearchInGlobal(DirectoryInfo folder, string fileName, Version version)
         {
             var matches = folder.GetFiles(fileName, SearchOption.AllDirectories)
                 .Select(v => new { File = v.FullName, Version = Version.Parse(v.Directory.Name) })
@@ -61,12 +58,10 @@ namespace OliveGenerator
                  .ThenByDescending(x => x.Version)
                  .FirstOrDefault();
 
-            
             if (chosen != null)
                 return Assembly.LoadFile(chosen.File);
 
             return null;
-
         }
     }
 
@@ -107,5 +102,5 @@ namespace OliveGenerator
     //        }
 
     //    }
-    //}
+    // }
 }

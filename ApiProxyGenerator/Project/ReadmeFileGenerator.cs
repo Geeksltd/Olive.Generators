@@ -1,6 +1,6 @@
-﻿using Olive;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -37,6 +37,7 @@ namespace OliveGenerator
             foreach (var method in methods)
             {
                 var returnType = method.GetApiMethodReturnType();
+
                 if (returnType != null)
                     r.Append(returnType.GetProgrammingName() + " result = ");
 

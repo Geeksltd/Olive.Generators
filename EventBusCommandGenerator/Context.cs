@@ -1,10 +1,8 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -26,6 +24,7 @@ namespace OliveGenerator
             {
                 if (TempPath.Exists)
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
+
                 TempPath.Create();
             }
             catch (Exception ex)

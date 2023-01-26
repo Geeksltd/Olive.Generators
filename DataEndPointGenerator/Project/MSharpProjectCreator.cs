@@ -1,11 +1,8 @@
-﻿using Olive;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -16,6 +13,8 @@ namespace OliveGenerator
 
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> _MSharpMetadata;
         static Dictionary<string, Dictionary<string, Dictionary<string, string>>> MSharpMetadata { get { return _MSharpMetadata ??= LoadMsharpMetadata(); } }
+
+        public MSharpProjectCreator() : base("MSharp") { }
 
         public static Dictionary<string, Dictionary<string, Dictionary<string, string>>> LoadMsharpMetadata()
         {
@@ -49,9 +48,6 @@ namespace OliveGenerator
         internal T? TryGetMetadataValueFor<T>(Type type, string property, string attribute) where T : struct =>
             MSharpMetadata.TryGet(type.Name)?.TryGet(property)?.TryGet(attribute)?.TryParseAs<T>();
 
-        public MSharpProjectCreator() : base("MSharp") { }
-
-
         [EscapeGCop]
         internal override string IconUrl => "http://licensing.msharp.co.uk/images/icon.png";
 
@@ -66,7 +62,8 @@ namespace OliveGenerator
             foreach (var item in Context.ExposedTypes)
             {
                 Console.Write("Adding M# model class " + item.GetType().Name + "...");
-                Folder.GetFile((string)item.GetType().Name + ".cs").WriteAllText(new MSharpModelProgrammer(this, item).Generate());
+                Folder.GetFile((string)item.GetType().Name + ".cs")
+                    .WriteAllText(new MSharpModelProgrammer(this, item).Generate());
                 Console.WriteLine("Done");
             }
         }

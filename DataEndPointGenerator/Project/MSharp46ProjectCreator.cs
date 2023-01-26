@@ -1,6 +1,7 @@
 ﻿namespace OliveGenerator
 {
     using Olive;
+
     class MSharp46ProjectCreator : MSharpProjectCreator
     {
         public MSharp46ProjectCreator() : base() => Folder = Folder.Parent.GetSubDirectory(Folder.Name + "46");

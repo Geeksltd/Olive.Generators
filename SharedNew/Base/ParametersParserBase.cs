@@ -1,7 +1,7 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -22,7 +22,6 @@ namespace OliveGenerator
             TheContext.Source = (Param("source") ?? Environment.CurrentDirectory).AsDirectory();
             return true;
         }
-
 
         public virtual void LoadParameters(string defaultName)
         {

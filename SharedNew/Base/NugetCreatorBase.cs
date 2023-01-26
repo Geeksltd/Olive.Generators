@@ -1,10 +1,10 @@
 ﻿namespace OliveGenerator
 {
-    using Olive;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using Olive;
 
     public abstract class NugetCreatorBase
     {
@@ -27,7 +27,6 @@
 
             PublishNuget(package);
         }
-
 
         FileInfo CreateNugetPackage()
         {
@@ -97,8 +96,8 @@
     <title>{folder}</title>
     <authors>Olive Data End Point Generator</authors>
     <iconUrl>{creator.IconUrl}</iconUrl>
-    <description>{description }</description>
-    { (dependencies.HasValue() ? $"<dependencies>{dependencies}</dependencies>" : null)}
+    <description>{description}</description>
+    {(dependencies.HasValue() ? $"<dependencies>{dependencies}</dependencies>" : null)}
   </metadata>
   <files>
      {ProjectCreators.SelectMany(x => x.GetTargetFiles()).ToLinesString()}

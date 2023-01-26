@@ -1,9 +1,9 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -30,15 +30,17 @@ namespace OliveGenerator
 
             if (Method.GetExplicitAuthorizeServiceAttribute().HasValue())
                 r.Append($" As the target Api declares [{Method.GetExplicitAuthorizeServiceAttribute()}], I will call AsServiceUser() automatically.");
+
             r.AppendLine("</summary>");
 
             r.AppendLine($"public Task{ReturnType.WithWrappers("<", ">")} {Method.Name}({GetArgs()})");
             r.AppendLine("{");
-            //Inject the mock data here
+            // Inject the mock data here
             r.AppendLine("if(MockConfig.Enabled)");
             r.AppendLine("{");
             r.AppendLine($"return MockConfig.Expect.{Method.Name}Result({GetArguments().Keys.ToString(", ")});");
             r.AppendLine("}");
+
             if (Method.GetExplicitAuthorizeServiceAttribute().HasValue())
                 r.AppendLine("this.AsServiceUser();");
 
@@ -100,6 +102,7 @@ namespace OliveGenerator
             return Method.GetParameters().ToDictionary(x => x.Name,
                   x => x.ParameterType.GetProgrammingName(useGlobal: false, useNamespace: false, useNamespaceForParams: false, useCSharpAlias: true));
         }
+
         public string GetArgsNames()
         {
             var items = Method.GetParameters().Select(x => x.Name).ToList();

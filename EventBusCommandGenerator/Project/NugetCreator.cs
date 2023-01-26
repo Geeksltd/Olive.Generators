@@ -1,13 +1,10 @@
 ﻿namespace OliveGenerator
 {
-    using Olive;
-    using System;
-    using System.IO;
     using System.Linq;
+    using Olive;
 
     class NugetCreator : NugetCreatorBase
     {
-
         public NugetCreator(params ProjectCreatorBase[] projectCreators) : base(Context.Current, projectCreators)
         {
         }
@@ -18,7 +15,6 @@
                 $"Provides an easy method to invoke the Api functions of {Context.Current.CommandName}",
                 $"{ProjectCreators.First().GetNugetDependencies().Select(x => $"<dependency id=\"{x}\" version=\"{GetLatestNugetVersion(x)}\" />").ToLinesString()}"
                 );
-
         }
     }
 }

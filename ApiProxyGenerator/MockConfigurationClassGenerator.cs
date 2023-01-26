@@ -1,7 +1,7 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -9,10 +9,7 @@ namespace OliveGenerator
     {
         Type Controller;
         string ClassName => Controller.Name;
-        public MockConfigurationClassGenerator(Type controller)
-        {
-            Controller = controller;
-        }
+        public MockConfigurationClassGenerator(Type controller) => Controller = controller;
 
         public string Generate()
         {
@@ -57,7 +54,7 @@ namespace OliveGenerator
             return new CSharpFormatter(r.ToString()).Format();
         }
 
-        private string GenerateApiBehaviourClass(MethodGenerator methodInfo)
+        string GenerateApiBehaviourClass(MethodGenerator methodInfo)
         {
             var r = new StringBuilder();
             r.Append($"/// <summary>Expected behaviour of the mocked {ClassName}.{methodInfo.Method.Name}() method.");
@@ -80,7 +77,6 @@ namespace OliveGenerator
 
             if (overloads.None(x => x.GetArgs().IsEmpty()))
             {
-
                 // All overloads have a value.
                 // Define a generic one.
                 foreach (var overload in overloads)
@@ -94,8 +90,8 @@ namespace OliveGenerator
                     r.AppendLine($"return {overload.Method.Name}Expectations[key]=new {overload.Method.Name}Expectation();");
                     r.AppendLine("}");
                 }
-
             }
+
             foreach (var overload in overloads)
             {
                 // define result method with parameters
@@ -107,6 +103,7 @@ namespace OliveGenerator
                 if (methodInfo.HasReturnType())
                 {
                     r.AppendLine($"{overload.Method.Name}Expectation expectation;");
+
                     if (overload.GetArgs().IsEmpty())
                     {
                         r.AppendLine($"if({overload.Method.Name}Expectations.ContainsKey(\"\"))");
@@ -118,6 +115,7 @@ namespace OliveGenerator
                         r.AppendLine($"expectation= {methodInfo.Method.Name}Expectations[key];");
                         r.AppendLine($"else if({overload.Method.Name}Expectations.ContainsKey(\"\"))");
                     }
+
                     r.AppendLine($"expectation= {methodInfo.Method.Name}Expectations[\"\"];");
                     r.AppendLine("else");
                     r.AppendLine($"throw new Exception(\"Mock expectation is not defined for {overload.Method.Name}().\");");
@@ -126,6 +124,7 @@ namespace OliveGenerator
                 else
                 {
                     r.AppendLine($"{overload.Method.Name}Expectation expectation;");
+
                     if (overload.GetArgs().IsEmpty())
                     {
                         r.AppendLine($"if({overload.Method.Name}Expectations.ContainsKey(\"\"))");
@@ -137,6 +136,7 @@ namespace OliveGenerator
                         r.AppendLine($"expectation= {methodInfo.Method.Name}Expectations[key];");
                         r.AppendLine($"else if({overload.Method.Name}Expectations.ContainsKey(\"\"))");
                     }
+
                     r.AppendLine($"expectation= {methodInfo.Method.Name}Expectations[\"\"];");
                     r.AppendLine("else");
                     r.AppendLine($"throw new Exception(\"Mock expectation is not defined for {overload.Method.Name}().\");");
@@ -153,11 +153,12 @@ namespace OliveGenerator
                     r.AppendLine($"expectation.ActionResult.Invoke({methodInfo.GetArgsNames()});");
                     r.AppendLine("return Task.CompletedTask;");
                     r.AppendLine("}");
-
                 }
+
                 r.AppendLine("}");
                 r.AppendLine();
             }
+
             if (methodInfo.HasReturnType())
                 r.AppendLine(GenerateMethodExpectationClass(methodInfo));
             else
@@ -167,7 +168,7 @@ namespace OliveGenerator
             return r.ToString();
         }
 
-        private string GenerateVoidMethodExpectationClass(MethodGenerator methodInfo)
+        string GenerateVoidMethodExpectationClass(MethodGenerator methodInfo)
         {
             var r = new StringBuilder();
             r.Append($"/// <summary>set the expected behaviour for {methodInfo.Method.Name} Method");
@@ -211,7 +212,8 @@ namespace OliveGenerator
             r.AppendLine("}");
             return r.ToString();
         }
-        private string GenerateMethodExpectationClass(MethodGenerator methodInfo)
+
+        string GenerateMethodExpectationClass(MethodGenerator methodInfo)
         {
             var r = new StringBuilder();
             r.Append($"/// <summary>set the expected behaviour for {methodInfo.Method.Name} Method");
@@ -242,8 +244,9 @@ namespace OliveGenerator
             r.AppendLine("}");
             return r.ToString();
         }
-        static string GetKey(string args) => args.Replace(",", "_");
-        static bool HasMethodsWithParams(MethodGenerator methodInfo) => Context.Current.ActionMethods.Any(x => x.Method.Name == methodInfo.Method.Name && !x.GetArgs().IsEmpty());
 
+        static string GetKey(string args) => args.Replace(",", "_");
+
+        static bool HasMethodsWithParams(MethodGenerator methodInfo) => Context.Current.ActionMethods.Any(x => x.Method.Name == methodInfo.Method.Name && !x.GetArgs().IsEmpty());
     }
 }

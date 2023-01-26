@@ -1,10 +1,7 @@
-﻿using Olive;
-using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -13,9 +10,9 @@ namespace OliveGenerator
         public static Context Current { get; } = new Context();
 
         public string ControllerName;//, PublisherService, NugetServer, NugetApiKey;
-        //public static FileInfo AssemblyFile;
-        //public static DirectoryInfo TempPath, Output, Source;
-        //public static Assembly AssemblyObj;
+        // public static FileInfo AssemblyFile;
+        // public static DirectoryInfo TempPath, Output, Source;
+        // public static Assembly AssemblyObj;
         public Type ControllerType;
         public MethodGenerator[] ActionMethods;
 
@@ -28,6 +25,7 @@ namespace OliveGenerator
             {
                 if (TempPath.Exists)
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
+
                 TempPath.Create();
             }
             catch (Exception ex)

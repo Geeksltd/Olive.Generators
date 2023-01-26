@@ -1,10 +1,10 @@
-﻿using Olive;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -30,8 +30,7 @@ namespace OliveGenerator
                 .Distinct()
                 .ToList();
 
-
-            DomainEntities = All.Where(x=>IsEntity(x)).ToList();
+            DomainEntities = All.Where(x => IsEntity(x)).ToList();
             All = All.Except(DomainEntities).ToList();
             Enums = All.Where(x => x.IsEnum).ToList();
             All = All.Except(Enums).ToList();

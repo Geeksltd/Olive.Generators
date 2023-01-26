@@ -1,11 +1,10 @@
-﻿using Olive;
-using Olive.Entities.Replication;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Olive;
 
 namespace OliveGenerator
 {
@@ -28,6 +27,7 @@ namespace OliveGenerator
             {
                 if (TempPath.Exists)
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
+
                 TempPath.Create();
             }
             catch (Exception ex)
@@ -77,7 +77,7 @@ namespace OliveGenerator
 
         internal static void FindExposedTypes()
         {
-            var existingTypes= ((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>;
+            var existingTypes = ((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>;
 
             ExposedTypes = existingTypes.Select(x => x.CreateInstance()).ToList();
 
