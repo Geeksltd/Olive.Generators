@@ -11,13 +11,21 @@ namespace OliveGenerator
 
         public static string Generate()
         {
-            if (Endpoint.Namespace?.EndsWith("Service") != true) throw new Exception("Endpoint namespace should ends with 'Service' keyword");
-            if (!Endpoint.Name.EndsWith("Endpoint")) throw new Exception("Endpoint class name should ends with 'Endpoint' keyword");
-            if (Endpoint.FullName.Contains("_")) throw new Exception("Endpoint class name or namespace should not contains '_'");
+            if (Endpoint.Namespace?.EndsWith("Service") != true) 
+                throw new Exception($"Endpoint namespace '{Endpoint.Namespace}' should ends with 'Service' keyword");
+
+            if (!Endpoint.Name.ToLower().EndsWith("endpoint")) 
+                throw new Exception($"Endpoint class name '{Endpoint.Name}' should ends with 'Endpoint' keyword (case insensitive)");
+
+            if (Endpoint.FullName.Contains("_")) 
+                throw new Exception($"Endpoint class name '{Endpoint.Name}' or namespace '{Endpoint.Namespace}' should not contains '_'");
+
+            if (Endpoint.FullName.Split('.').Length!= 2) 
+                throw new Exception($"Endpoint class name '{Endpoint.Name}' or namespace '{Endpoint.Namespace}' should not contains extra '.'");
 
             var r = new StringBuilder();
 
-            r.AppendLine("namespace " + Endpoint.Namespace.ToPascalCaseId());
+            r.AppendLine("namespace " + Endpoint.Namespace.Replace(".", " ").ToPascalCaseId());
             r.AppendLine("{");
             r.AppendLine("using Olive;");
             r.AppendLine("using Olive.Entities.Replication;");
