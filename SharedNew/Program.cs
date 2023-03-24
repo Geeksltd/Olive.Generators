@@ -38,7 +38,7 @@ namespace OliveGenerator
             Console.ResetColor();
             Console.WriteLine(error.GetUsefulStack());
             Console.WriteLine("Press any key to end, or rerun the command with /debug.");
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
