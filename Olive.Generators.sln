@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.ApiProxyGenerator", "ApiProxyGenerator\Olive.ApiProxyGenerator.csproj", "{EBB6B099-F319-408D-9376-64D38980F4B5}"
 EndProject
@@ -18,16 +18,6 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedNew", "SharedNew\SharedNew.shproj", "{A72D274D-454C-43BE-B540-CB1AC96D3D9A}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		DTO\DTO.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
-		SharedNew\SharedNew.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
-		Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
-		DTO\DTO.projitems*{41eebc19-c4f0-462d-81f2-324d0d8e760c}*SharedItemsImports = 13
-		Shared\Shared.projitems*{52449d24-da0b-4113-9a60-fb1da4fab81d}*SharedItemsImports = 5
-		SharedNew\SharedNew.projitems*{a72d274d-454c-43be-b540-cb1ac96d3d9a}*SharedItemsImports = 13
-		DTO\DTO.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
-		SharedNew\SharedNew.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -55,5 +45,15 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {32145FA5-F5E1-4524-A359-77BBDA23EA3F}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DTO\DTO.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{36649c8b-5e44-492c-9832-fab70a88f442}*SharedItemsImports = 5
+		Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
+		DTO\DTO.projitems*{41eebc19-c4f0-462d-81f2-324d0d8e760c}*SharedItemsImports = 13
+		Shared\Shared.projitems*{52449d24-da0b-4113-9a60-fb1da4fab81d}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{a72d274d-454c-43be-b540-cb1ac96d3d9a}*SharedItemsImports = 13
+		DTO\DTO.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
+		SharedNew\SharedNew.projitems*{ebb6b099-f319-408d-9376-64d38980f4b5}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

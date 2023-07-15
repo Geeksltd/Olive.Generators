@@ -11,6 +11,5 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ResolveAssemblies.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SharedHelper\HashHelper.cs" />
   </ItemGroup>
 </Project>

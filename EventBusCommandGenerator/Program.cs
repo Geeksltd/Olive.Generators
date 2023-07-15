@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace OliveGenerator
 {
@@ -26,6 +27,17 @@ namespace OliveGenerator
 
 
                 DtoTypes.FindAll(Context.Current.CommandType.GetFiledTypes(), Context.Current.AssemblyObj);
+
+
+                // hashonly argument added to help CI / CD process to identify modified EventBusCommands faster using hash function
+                // by detecting "hashonly" in aruments list, this generates a hash to help CI agent to identify modified EventBusCommands
+                if (args.Any(x => x.ToLower().Contains("/hashonly")))
+                {
+                    var hashvalue = HashHelper.HashFieldTypes(Context.Current.CommandType.GetFields());
+                    Console.Out.WriteLine();
+                    Console.Out.WriteLine($"EventBusCommand Hash = {hashvalue}");
+                    return 0;
+                }
 
 
                 new List<ProjectCreatorBase> { new EventBusCommandProjectCreator() };

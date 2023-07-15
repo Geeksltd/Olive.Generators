@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Olive.SharedHelper
+namespace OliveGenerator
 {
     internal class HashHelper
     {
