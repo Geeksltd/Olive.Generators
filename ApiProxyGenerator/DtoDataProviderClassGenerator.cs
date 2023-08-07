@@ -67,7 +67,8 @@ namespace OliveGenerator
             r.AppendLine($"public static void Register(Action<{Context.ControllerType.Name}> configurator = null)");
             r.AppendLine("{");
             r.AppendLine("Configurator = configurator;");
-            r.AppendLine($"Context.Current.Database().RegisterDataProvider(typeof({Type.Name}), Current);");
+            r.AppendLine($"var config = Context.Current.GetService<Olive.Entities.Data.IDatabaseProviderConfig>();");
+            r.AppendLine($"config.RegisterDataProvider(typeof({Type.Name}), Current);");
             r.AppendLine("}");
 
             return r.ToString();

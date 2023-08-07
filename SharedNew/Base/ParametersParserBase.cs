@@ -31,6 +31,7 @@ namespace OliveGenerator
                 throw new Exception("The specified output folder does not exist.");
 
             TheContext.NugetServer = Param("push");
+            TheContext.PublisherService = Param("serviceName");
             TheContext.NugetApiKey = Param("apiKey");
 
             TheContext.AssemblyFile = TheContext.Source
