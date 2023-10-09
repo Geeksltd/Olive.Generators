@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Olive.Entities" Version="2.1.189" />
-		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.196" />
+		<PackageReference Include="Olive.Entities.Data.Replication" Version="2.1.197" />
 	</ItemGroup>
 	<ItemGroup>
 
