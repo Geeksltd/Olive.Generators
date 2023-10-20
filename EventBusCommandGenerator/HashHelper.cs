@@ -11,7 +11,7 @@ namespace OliveGenerator
         public static string HashFieldTypes(IEnumerable<FieldInfo> fieldTypes)
         {
             if (fieldTypes.HasAny() == false) return string.Empty;
-            string fieldTypeToStr = null;
+            string fieldTypeToStr = Context.Current.CommandName + "-";
 
             foreach (var type in fieldTypes)
             {

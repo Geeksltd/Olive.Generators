@@ -10,7 +10,7 @@ namespace OliveGenerator
         public static string HashExposedType(IEnumerable<dynamic> exposedType)
         {
             if (exposedType.HasAny() == false) return string.Empty;
-            string exposedTypeToStr = null;
+            string exposedTypeToStr = Context.EndpointName + "-";
 
             foreach (var type in exposedType)
             {
