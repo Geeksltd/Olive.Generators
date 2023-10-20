@@ -38,7 +38,7 @@ namespace OliveGenerator
             r.AppendLine();
 
             foreach (var item in Context.ExposedTypes)
-                r.AppendLine($"public static EndpointSubscriber {item.GetType().Name} {{ get; private set; }}");
+                r.AppendLine($"public static EndpointSubscriber {((Type)item.GetType()).GetProgrammingName()} {{ get; private set; }}");
 
             r.AppendLine();
 
@@ -46,7 +46,7 @@ namespace OliveGenerator
             r.AppendLine("{");
 
             foreach (var item in Context.ExposedTypes)
-                r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
+                r.AppendLine($"    {((Type)item.GetType()).GetProgrammingName()} = Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
 
             r.AppendLine("}");
             r.AppendLine();

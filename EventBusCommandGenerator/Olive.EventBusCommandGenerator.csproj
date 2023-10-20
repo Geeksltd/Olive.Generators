@@ -6,7 +6,8 @@
 		<RootNamespace>Olive</RootNamespace>
 		<StartupObject>OliveGenerator.Program</StartupObject>
 		<PackageId>generate-eventbus-command-proxy</PackageId>
-		<Version>6.1.5</Version>
+		<Version>6.1.6
+		</Version>
 		<ToolCommandName>generate-eventbus-command-proxy</ToolCommandName>
 		<Authors>Geeks Ltd</Authors>
 		<Description>Generates event bus command packages</Description>
