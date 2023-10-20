@@ -27,7 +27,7 @@ namespace OliveGenerator
 
             foreach (var item in Context.Current.CommandType.GetEffectiveProperties())
             {
-                var propertyTypeString = AddProperty(item.GetPropertyOrFieldType());
+                var propertyTypeString = item.GetPropertyOrFieldType().GetProgrammingName();
                 r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(item)} {{ get; set; }}");
             }
 
@@ -47,38 +47,38 @@ namespace OliveGenerator
             return member.Name;
         }
 
-        static string AddProperty(Type propertyType)
-        {
-            var type = propertyType;
-            var extraType = "";
+        //static string AddProperty(Type propertyType)
+        //{
+        //    var type = propertyType;
+        //    var extraType = "";
 
-            if (type.IsArray)
-            {
-                type = type.GetElementType();
-                extraType = "[]";
-            }
+        //    if (type.IsArray)
+        //    {
+        //        type = type.GetElementType();
+        //        extraType = "[]";
+        //    }
 
-            bool isNullable;
+        //    bool isNullable;
 
-            if (isNullable = type.IsNullable())
-            {
-                type = type.GetGenericArguments().Single();
-            }
+        //    if (isNullable = type.IsNullable())
+        //    {
+        //        type = type.GetGenericArguments().Single();
+        //    }
 
-            var method = type.Name;
+        //    var method = type.Name;
 
-            switch (method)
-            {
-                case "Boolean": method = "bool"; break;
-                case "Int32": method = "int"; break;
-                case "Int64": method = "decimal"; break;
-                case "String": method = "string"; break;
-                default: break;
-            }
+        //    switch (method)
+        //    {
+        //        case "Boolean": method = "bool"; break;
+        //        case "Int32": method = "int"; break;
+        //        case "Int64": method = "decimal"; break;
+        //        case "String": method = "string"; break;
+        //        default: break;
+        //    }
 
-            if (DtoTypes.DomainEntities.Contains(type)) return "Guid?";
+        //    if (DtoTypes.DomainEntities.Contains(type)) return "Guid?";
 
-            return method + extraType;
-        }
+        //    return method + extraType;
+        //}
     }
 }
