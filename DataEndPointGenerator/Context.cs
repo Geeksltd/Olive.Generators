@@ -51,14 +51,18 @@ namespace OliveGenerator
             cmd.StandardInput.Close();
             var result = cmd.StandardOutput.ReadToEnd().ToStringOrEmpty().Trim();
 
-            if (result.StartsWith("Could not ")) throw new Exception(result);
-
-            if (result.Contains("Build FAILED"))
+            if (cmd.ExitCode != 0)
             {
-                Console.WriteLine("Compile " + command + " manually...");
-                Console.ReadLine();
-                // throw new Exception(result.TrimBefore("Build FAILED"));
+                throw new Exception(result);
             }
+            //if (result.StartsWith("Could not ")) throw new Exception(result);
+
+            //if (result.Contains("Build FAILED"))
+            //{
+            //    Console.WriteLine("Compile " + command + " manually...");
+            //    Console.ReadLine();
+            //    // throw new Exception(result.TrimBefore("Build FAILED"));
+            //}
 
             return result;
         }

@@ -64,9 +64,14 @@
             cmd.StandardInput.Close();
             var result = cmd.StandardOutput.ReadToEnd().ToStringOrEmpty().Trim();
 
-            if (result.StartsWith("Could not ")) throw new Exception(result);
+            if (cmd.ExitCode != 0)
+            {
+                throw new Exception(result);
+            }
 
-            if (result.Contains("Build FAILED")) throw new Exception(result.RemoveBefore("Build FAILED"));
+            //if (result.StartsWith("Could not ")) throw new Exception(result);
+
+            //if (result.Contains("Build FAILED")) throw new Exception(result.RemoveBefore("Build FAILED"));
 
             return result;
         }
