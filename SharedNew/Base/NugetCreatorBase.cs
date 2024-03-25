@@ -32,10 +32,10 @@
         {
             Environment.CurrentDirectory = NuspecFile.Directory.FullName;
 
-            Run("nuget.exe pack " + NuspecFile.Name);
+            var result = Run("nuget.exe pack " + NuspecFile.Name);
 
             return NuspecFile.Directory.GetFiles(NuspecFile.NameWithoutExtension().TrimEnd(".Proxy") + "*.nupkg", SearchOption.AllDirectories)
-                .FirstOrDefault() ?? throw new Exception("Nuget package was not succesfully generated.");
+                .FirstOrDefault() ?? throw new Exception($"Nuget package was not successfully generated: {result}");
         }
 
         void PublishNuget(FileInfo package)

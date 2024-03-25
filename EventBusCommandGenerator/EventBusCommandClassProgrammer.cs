@@ -31,6 +31,18 @@ namespace OliveGenerator
                 r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(item)} {{ get; set; }}");
             }
 
+            foreach (var type in Context.Current.CommandType.GetNestedTypes())
+            {
+                r.AppendLine($"public class {type.Name}");
+                r.AppendLine("{");
+                foreach (var member in type.GetEffectiveProperties())
+                {
+                    var propertyTypeString = member.GetPropertyOrFieldType().GetProgrammingName();
+                    r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(member)} {{ get; set; }}");
+                }
+                r.AppendLine("}");
+            }
+
             r.AppendLine();
 
             r.AppendLine($"public Task Publish () => EventBus.Queue<{Command.Namespace}.{ClassName}>().Publish(this);");

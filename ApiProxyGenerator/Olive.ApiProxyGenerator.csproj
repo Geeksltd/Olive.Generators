@@ -17,12 +17,12 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>generate-api-proxy</ToolCommandName>
-    <Version>8.0.0.0</Version>
+    <Version>8.0.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GCop.All.Geeks" Version="2.8.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
-    <PackageReference Include="olive" Version="2.1.361" />
+    <PackageReference Include="olive" Version="2.1.363" />
     <PackageReference Include="Olive.Entities" Version="2.1.189" />
   </ItemGroup>
   <Import Project="..\DTO\DTO.projitems" Label="Shared" />

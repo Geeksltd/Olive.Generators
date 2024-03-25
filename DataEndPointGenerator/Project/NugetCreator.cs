@@ -28,10 +28,10 @@
         FileInfo CreateNugetPackage()
         {
             Environment.CurrentDirectory = NuspecFile.Directory.FullName;
-            Context.Run("nuget.exe pack " + NuspecFile.Name);
+            var result = Context.Run("nuget.exe pack " + NuspecFile.Name);
 
             return NuspecFile.Directory.GetFiles(NuspecFile.NameWithoutExtension().TrimEnd(".Endpoint") + "*.nupkg", SearchOption.AllDirectories)
-                .FirstOrDefault() ?? throw new Exception("Nuget package was not succesfully generated.");
+                .FirstOrDefault() ?? throw new Exception($"Nuget package was not succesfully generated: {result}");
         }
 
         void PublishNuget(FileInfo package)
