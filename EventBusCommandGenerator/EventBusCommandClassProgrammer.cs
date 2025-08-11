@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Olive;
+using System;
 using System.Reflection;
 using System.Text;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -46,6 +45,12 @@ namespace OliveGenerator
             r.AppendLine();
 
             r.AppendLine($"public Task Publish () => EventBus.Queue<{Command.Namespace}.{ClassName}>().Publish(this);");
+            r.AppendLine();
+            r.AppendLine($"public async Task PublishAndBlockUntilProcessed()");
+            r.AppendLine($"{{");
+            r.AppendLine($"await Publish();");
+            r.AppendLine($"await EventBus.ProcessCommandUrl<{Command.Namespace}.{ClassName}>().AsUri().Download();");
+            r.AppendLine($"}}");
 
             r.AppendLine("}");
             r.AppendLine("}");
