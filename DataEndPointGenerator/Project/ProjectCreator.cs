@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -26,6 +27,8 @@ namespace OliveGenerator
 
         protected abstract void AddFiles();
 
+        protected abstract string[] AddEmbeddedResources();
+
         internal abstract string IconUrl { get; }
 
         void Create()
@@ -35,7 +38,15 @@ namespace OliveGenerator
             Console.ResetColor();
 
             Console.WriteLine("Creating a new class library project at " + Folder.FullName + "...");
-
+            var embeddedFiles = AddEmbeddedResources();
+            var embeddedResources = embeddedFiles != null && embeddedFiles.Any() ? $@"
+  <ItemGroup>
+	{embeddedFiles.Select(ef => $"<Content Remove=\"{ef}\" />").ToLinesString()}
+  </ItemGroup>
+  <ItemGroup>
+	{embeddedFiles.Select(ef => $"<EmbeddedResource Include=\"{ef}\" />").ToLinesString()}
+  </ItemGroup>
+" : "";
             Folder.GetFile(Name + ".csproj")
                 .WriteAllText($@"<Project Sdk=""Microsoft.NET.Sdk"">
   <PropertyGroup>
@@ -49,6 +60,7 @@ namespace OliveGenerator
   <ItemGroup>
     {GetNugetReferences()}
   </ItemGroup>
+{embeddedResources}
 </Project>");
 
             Environment.CurrentDirectory = Folder.FullName;

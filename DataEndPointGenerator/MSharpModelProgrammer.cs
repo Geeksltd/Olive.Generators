@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Olive;
+using Olive.Entities;
+using Olive.Entities.Replication;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Olive;
-using Olive.Entities;
-using Olive.Entities.Replication;
 
 namespace OliveGenerator
 {
@@ -16,7 +16,7 @@ namespace OliveGenerator
         Type? IDType;
         Type Type => ExposedType.GetType();
 
-        public MSharpModelProgrammer(MSharpProjectCreator projectCreator, ExposedType type)
+        public MSharpModelProgrammer(MSharpProjectCreator projectCreator, dynamic type)
         {
             ProjectCreator = projectCreator;
             ExposedType = type;

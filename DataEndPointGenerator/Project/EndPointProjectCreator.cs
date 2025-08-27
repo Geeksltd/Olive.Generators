@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
-using Olive;
+using System.Linq;
 
 namespace OliveGenerator
 {
@@ -43,6 +44,39 @@ namespace OliveGenerator
             // {
             //    PackageReference.Olive_Entities_Data_Replication
             // };
+        }
+
+        protected override string[] AddEmbeddedResources()
+        {
+            const string key = "ReferenceData";
+
+            var current = Context.AssemblyFile.Directory;
+            while (current != null && !current.GetSubDirectory(key).Exists())
+                current = current.Parent;
+
+            if (current == null)
+                return Array.Empty<string>();
+
+            var endpointName = Context.EndpointName.Split('.', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            current = current.GetSubDirectory(key).GetSubDirectory(endpointName);
+
+            if (current == null || !current.Exists())
+                return Array.Empty<string>();
+
+            var files = current.GetFiles("*.json", System.IO.SearchOption.AllDirectories);
+
+            foreach (var file in files)
+            {
+                var newFileName = System.IO.Path.Combine(Folder.FullName, key + file.FullName?.Split(key)?.LastOrDefault()).AsFile();
+                if (!newFileName.Directory.Exists()) newFileName.Directory.Create();
+                file.CopyTo(newFileName, overwrite: true);
+            }
+
+            return Folder
+              .GetSubDirectory(key)
+              .GetFiles("*.json", System.IO.SearchOption.AllDirectories)
+              .Select<System.IO.FileInfo, string>(x => key + x.FullName?.Split(key)?.LastOrDefault())
+              .ToArray();
         }
     }
 }

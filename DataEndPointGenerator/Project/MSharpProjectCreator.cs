@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -66,6 +66,11 @@ namespace OliveGenerator
                     .WriteAllText(new MSharpModelProgrammer(this, item).Generate());
                 Console.WriteLine("Done");
             }
+        }
+
+        protected override string[] AddEmbeddedResources()
+        {
+            return null;
         }
     }
 }
