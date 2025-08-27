@@ -1,13 +1,14 @@
 ﻿using Olive;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OliveGenerator
 {
     internal class HashHelper
     {
-        public static string HashExposedType(IEnumerable<dynamic> exposedType)
+        public static string HashExposedType(IEnumerable<dynamic> exposedType, IEnumerable<string> referenceDataFileNames)
         {
             if (exposedType.HasAny() == false) return string.Empty;
             string exposedTypeToStr = Context.EndpointName + "-";
@@ -22,16 +23,19 @@ namespace OliveGenerator
                 }
             }
 
+            exposedTypeToStr += "-";
+            exposedTypeToStr += referenceDataFileNames.OrderBy(x => x).ToString("|");
+
             return HashString(exposedTypeToStr);
         }
 
-        public static string HashString(string inputstr)
+        public static string HashString(string inputStr)
         {
-            if (inputstr.IsEmpty()) return string.Empty;
+            if (inputStr.IsEmpty()) return string.Empty;
 
             using (var sha = new System.Security.Cryptography.SHA512Managed())
             {
-                var textBytes = Encoding.UTF8.GetBytes(inputstr);
+                var textBytes = Encoding.UTF8.GetBytes(inputStr);
                 var hashBytes = sha.ComputeHash(textBytes);
                 return BitConverter.ToString(hashBytes);
             }

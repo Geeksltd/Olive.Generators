@@ -50,20 +50,10 @@ namespace OliveGenerator
         {
             const string key = "ReferenceData";
 
-            var current = Context.AssemblyFile.Directory;
-            while (current != null && !current.GetSubDirectory(key).Exists())
-                current = current.Parent;
+            var files = Context.FindReferenceDataFiles();
 
-            if (current == null)
+            if (files == null || !files.Any())
                 return Array.Empty<string>();
-
-            var endpointName = Context.EndpointName.Split('.', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-            current = current.GetSubDirectory(key).GetSubDirectory(endpointName);
-
-            if (current == null || !current.Exists())
-                return Array.Empty<string>();
-
-            var files = current.GetFiles("*.json", System.IO.SearchOption.AllDirectories);
 
             foreach (var file in files)
             {

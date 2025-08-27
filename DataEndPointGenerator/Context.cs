@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -89,6 +89,26 @@ namespace OliveGenerator
 
             foreach (var type in ExposedTypes)
                 type.Define();
+        }
+
+        internal static FileInfo[] FindReferenceDataFiles()
+        {
+            const string key = "ReferenceData";
+
+            var current = Context.AssemblyFile.Directory;
+            while (current != null && !current.GetSubDirectory(key).Exists())
+                current = current.Parent;
+
+            if (current == null)
+                return Array.Empty<FileInfo>();
+
+            var endpointName = Context.EndpointName.Split('.', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            current = current.GetSubDirectory(key).GetSubDirectory(endpointName);
+
+            if (current == null || !current.Exists())
+                return Array.Empty<FileInfo>();
+
+            return current.GetFiles("*.json", System.IO.SearchOption.AllDirectories);
         }
     }
 }

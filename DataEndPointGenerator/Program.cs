@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Olive;
+using System;
 using System.Linq;
-using Olive;
 
 namespace OliveGenerator
 {
@@ -26,9 +26,10 @@ namespace OliveGenerator
                 /// by detecting "hashonly" in aruments list, Olive.Endpoint.Generator generates a hash to help CI agent to identify modified Endpoints
                 if (args.Any(x => x.ToLower().Contains("/hashonly")))
                 {
-                    var hashvalue = HashHelper.HashExposedType(Context.ExposedTypes);
+                    var referenceDataFiles = Context.FindReferenceDataFiles().Select(x => $"{x.Directory.Name}/{x.Name}");
+                    var hashValue = HashHelper.HashExposedType(Context.ExposedTypes, referenceDataFiles);
                     Console.Out.WriteLine();
-                    Console.Out.WriteLine($"Endpoint Hash = {hashvalue}");
+                    Console.Out.WriteLine($"Endpoint Hash = {hashValue}");
                     return 0;
                 }
 
