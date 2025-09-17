@@ -12,8 +12,8 @@ dotnet tool install -g generate-data-endpoint-proxy
 
 | Command      | Description |
 | ----------- | ----------- |
-| C:\MyProject\Website\bin\debug\netcoreapp3.1\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /out:"C:\...\PrivatePackages"` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy) |
-| C:\MyProject\Website\bin\debug\netcoreapp3.1\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /push:http://my-nuget-server.com/nuget /apiKey:12345`  | Generate and publish [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy)        |
+| C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /out:"C:\...\PrivatePackages"` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy) |
+| C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /push:http://my-nuget-server.com/nuget /apiKey:12345`  | Generate and publish [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy)        |
 
 ---
 
@@ -25,8 +25,8 @@ dotnet tool install -g generate-eventbus-command-proxy
 
 | Command      | Description |
 | ----------- | ----------- |
-| C:\MyProject\Website\bin\debug\netcoreapp3.1\> `generate-eventbus-command-proxy /assembly:"website.dll" /command:MyNamespace.FooCommand /out:"c:\temp\generated-packages"` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/EventBusCommands) |
-| C:\MyProject\Website\bin\debug\netcoreapp3.1\> `generate-eventbus-command-proxy /assembly:"website.dll" /command:MyNamespace.FooCommand /push:http://my-nuget-server.com/nuget /apiKey:12345` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/EventBusCommands) |
+| C:\MyProject\Website\bin\debug\net8.0\> `generate-eventbus-command-proxy /assembly:"website.dll" /command:MyNamespace.FooCommand /out:"c:\temp\generated-packages"` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/EventBusCommands) |
+| C:\MyProject\Website\bin\debug\net8.0\> `generate-eventbus-command-proxy /assembly:"website.dll" /command:MyNamespace.FooCommand /push:http://my-nuget-server.com/nuget /apiKey:12345` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/EventBusCommands) |
 
 ---
 
@@ -52,6 +52,6 @@ If you are experiencing a problem using the generators, try the following:
 3. Set the generator you're trying to use as the *StartUp project* (e.g. **DataEndPointGenerator**)
 4. Right click no the project and select *Properties*
 5. Go under the `Debug` tab.
-6. Set the Working Directory to the folder of your test project for which you want to generate (e.g. `C:\MyProject\Website\bin\debug\netcoreapp3.1`)
+6. Set the Working Directory to the folder of your test project for which you want to generate (e.g. `C:\MyProject\Website\bin\debug\net8.0`)
 7. Set the other command line parameters
 8. In Visual Studio, press F5 to run the generator on your target test project. Now you can see what is hapenning.
