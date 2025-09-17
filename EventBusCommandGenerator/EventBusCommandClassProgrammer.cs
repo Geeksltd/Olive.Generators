@@ -39,6 +39,7 @@ namespace OliveGenerator
                     var propertyTypeString = member.GetPropertyOrFieldType().GetProgrammingName();
                     r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(member)} {{ get; set; }}");
                 }
+
                 r.AppendLine("}");
             }
 
@@ -46,10 +47,11 @@ namespace OliveGenerator
 
             r.AppendLine($"public Task Publish () => EventBus.Queue<{Command.Namespace}.{ClassName}>().Publish(this);");
             r.AppendLine();
-            r.AppendLine($"public async Task PublishAndBlockUntilProcessed()");
+            r.AppendLine($"public async Task<string> PublishAndBlockUntilProcessed()");
             r.AppendLine($"{{");
             r.AppendLine($"await Publish();");
-            r.AppendLine($"await EventBus.ProcessCommandUrl<{Command.Namespace}.{ClassName}>().AsUri().Download();");
+            r.AppendLine(
+                $"return await EventBus.ProcessCommandUrl<{Command.Namespace}.{ClassName}>().AsUri().Download();");
             r.AppendLine($"}}");
 
             r.AppendLine("}");
