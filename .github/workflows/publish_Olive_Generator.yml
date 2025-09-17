@@ -15,14 +15,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
    
+    - name: Publish Olive Api Proxy Generator Package
+      uses: Geeksltd/publish-nuget@v3.8.5
+      with:
+        PROJECT_FILE_PATH: ApiProxyGenerator/Olive.ApiProxyGenerator.csproj
+        PACKAGE_NAME: generate-api-proxy
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+   
     - name: Publish Olive Data End Point Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
         PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
+        PACKAGE_NAME: generate-data-endpoint-proxy
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
    
     - name: Publish Olive EventBus Command Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
         PROJECT_FILE_PATH: EventBusCommandGenerator/Olive.EventBusCommandGenerator.csproj
+        PACKAGE_NAME: generate-eventbus-command-proxy
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
