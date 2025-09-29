@@ -1,4 +1,5 @@
 ﻿using Olive;
+using Olive.Entities.Replication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +17,7 @@ namespace OliveGenerator
 
         public static Assembly AssemblyObject;
         public static Type EndpointType;
-        public static List<dynamic> ExposedTypes = new List<dynamic>();
+        public static List<ExposedType> ExposedTypes = new List<ExposedType>();
 
         internal static void PrepareOutputDirectory()
         {
@@ -81,9 +82,14 @@ namespace OliveGenerator
 
         internal static void FindExposedTypes()
         {
-            var existingTypes = ((dynamic)EndpointType.CreateInstance()).GetTypes() as IEnumerable<Type>;
+            //================================================================================
+            // If an InvalidCastException occurs here,
+            // check whether "Olive.Entities.Data.Replication" needs to be updated.
+            // Types must be loaded from the same assembly version both here and in the target microservice assembly.
+            //================================================================================
 
-            ExposedTypes = existingTypes.Select(x => x.CreateInstance()).ToList();
+            var existingTypes = EndpointType.CreateInstance<SourceEndpoint>().GetTypes();
+            ExposedTypes = existingTypes.Select(x => x.CreateInstance<ExposedType>()).ToList();
 
             if (ExposedTypes.None()) throw new Exception("This endpoint has no exposed data types.");
 
