@@ -6,7 +6,7 @@
 		<RootNamespace>Olive</RootNamespace>
 		<StartupObject>OliveGenerator.Program</StartupObject>
 		<PackageId>generate-eventbus-command-proxy</PackageId>
-		<Version>8.0.4</Version>
+		<Version>8.0.5</Version>
 		<ToolCommandName>generate-eventbus-command-proxy</ToolCommandName>
 		<Authors>Geeks Ltd</Authors>
 		<Description>Generates event bus command packages</Description>
@@ -15,7 +15,7 @@
 		<PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackAsTool>true</PackAsTool>
-		<PackageVersion>8.0.4</PackageVersion>
+		<PackageVersion>8.0.5</PackageVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;1705;NU1701</NoWarn>
@@ -26,10 +26,10 @@
 		<Compile Remove="Project\MSharpProjectCreator.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Olive" Version="8.0.0" />
+		<PackageReference Include="Olive" Version="8.2.2" />
 		<PackageReference Include="Olive.Entities" Version="8.0.0" />
-		<PackageReference Include="Olive.Entities.Data" Version="8.0.0" />
-		<PackageReference Include="Olive.EventBus" Version="8.0.0" />
+		<PackageReference Include="Olive.Entities.Data" Version="8.0.2" />
+		<PackageReference Include="Olive.EventBus" Version="8.0.5" />
 	</ItemGroup>
 	<Import Project="..\DTO\DTO.projitems" Label="Shared" />
 	<Import Project="..\SharedNew\SharedNew.projitems" Label="Shared" />

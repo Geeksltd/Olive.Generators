@@ -16,7 +16,7 @@ namespace OliveGenerator
         Type? IDType;
         Type Type => ExposedType.GetType();
 
-        public MSharpModelProgrammer(MSharpProjectCreator projectCreator, dynamic type)
+        public MSharpModelProgrammer(MSharpProjectCreator projectCreator, ExposedType type)
         {
             ProjectCreator = projectCreator;
             ExposedType = type;
