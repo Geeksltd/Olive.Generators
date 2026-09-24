@@ -16,7 +16,7 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>accelerate-package-restore</ToolCommandName>
-    <Version>10.2.2</Version>
+    <Version>10.3.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Olive" Version="10.2.1" />
