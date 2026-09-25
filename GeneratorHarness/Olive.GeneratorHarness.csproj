@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Olive.GeneratorHarness</AssemblyName>
+    <RootNamespace>Olive.GeneratorHarness</RootNamespace>
+    <Title>Olive Generator Harness</Title>
+    <Description>Desktop harness for exercising the Olive generator command line tools.</Description>
+    <Authors>Geeks Ltd</Authors>
+    <Version>10.3.0</Version>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationDefaultFont>Segoe UI, 9pt</ApplicationDefaultFont>
+    <!-- So that "dotnet build" of the whole solution still restores on the Linux SDK in WSL.
+         The app itself can only run on Windows; this only lets it compile elsewhere. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <IsPackable>false</IsPackable>
+    <PackAsTool>false</PackAsTool>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <NoWarn>1701;1702;1705</NoWarn>
+  </PropertyGroup>
+  <!-- Deliberately no SharedNew/DTO projitems import and no ProjectReference: those sources
+       define OliveGenerator.Program, Context and Log with identical full names in three
+       assemblies. The harness drives the tools as processes and needs none of it. -->
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.11" />
+  </ItemGroup>
+</Project>
