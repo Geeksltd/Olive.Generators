@@ -14,7 +14,7 @@ namespace OliveGenerator
 
         public static ParametersParser Current { get; private set; }
 
-        public virtual bool Start()
+        public override bool Start()
         {
             base.Start();
 

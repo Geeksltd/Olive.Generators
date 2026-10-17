@@ -27,7 +27,10 @@ namespace OliveGenerator
 
         public override void LoadParameters(string defaultName)
         {
-            Context.Current.CommandName = Param("command");
+            // Several commands may be listed, so that one invocation can generate all of them.
+            // A CI loop calling this once per command pays the process start, the load context
+            // handover and the assembly load again every time.
+            Context.Current.CommandNames = ParamList("command");
             base.LoadParameters("eventbuscommand-generator");
         }
     }

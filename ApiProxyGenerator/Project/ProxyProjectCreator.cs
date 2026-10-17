@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Olive;
 
 namespace OliveGenerator
@@ -16,52 +15,63 @@ namespace OliveGenerator
         internal override string IconUrl
             => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.ApiProxyGenerator/ProxyIcon.png";
 
-        protected override string[] References
-            => new[] { "Olive", "Olive.Entities", "Olive.Entities.Data", "Olive.ApiClient", "Olive.Microservices" };
+        internal override PackageReference[] References => new[]
+        {
+            PackageReference.Olive,
+            PackageReference.Olive_Entities,
+            PackageReference.Olive_Entities_Data,
+            PackageReference.Olive_ApiClient,
+            PackageReference.Olive_Microservices
+        };
 
         protected override void AddFiles()
         {
-            Console.Write("Adding the proxy class...");
-            Folder.GetFile($"{Context.Current.ControllerName}.cs").WriteAllText(ProxyClassProgrammer.Generate());
-            Console.WriteLine("Done");
-            Console.Write("Adding the proxy class mock configuration...");
-            MockFolder.GetFile($"{Context.Current.ControllerName}.Mock.cs")
-                .WriteAllText(ProxyClassProgrammer.GenerateMock());
-            Console.WriteLine("Done");
-            Console.Write("Adding ReamMe.txt file ...");
-            Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
-            Console.WriteLine("Done");
+            using (Log.Step("Write the proxy class", LogLevel.Detailed))
+                Folder.GetFile($"{Context.Current.ControllerName}.cs").WriteAllText(ProxyClassProgrammer.Generate());
+
+            using (Log.Step("Write the proxy class mock configuration", LogLevel.Detailed))
+                MockFolder.GetFile($"{Context.Current.ControllerName}.Mock.cs")
+                    .WriteAllText(ProxyClassProgrammer.GenerateMock());
+
+            using (Log.Step("Write README.txt", LogLevel.Detailed))
+                Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
 
             DtoTypes.GenerateEnums(Folder);
-            DtoTypes.GenerateDtoClasses(Folder);
+
+            // Nested, because the proxy names a nested DTO through the controller class, and that
+            // class is generated here too for the declaration to merge into.
+            DtoTypes.GenerateDtoClasses(Folder, nested: true);
+
             GenerateDataProviderClasses();
             GenerateMockConfiguration();
         }
 
+        /// <summary>
+        /// The remote data provider of each DTO that has one. The DTO classes themselves are written
+        /// by GenerateDtoClasses above; this used to write them a second time here, over the top of
+        /// what that had just produced.
+        /// </summary>
         void GenerateDataProviderClasses()
         {
             foreach (var type in DtoTypes.All)
             {
-                Console.Write("Adding DTO class " + type.Name + "...");
-                var dto = new DtoProgrammer(type);
-                Folder.GetFile(type.Name + ".cs").WriteAllText(dto.Generate());
+                var generator = new DtoDataProviderClassGenerator(type, Context.Current);
 
-                var dataProvider = new DtoDataProviderClassGenerator(type, Context.Current).Generate();
+                var dataProvider = generator.Generate();
+                if (dataProvider.IsEmpty()) continue;
 
-                if (dataProvider.HasValue())
-                    Folder.GetFile(type.Name + "DataProvider.cs").WriteAllText(dataProvider);
-
-                Console.WriteLine("Done");
+                using (Log.Step("Write remote data provider " + generator.ClassName, LogLevel.Detailed))
+                    Folder.GetFile(generator.ClassName + ".cs").WriteAllText(dataProvider);
             }
         }
 
         void GenerateMockConfiguration()
         {
             var generator = new MockConfigurationClassGenerator(Context.Current.ControllerType);
-            Console.Write($"Adding class {Context.Current.ControllerName}MockConfiguration");
-            MockFolder.GetFile($"{Context.Current.ControllerName}MockConfiguration.cs")
-                .WriteAllText(generator.Generate());
-            Console.WriteLine("Done");
+
+            using (Log.Step($"Write class {Context.Current.ControllerName}MockConfiguration", LogLevel.Detailed))
+                MockFolder.GetFile($"{Context.Current.ControllerName}MockConfiguration.cs")
+                    .WriteAllText(generator.Generate());
         }
 
         public override IEnumerable<string> GetTargetFiles()

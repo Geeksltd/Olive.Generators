@@ -21,22 +21,29 @@ namespace OliveGenerator
             r.AppendLine("using Olive;");
             r.AppendLine();
 
-            r.AppendLine($"public class {ClassName} : EventBusMessage");
+            r.AppendDocumentation(Command);
+
+            // Partial, because a nested enum is generated into Enums.cs as a member of a partial
+            // declaration of this same class, which is how the generated code refers to it.
+            r.AppendLine($"public partial class {ClassName} : EventBusMessage");
             r.AppendLine("{");
 
-            foreach (var item in Context.Current.CommandType.GetEffectiveProperties())
+            foreach (var item in Context.Current.CommandType.GetCommandMembers())
             {
                 var propertyTypeString = item.GetPropertyOrFieldType().GetProgrammingName();
+                r.AppendDocumentation(item);
                 r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(item)} {{ get; set; }}");
             }
 
-            foreach (var type in Context.Current.CommandType.GetNestedTypes())
+            foreach (var type in Context.Current.CommandType.GetCommandNestedTypes())
             {
+                r.AppendDocumentation(type);
                 r.AppendLine($"public class {type.Name}");
                 r.AppendLine("{");
-                foreach (var member in type.GetEffectiveProperties())
+                foreach (var member in type.GetCommandMembers())
                 {
                     var propertyTypeString = member.GetPropertyOrFieldType().GetProgrammingName();
+                    r.AppendDocumentation(member);
                     r.AppendLine($"public {propertyTypeString} {GetPropertyOrFieldName(member)} {{ get; set; }}");
                 }
 

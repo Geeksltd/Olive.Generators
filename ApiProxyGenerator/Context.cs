@@ -27,6 +27,10 @@ namespace OliveGenerator
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
 
                 TempPath.Create();
+
+                // Written before anything is built, so the temporary projects can see the private
+                // feeds the target microservice restores from.
+                TargetNugetConfig.WriteInto(TempPath, AssemblyFile);
             }
             catch (Exception ex)
             {
@@ -39,7 +43,7 @@ namespace OliveGenerator
         {
             var pluginLocation = AssemblyFile.ExistsOrThrow().FullName;
 
-            AssemblyObj = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
+            AssemblyObj = GeneratorHost.LoadTargetAssembly(AssemblyFile.ExistsOrThrow().FullName);
 
             ControllerType = AssemblyObj.GetType(ControllerName);
 
@@ -50,13 +54,31 @@ namespace OliveGenerator
             }
 
             ControllerName = ControllerType.FullName; // Ensure it has full namespace
+            Log.Item = ControllerName;
+            Log.Detail("Loaded " + AssemblyObj.FullName);
 
             ActionMethods = ControllerType
                 .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
+                .Where(IsApiAction)
                 .Select(x => new MethodGenerator(x, ControllerType))
                 .ToArray();
 
-            if (ActionMethods.Length == 0) throw new Exception("This controller has no action method.");
+            Log.Detail($"{ControllerName} exposes {ActionMethods.Length} api action(s): " +
+                ActionMethods.Select(x => x.Method.Name).ToString(", "));
+
+            if (ActionMethods.None())
+                throw new Exception($"{ControllerName} has no action method. An api method must declare " +
+                    "[Route], [HttpGet], [HttpPost], [HttpPut], [HttpPatch] or [HttpDelete].");
+        }
+
+        bool IsApiAction(MethodInfo method)
+        {
+            if (MethodGenerator.IsApiAction(method)) return true;
+
+            Log.Detail($"Skipping {ControllerName}.{method.Name}(): " +
+                "it declares no route or http verb attribute, so it is not an api action.");
+
+            return false;
         }
     }
 }

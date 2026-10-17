@@ -6,28 +6,51 @@ namespace OliveGenerator
     {
         static int Main(string[] args)
         {
-            if (!ParametersParser.Start(args)) return -1;
+            Log.Initialize(args);
+            Timings.Initialize(args);
+
+            Log.Run("Accelerate Package Restore",
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3), args);
+
+            // The help screen exists but was never reached: a bad command line just exited.
+            if (!ParametersParser.Start(args))
+            {
+                var usage = Helper.ShowHelp();
+                Log.Shutdown(usage);
+                return usage;
+            }
+
+            // Kept, so that the run's closing record can name the code the process exits with.
+            var exitCode = -1;
 
             try
             {
                 ParametersParser.LoadParameters();
 
-                Console.WriteLine("Command: " + Context.Command + " nugets ");
-                Console.WriteLine("File: file: " + Context.FileName);
-                Console.WriteLine();
+                Log.Field("command", Context.Command);
+                Log.Field("file", Context.FileName);
+                Log.Field("base path", Context.BasePath);
 
-                if (Context.Command == Command.Extract) Extract.Start();
-                else Restore.Start();
+                using (Log.Step(Context.Command + " packages"))
+                {
+                    if (Context.Command == Command.Extract) Extract.Start();
+                    else Restore.Start();
+                }
 
-                Console.WriteLine("Cashe Nuget was done");
-
-                return 0;
+                exitCode = 0;
             }
             catch (Exception ex)
             {
-                Helper.ShowError(ex);
-                return -1;
+                Log.Error(ex);
+                exitCode = -1;
             }
+            finally
+            {
+                Timings.Report();
+                Log.Shutdown(exitCode);
+            }
+
+            return exitCode;
         }
     }
 }

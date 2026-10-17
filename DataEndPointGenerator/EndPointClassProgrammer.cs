@@ -6,7 +6,7 @@ namespace OliveGenerator
 {
     class EndpointClassProgrammer
     {
-        static Type Endpoint => Context.EndpointType;
+        static Type Endpoint => Context.Current.EndpointType;
         static string ClassName => Endpoint.Name;
 
         public static string Generate()
@@ -31,13 +31,14 @@ namespace OliveGenerator
             r.AppendLine("using Olive.Entities.Replication;");
             r.AppendLine();
 
+            r.AppendDocumentation(Endpoint);
             r.AppendLine($"public class {ClassName} : DestinationEndpoint");
             r.AppendLine("{");
 
             r.AppendLine($"public override string QueueUrl => Olive.Config.Get(\"DataReplication:{Endpoint.FullName}:Url\").Or(Olive.Entities.Data.Replication.QueueUrlProvider.UrlProvider.GetUrl(GetType()));");
             r.AppendLine();
 
-            foreach (var item in Context.ExposedTypes)
+            foreach (var item in Context.Current.ExposedTypes)
                 r.AppendLine($"public static EndpointSubscriber {item.GetType().Name} {{ get; private set; }}");
 
             r.AppendLine();
@@ -45,7 +46,7 @@ namespace OliveGenerator
             r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
 
-            foreach (var item in Context.ExposedTypes)
+            foreach (var item in Context.Current.ExposedTypes)
                 r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
 
             r.AppendLine("}");

@@ -16,7 +16,13 @@ namespace OliveGenerator
 
         public DtoProgrammer(Type type) => Type = type;
 
-        internal string Generate()
+        /// <param name="nested">
+        /// Pass true to declare a nested DTO inside a partial declaration of the classes that
+        /// declare it, which is where the generated code looks for it. Without this the class was
+        /// written at the top of the namespace while every reference to it still named the
+        /// declaring class, so a controller with a nested DTO produced a package that never built.
+        /// </param>
+        internal string Generate(bool nested = false)
         {
             var r = new StringBuilder();
 
@@ -28,7 +34,7 @@ namespace OliveGenerator
             r.AppendLine("using System.Reflection;");
             r.AppendLine("using Olive.Entities;");
             r.AppendLine();
-            r.AppendLine(GenerateDto());
+            r.AppendLine(nested ? DtoTypes.WrapInDeclaringTypes(GenerateDto(), Type) : GenerateDto());
 
             r.AppendLine("}");
 
@@ -38,16 +44,20 @@ namespace OliveGenerator
         string GenerateDto()
         {
             var r = new StringBuilder();
-            // r.AppendLine($"/// <summary>The {Type.Name} DTO type (Data Transfer Object) to be used with {Context2.ControllerType.Name} Api.</summary>");
+
+            r.AppendDocumentation(Type);
+
             r.AppendLine("[Olive.Entities.CacheObjects(false)]");
-            r.AppendLine("public class " + Type.Name + " : Olive.Entities.GuidEntity");
+            r.AppendLine("public partial class " + Type.Name + " : Olive.Entities.GuidEntity");
             r.AppendLine("{");
 
             foreach (var p in EffectiveProperties)
             {
                 var type = p.GetPropertyOrFieldType().GetProgrammingName(useGlobal: false, useNamespace: false, useNamespaceForParams: false, useCSharpAlias: true);
 
-                r.AppendLine($"/// <summary>Gets or sets the {p.Name} of this {Type.Name} instance.</summary>");
+                if (!r.AppendDocumentation(p))
+                    r.AppendLine($"/// <summary>Gets or sets the {p.Name} of this {Type.Name} instance.</summary>");
+
                 r.AppendLine($"public {type} {p.Name} {{ get; set; }}");
                 r.AppendLine();
             }
@@ -67,21 +77,12 @@ namespace OliveGenerator
 
             if (toStringField != null) return toStringField.Name;
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("********** WARNING ***********");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Could not find a suitable implementation for ToString().");
-            Console.WriteLine("- There is no field annotated with [ToString] attribute.");
-            Console.WriteLine($"- Nor is there a field in {Type.FullName} named {CommonDefaultProperties.Select(s => s.ToPascalCaseId()).ToString(", ", " or ")}.");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.ResetColor();
-
-            Console.WriteLine("This does not stop the proxy creation.");
-            Console.WriteLine("Press Enter to continue");
-            Console.ReadLine();
+            // No prompt: this warning says itself that it changes nothing, and waiting for a key
+            // that no build agent will ever press hangs the run instead of finishing it.
+            Log.Warn($"Could not find a suitable implementation of ToString() for {Type.FullName}. " +
+                "No field is annotated with [ToString], and none is named " +
+                CommonDefaultProperties.Select(s => s.ToPascalCaseId()).ToString(", ", " or ") + ". " +
+                "This does not stop the proxy creation.");
 
             return $"\"{Type.Name.RemoveBeforeAndIncluding("+")}: No good ToString() :(\"";
         }

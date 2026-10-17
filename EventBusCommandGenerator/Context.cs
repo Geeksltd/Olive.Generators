@@ -11,8 +11,11 @@ namespace OliveGenerator
         public static Context Current { get; } = new Context();
 
         public string CommandName;
+
+        /// <summary>Every command this run was asked to generate.</summary>
+        public string[] CommandNames = Array.Empty<string>();
+
         public Type CommandType;
-        public static Assembly AssemblyObject;
         public List<FieldInfo> CommandFields = new List<FieldInfo>();
 
         internal void PrepareOutputDirectory()
@@ -26,6 +29,10 @@ namespace OliveGenerator
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
 
                 TempPath.Create();
+
+                // Written before anything is built, so the temporary projects can see the private
+                // feeds the target microservice restores from.
+                TargetNugetConfig.WriteInto(TempPath, AssemblyFile);
             }
             catch (Exception ex)
             {
@@ -34,16 +41,27 @@ namespace OliveGenerator
             }
         }
 
+        /// <summary>
+        /// Loads the target application once for the whole run. Resolving the individual commands
+        /// is separate, so a run covering several of them pays this only once.
+        /// </summary>
         internal void LoadAssembly()
         {
             AppDomain.CurrentDomain.ResolveAssemblies();
-            AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
+            AssemblyObj = GeneratorHost.LoadTargetAssembly(AssemblyFile.ExistsOrThrow().FullName);
 
-            CommandType = AssemblyObject.GetType(CommandName) ??
-                AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == CommandName) ??
-                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {CommandName}.");
+            Log.Detail("Loaded " + AssemblyObj.FullName);
+        }
 
-            CommandName = CommandType.FullName; // Ensure it has full namespace 
+        /// <summary>Points this context at one of the commands the run was asked to generate.</summary>
+        internal void Select(string command)
+        {
+            CommandType = AssemblyObj.GetType(command) ??
+                AssemblyObj.GetTypes().FirstOrDefault(x => x.Name == command) ??
+                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {command}.");
+
+            CommandName = CommandType.FullName; // Ensure it has full namespace
+            Log.Item = CommandName;
         }
     }
 }

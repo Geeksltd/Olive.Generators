@@ -25,7 +25,7 @@ jobs:
     - name: Publish Olive Data End Point Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
-        PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndPointGenerator.csproj
+        PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndpointGenerator.csproj
         PACKAGE_NAME: generate-data-endpoint-proxy
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
    

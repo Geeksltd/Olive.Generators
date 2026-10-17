@@ -13,6 +13,19 @@ namespace OliveGenerator
         bool ApiMethodReturnsList => ApiMethod.GetApiMethodReturnType().IsIEnumerableOf(Type);
         Context Context;
 
+        /// <summary>How the generated code names the DTO, i.e. "HrApi.NewEmployee" for a nested one.</summary>
+        string Entity => DtoTypes.QualifiedName(Type);
+
+        /// <summary>
+        /// The provider's own class name. It sits at the top of the namespace, so a nested DTO's
+        /// declaring classes are run into the name rather than left as dots. For a DTO that is not
+        /// nested this is the same "&lt;name&gt;DataProvider" it has always been.
+        /// </summary>
+        internal string ClassName => Entity.Replace(".", "") + "DataProvider";
+
+        /// <summary>The provider's name as code outside its namespace refers to it.</summary>
+        internal string FullName => Type.Namespace + "." + ClassName;
+
         public DtoDataProviderClassGenerator(Type type, Context context)
         {
             Type = type;
@@ -35,17 +48,17 @@ namespace OliveGenerator
             r.AppendLine("using Olive.Entities;");
             r.AppendLine();
 
-            var type = Type.Name + "DataProvider";
+            var type = ClassName;
 
-            r.AppendLine($"/// <summary>Enables querying {Type.Name} instances through the Olive Database Api.</summary>");
+            r.AppendLine($"/// <summary>Enables querying {Entity} instances through the Olive Database Api.</summary>");
             r.AppendLine($"public class {type} : LimitedDataProvider");
             r.AppendLine("{");
             r.AppendLine($"static Action<{Context.ControllerType.Name}> Configurator;");
 
             if (ApiMethodReturnsList)
             {
-                r.AppendLine($"static {Type.Name}[] LatestListResult;");
-                r.AppendLine($"static Dictionary<Guid, {Type.Name}> LatestListResultByIds;");
+                r.AppendLine($"static {Entity}[] LatestListResult;");
+                r.AppendLine($"static Dictionary<Guid, {Entity}> LatestListResultByIds;");
             }
 
             r.AppendLine();
@@ -68,7 +81,7 @@ namespace OliveGenerator
             r.AppendLine("{");
             r.AppendLine("Configurator = configurator;");
             r.AppendLine($"var config = Context.Current.GetService<Olive.Entities.Data.IDatabaseProviderConfig>();");
-            r.AppendLine($"config.RegisterDataProvider(typeof({Type.Name}), Current);");
+            r.AppendLine($"config.RegisterDataProvider(typeof({Entity}), Current);");
             r.AppendLine("}");
 
             return r.ToString();

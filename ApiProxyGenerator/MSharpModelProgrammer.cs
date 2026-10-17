@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Olive;
 
@@ -27,12 +28,15 @@ namespace OliveGenerator
 
             r.AppendLine("HasExternallyDomainClass();");
 
+            var documentation = XmlDocumentation.GetSummaryLiteral(Type);
+            if (documentation.HasValue()) r.AppendLine($"Documentation({documentation});");
+
             if (Type.FindDatabaseGetMethod() == null)
                 r.AppendLine("DatabaseMode(DatabaseOption.Transient);");
             else r.AppendLine("DatabaseMode(DatabaseOption.Custom);");
 
             foreach (var p in Type.GetEffectiveProperties())
-                r.AppendLine(AddProperty(p.GetPropertyOrFieldType(), p.Name));
+                r.AppendLine(AddProperty(p));
 
             r.AppendLine("}");
             r.AppendLine("}");
@@ -41,8 +45,10 @@ namespace OliveGenerator
             return new CSharpFormatter(r.ToString()).Format();
         }
 
-        string AddProperty(Type propertyType, string name)
+        string AddProperty(MemberInfo property)
         {
+            var name = property.Name;
+            var propertyType = property.GetPropertyOrFieldType();
             var type = propertyType;
             if (type.IsArray) type = type.GetElementType();
 
@@ -78,6 +84,9 @@ namespace OliveGenerator
             {
                 if (type.IsValueType) result += ".Mandatory()";
             }
+
+            var documentation = XmlDocumentation.GetSummaryLiteral(property);
+            if (documentation.HasValue()) result += $".Documentation({documentation})";
 
             return result + ";";
         }

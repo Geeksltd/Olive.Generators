@@ -33,7 +33,6 @@ namespace OliveGenerator
         public static void LoadParameters()
         {
             Context.BasePath = Environment.CurrentDirectory.AsDirectory();
-            Console.WriteLine("BasePath: " + Context.BasePath.FullName);
 
             Context.ProjectFiles = Context.BasePath.GetFiles("*.csproj", SearchOption.AllDirectories).ToList();
         }

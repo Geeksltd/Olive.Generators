@@ -6,12 +6,7 @@
         {
         }
 
-        protected override void CreateNuspec()
-        {
-            base.CreateNuspec(
-                $"Provides an easy method to invoke the Api functions of {Context.Current.ControllerName}",
-                null
-                );
-        }
+        protected override string BuildDescription()
+            => $"Provides an easy method to invoke the Api functions of {Context.Current.ControllerName}";
     }
 }

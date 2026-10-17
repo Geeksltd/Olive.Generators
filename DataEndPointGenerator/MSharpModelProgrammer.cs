@@ -37,6 +37,9 @@ namespace OliveGenerator
             r.AppendLine("{");
             r.AppendLine($"Schema(\"{Type.Namespace}\").IsRemoteCopy();");
 
+            var typeDocumentation = XmlDocumentation.GetSummaryLiteral(ExposedType.DomainType);
+            if (typeDocumentation.HasValue()) r.AppendLine($"Documentation({typeDocumentation});");
+
             if (ExposedType.ToStringExpression.HasValue())
                 r.AppendLine($"ToStringExpression(\"{CSharpFormatter.EscapeString(ExposedType.ToStringExpression)}\");");
 
@@ -125,7 +128,7 @@ namespace OliveGenerator
 
             var result = method + $"\"{name}\"{extraArgs})";
 
-            if (type.Assembly == Context.AssemblyObject && type.IsArray)
+            if (type.Assembly == Context.Current.AssemblyObj && type.IsArray)
                 result += ".MaxCardinality(null)";
 
             if (!isNullable && type.IsValueType)
@@ -137,6 +140,9 @@ namespace OliveGenerator
             if (scale != null) result += $".Scale({scale})";
 
             if (maxLength > 0) result += $".Max({maxLength})";
+
+            var documentation = XmlDocumentation.GetSummaryLiteral((item as ExposedPropertyInfo)?.Property);
+            if (documentation.HasValue()) result += $".Documentation({documentation})";
 
             return result + ";";
         }

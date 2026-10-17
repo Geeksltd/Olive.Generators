@@ -9,12 +9,12 @@
         {
         }
 
-        protected override void CreateNuspec()
-        {
-            base.CreateNuspec(
-                $"Provides an easy method to invoke the Api functions of {Context.Current.CommandName}",
-                $"{ProjectCreators.First().GetNugetDependencies().Select(x => $"<dependency id=\"{x}\" version=\"{GetLatestNugetVersion(x)}\" />").ToLinesString()}"
-                );
-        }
+        protected override string BuildDescription()
+            => $"Provides an easy method to invoke the Api functions of {Context.Current.CommandName}";
+
+        protected override string BuildDependencies()
+            => ProjectCreators.First().GetNugetDependencies()
+                .Select(x => $"<dependency id=\"{x.Package}\" version=\"{GetDependencyVersion(ProjectCreators.First(), x)}\" />")
+                .ToLinesString();
     }
 }

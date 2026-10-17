@@ -12,9 +12,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Base\ContextBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\NugetCreatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\ParametersParserBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Base\ProjectBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\ProjectCreatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RunSummary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PackageReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProcessRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ResolveAssemblies.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Timings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TargetAssemblyLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TargetFramework.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TargetNugetConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TargetPackageVersions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlDocumentation.cs" />
   </ItemGroup>
 </Project>

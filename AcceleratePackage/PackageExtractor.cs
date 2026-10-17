@@ -1,31 +1,40 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Xml.Linq;
 using Olive;
 
 namespace OliveGenerator
 {
     internal class PackageExtractor
     {
+        /// <summary>
+        /// Every package a project references.
+        /// <para>
+        /// This used to read one ItemGroup: the first whose first child was a PackageReference.
+        /// A project that spreads its references over several groups, which is what conditioning
+        /// them on the target framework produces, had all but one group silently dropped, and one
+        /// whose first child was a comment threw.
+        /// </para>
+        /// </summary>
         static internal NugetPackage[] Extract(FileInfo project)
         {
-            var xml = new XmlDocument();
-            xml.Load(project.FullName);
+            var document = XDocument.Load(project.FullName);
 
-            var containerNode =
-                xml.SelectNodes(@"/Project/ItemGroup")
-                .Cast<XmlNode>()
-                .Where(n => n.FirstChild.Name == "PackageReference")
-                .FirstOrDefault();
-
-            if (containerNode == null) return new NugetPackage[0];
-
-            return containerNode.ChildNodes.Cast<XmlNode>()
-                 .Where(x => x.Attributes != null)
-                 .Select(x => new { Include = x.Attributes["Include"], Version = x.Attributes["Version"] })
-                 .Where(x => x.Include != null && x.Version != null)
-                 .Select(x => new NugetPackage(x.Include.Value, x.Version.Value))
-                 .ToArray();
+            return document.Descendants()
+                .Where(x => x.Name.LocalName == "PackageReference")
+                .Select(x => new
+                {
+                    Include = (string)x.Attribute("Include") ?? (string)x.Attribute("Update"),
+                    Version = (string)x.Attribute("Version")
+                })
+                .Where(x => x.Include.HasValue() && x.Version.HasValue())
+                // The same package and version legitimately appears more than once in a project
+                // that conditions its references on the target framework.
+                .GroupBy(x => x.Include + "/" + x.Version, StringComparer.OrdinalIgnoreCase)
+                .Select(x => x.First())
+                .Select(x => new NugetPackage(x.Include, x.Version))
+                .ToArray();
         }
     }
 }

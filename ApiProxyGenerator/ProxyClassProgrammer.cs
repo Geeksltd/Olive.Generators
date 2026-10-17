@@ -22,12 +22,17 @@ namespace OliveGenerator
             r.AppendLine("using System.Collections.Generic;");
             r.AppendLine("using Olive;");
             r.AppendLine();
-            r.Append("/// <summary>Provides access to the " + ClassName + " api of the " + Context.Current.PublisherService + " service.");
+
+            var behaviour = "Provides access to the " + ClassName + " api of the " +
+                Context.Current.PublisherService + " service.";
 
             if (ServiceOnly())
-                r.Append($" As the target Api declares [{Controller.GetExplicitAuthorizeServiceAttribute()}], my constructor will call AsServiceUser() automatically.");
+                behaviour += $" As the target Api declares [{Controller.GetExplicitAuthorizeServiceAttribute()}], my constructor will call AsServiceUser() automatically.";
 
-            r.AppendLine("</summary>");
+            // Keep the documentation of the Api controller itself, and describe the proxy behaviour separately:
+            if (r.AppendDocumentation(Controller)) r.AppendLine($"/// <remarks>{behaviour}</remarks>");
+            else r.AppendLine($"/// <summary>{behaviour}</summary>");
+
             r.AppendLine($"public partial class {ClassName} : StronglyTypedApiProxy");
             r.AppendLine("{");
             r.AppendLine("static Action<ApiClient> DefaultConfiguration = x => x.Retries(3).CircuitBreaker();");

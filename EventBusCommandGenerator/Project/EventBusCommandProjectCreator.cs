@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Olive;
 
 namespace OliveGenerator
@@ -20,20 +19,27 @@ namespace OliveGenerator
         internal override string IconUrl
             => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.DataEndpointGenerator/EndpointIcon.png";
 
-        protected override string[] References
-            => new[] { "Olive", "Olive.EventBus", "Olive.Entities" };
+        /// <summary>What the command project references, readable without creating one, for the hash.</summary>
+        internal static PackageReference[] Packages => new[]
+        {
+            PackageReference.Olive,
+            PackageReference.Olive_EventBus,
+            PackageReference.Olive_Entities
+        };
+
+        internal override PackageReference[] References => Packages;
 
         protected override void AddFiles()
         {
-            Console.Write("Adding the command class...");
-            Folder.GetFile($"{Context.Current.CommandType.Name}.cs")
-                .WriteAllText(EventBusCommandClassProgrammer.Generate());
-            Console.WriteLine("Done");
-            Console.Write("Adding ReamMe.txt file ...");
-            Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
-            Console.WriteLine("Done");
+            using (Log.Step("Write the command class", LogLevel.Detailed))
+                Folder.GetFile($"{Context.Current.CommandType.Name}.cs")
+                    .WriteAllText(EventBusCommandClassProgrammer.Generate());
 
-            DtoTypes.GenerateEnums(Folder);
+            using (Log.Step("Write README.txt", LogLevel.Detailed))
+                Folder.GetFile("README.txt").WriteAllText(ReadmeFileGenerator.Generate());
+
+            // The generated command refers to its types by their full name:
+            DtoTypes.GenerateEnums(Folder, useNamespace: true);
             DtoTypes.GenerateDtoClasses(Folder);
         }
 
@@ -43,14 +49,6 @@ namespace OliveGenerator
             return base.GetTargetFiles().Concat($@"<file src=""{readme}"" target="""" />");
         }
 
-        public override IEnumerable<string> GetNugetDependencies()
-        {
-            return new[]
-            {
-                "Olive",
-                "Olive.Entities",
-                "Olive.EventBus"
-            };
-        }
+        public override IEnumerable<PackageReference> GetNugetDependencies() => References;
     }
 }

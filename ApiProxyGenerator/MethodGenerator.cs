@@ -9,11 +9,36 @@ namespace OliveGenerator
 {
     public class MethodGenerator
     {
+        /// <summary>The only verb without a request body, so its arguments go in the query string.</summary>
+        const string Get = "Get";
+
+        static readonly string[] HttpVerbs = { Get, "Post", "Put", "Patch", "Delete" };
+
+        /// <summary>The attributes that expose a controller method, most specific route first.</summary>
+        static readonly string[] RoutingAttributes =
+            new[] { "Route" }.Concat(HttpVerbs.Select(x => "Http" + x)).ToArray();
+
         internal MethodInfo Method;
         string[] RouteParams;
 
-        public string ReturnType => Method.GetApiMethodReturnType()?.Name;
+        /// <summary>
+        /// The type the proxy method returns, named as the generated code names it. A nested
+        /// return type keeps its declaring class, which is where its DTO class is declared.
+        /// </summary>
+        public string ReturnType => DtoTypes.QualifiedName(Method.GetApiMethodReturnType());
         Type ControllerType;
+
+        /// <summary>
+        /// Whether the method is exposed as an api action. A controller may declare public methods
+        /// that are not actions, and a proxy method generated for one of those would name no http
+        /// verb and so would not compile.
+        /// </summary>
+        public static bool IsApiAction(MethodInfo method)
+        {
+            if (method.GetAttribute("NonAction") != null) return false;
+
+            return RoutingAttributes.Any(x => method.GetAttribute(x) != null);
+        }
 
         public MethodGenerator(MethodInfo method, Type controllerType)
         {
@@ -26,12 +51,14 @@ namespace OliveGenerator
         {
             var r = new StringBuilder();
 
-            r.Append($"/// <summary>Sends a Http{HttpVerb()} request to {Route()} of the {PublisherService} service.");
+            var behaviour = $"Sends a Http{HttpVerb()} request to {Route()} of the {PublisherService} service.";
 
             if (Method.GetExplicitAuthorizeServiceAttribute().HasValue())
-                r.Append($" As the target Api declares [{Method.GetExplicitAuthorizeServiceAttribute()}], I will call AsServiceUser() automatically.");
+                behaviour += $" As the target Api declares [{Method.GetExplicitAuthorizeServiceAttribute()}], I will call AsServiceUser() automatically.";
 
-            r.AppendLine("</summary>");
+            // Keep the documentation of the Api method itself, and describe the proxy behaviour separately:
+            if (r.AppendDocumentation(Method)) r.AppendLine($"/// <remarks>{behaviour}</remarks>");
+            else r.AppendLine($"/// <summary>{behaviour}</summary>");
 
             r.AppendLine($"public Task{ReturnType.WithWrappers("<", ">")} {Method.Name}({GetArgs()})");
             r.AppendLine("{");
@@ -63,28 +90,48 @@ namespace OliveGenerator
 
         string GetReturnStatement()
         {
+            var verb = HttpVerb();
+
             var r = new StringBuilder();
-            r.Append($"return client.{HttpVerb()}");
-            if (HttpVerb() == "Get") r.Append($"<{ReturnType.Or("object")}>");
+            r.Append($"return client.{verb}");
+            if (verb == Get) r.Append($"<{ReturnType.Or("object")}>");
             r.AppendLine("(" + GetArg() + ");");
             return r.ToString();
         }
 
         public string GetArg()
         {
-            var args = new List<string>();
-
-            var parameters = Method.GetParameters().Select(x => x.Name).Except(RouteParams).Trim();
+            var nonRoute = Method.GetParameters().Where(x => RouteParams.Lacks(x.Name)).ToArray();
+            var parameters = nonRoute.Select(x => x.Name).Trim().ToArray();
 
             if (parameters.None()) return null;
 
-            if (HttpVerb() == "GET")
+            if (HttpVerb() == Get)
+            {
+                // A single object is passed as it is: the api client turns its properties into the
+                // query string, which is what a [FromQuery] model binds from. Wrapping it would send
+                // "?request=Namespace.RequestDto" instead, and the published proxies always passed it bare.
+                if (nonRoute.IsSingle() && !IsScalar(nonRoute.Single().ParameterType)) return parameters.Single();
+
+                // A GET has no request body, so its other arguments travel together as query parameters.
                 return "new { " + parameters.ToString(", ") + "}";
+            }
 
             if (parameters.HasMany())
-                throw new Exception(HttpVerb() + "-based Api methods can take only one argument.");
+                throw new Exception($"{ControllerType.Name}.{Method.Name}() takes {parameters.Length} arguments " +
+                    $"that are not route values, and an Http{HttpVerb()} api method can send only one as its body.");
 
             return parameters.Single();
+        }
+
+        /// <summary>A value that binds from a single query parameter, rather than an object whose properties do.</summary>
+        static bool IsScalar(Type type)
+        {
+            type = Nullable.GetUnderlyingType(type) ?? type;
+
+            return type.IsPrimitive || type.IsEnum || type == typeof(string) || type == typeof(decimal) ||
+                type == typeof(DateTime) || type == typeof(DateTimeOffset) || type == typeof(TimeSpan) ||
+                type == typeof(Guid);
         }
 
         public string GetArgs() => GetArguments().Select(x => x.Value + " " + x.Key).ToString(", ");
@@ -113,26 +160,33 @@ namespace OliveGenerator
 
         string HttpVerb()
         {
-            foreach (var item in new[] { "Get", "Post", "Put", "Patch", "Delete" })
-                if (Method.CustomAttributes.Any(x => x.AttributeType.Name == "Http" + item + "Attribute"))
-                    return item;
+            var result = HttpVerbs.FirstOrDefault(x => Method.GetAttribute("Http" + x) != null);
 
-            return null;
+            if (result.IsEmpty())
+                throw new Exception($"{ControllerType.Name}.{Method.Name}() declares a route but no http verb, " +
+                    "so the method to call cannot be determined. Add [HttpGet], [HttpPost], [HttpPut], " +
+                    "[HttpPatch] or [HttpDelete] to it, or [NonAction] if it is not an api method.");
+
+            return result;
         }
 
         string Route()
         {
-            var classRouteAttr = ControllerType
+            var classRoute = ControllerType
                       .GetAttribute("Route")
                       ?.ConstructorArguments
-                      .FirstOrDefault().Value.ToString();
+                      .FirstOrDefault().Value.ToStringOrEmpty();
 
-            return classRouteAttr.WithSuffix("/") + GetMethodRoute();
+            var methodRoute = GetMethodRoute();
+
+            if (methodRoute.IsEmpty()) return classRoute.OrEmpty();
+
+            return classRoute.WithSuffix("/") + methodRoute;
         }
 
         string GetMethodRoute()
         {
-            foreach (var name in new[] { "Route", "HttpGet", "HttpPost", "HttpDelete", "HttpPut", "HttpPatch" })
+            foreach (var name in RoutingAttributes)
             {
                 var result = Method.GetAttribute(name)
                              ?.ConstructorArguments
@@ -141,7 +195,9 @@ namespace OliveGenerator
                 if (result.HasValue()) return result;
             }
 
-            return "{Route???}";
+            // A verb attribute with no template of its own, e.g. [HttpGet], routes to the
+            // controller's own route.
+            return string.Empty;
         }
 
         public Type[] GetArgAndReturnTypes()

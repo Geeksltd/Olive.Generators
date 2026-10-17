@@ -10,22 +10,26 @@ namespace OliveGenerator
     {
         internal static void Start()
         {
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.ResetColor();
-            Console.WriteLine("Finding packages...");
+            using var scope = Log.Step($"Read the package references of {Context.ProjectFiles.Count} project(s)");
 
             foreach (var project in Context.ProjectFiles)
             {
                 var packages = PackageExtractor.Extract(project);
-                var unique = packages.Where(x => !Context.Packages.Any(y => x.Package == y.Package && x.Version == y.Version));
+
+                // Materialised before it is added to the list it filters against. Left lazy, the
+                // count printed below re-ran the query after the add and so always said zero.
+                var unique = packages
+                    .Where(x => !Context.Packages.Any(y => x.Package == y.Package && x.Version == y.Version))
+                    .ToArray();
+
                 if (unique.None()) continue;
 
                 Context.Packages.AddRange(unique);
-                Console.WriteLine($"Found package: {project.Name} : {unique.Count()}");
+                Log.Detail($"{project.Name}: {unique.Length} package(s) not already listed");
             }
 
-            Console.WriteLine();
+            scope.Note($"{Context.Packages.Count} distinct packages");
+
             CreateOutput();
         }
 
@@ -37,8 +41,7 @@ namespace OliveGenerator
             var json = JsonConvert.SerializeObject(report, Formatting.Indented);
             file.WriteAllText(json);
 
-            Console.WriteLine($"Generating Output file \"{Context.FileName}\"  at \"{Context.BasePath.FullName}\"");
-            Console.WriteLine();
+            Log.Info($"Wrote {report.Length} packages to {file.FullName}");
         }
     }
 }

@@ -85,7 +85,8 @@ namespace OliveGenerator
         static string GenerateDataProviders()
         {
             var dataProviders = DtoTypes.All
-             .Where(x => new DtoDataProviderClassGenerator(x, Context.Current).Generate().HasValue()).ToList();
+             .Select(x => new DtoDataProviderClassGenerator(x, Context.Current))
+             .Where(x => x.Generate().HasValue()).ToList();
 
             if (dataProviders.None()) return null;
 
@@ -100,9 +101,11 @@ namespace OliveGenerator
             r.AppendLine("...");
             r.AppendLine();
 
-            foreach (var type in dataProviders)
+            foreach (var provider in dataProviders)
             {
-                r.AppendLine("    " + type.FullName + "DataProvider");
+                // Not the DTO's FullName with the suffix run onto it: a nested one spells that with
+                // a "+", which is not how the generated provider is named or referred to.
+                r.AppendLine("    " + provider.FullName);
                 r.AppendLine("      .Register(x => x.Cache(CachePolicy.CacheOrFreshOrFail, cacheExpiry: 1.Minutes()));");
                 r.AppendLine();
             }

@@ -2,24 +2,26 @@
 using Olive.Entities.Replication;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace OliveGenerator
 {
-    class Context
+    class Context : ContextBase
     {
-        public static string EndpointName, NugetServer, NugetApiKey;
-        public static FileInfo AssemblyFile;
-        public static DirectoryInfo TempPath, Output, Source, MSharp;
+        public static Context Current { get; } = new Context();
 
-        public static Assembly AssemblyObject;
-        public static Type EndpointType;
-        public static List<ExposedType> ExposedTypes = new List<ExposedType>();
+        public string EndpointName;
 
-        internal static void PrepareOutputDirectory()
+        /// <summary>Every endpoint this run was asked to generate.</summary>
+        public string[] EndpointNames = Array.Empty<string>();
+
+        public DirectoryInfo MSharp;
+
+        public Type EndpointType;
+        public List<ExposedType> ExposedTypes = new List<ExposedType>();
+
+        internal void PrepareOutputDirectory()
         {
             if (!TempPath.Exists)
                 throw new Exception("Output directory not found: " + TempPath.FullName);
@@ -30,6 +32,10 @@ namespace OliveGenerator
                     TempPath.DeleteAsync(recursive: true, harshly: true).WaitAndThrow();
 
                 TempPath.Create();
+
+                // Written before anything is built, so the temporary projects can see the private
+                // feeds the target microservice restores from.
+                TargetNugetConfig.WriteInto(TempPath, AssemblyFile);
             }
             catch (Exception ex)
             {
@@ -38,49 +44,30 @@ namespace OliveGenerator
             }
         }
 
-        internal static string Run(string command)
-        {
-            var cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = false;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
-            cmd.StandardInput.WriteLine(command);
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            var result = cmd.StandardOutput.ReadToEnd().ToStringOrEmpty().Trim();
-
-            if (cmd.ExitCode != 0)
-            {
-                throw new Exception(result);
-            }
-            //if (result.StartsWith("Could not ")) throw new Exception(result);
-
-            //if (result.Contains("Build FAILED"))
-            //{
-            //    Console.WriteLine("Compile " + command + " manually...");
-            //    Console.ReadLine();
-            //    // throw new Exception(result.TrimBefore("Build FAILED"));
-            //}
-
-            return result;
-        }
-
-        internal static void LoadAssembly()
+        /// <summary>
+        /// Loads the target application once for the whole run. Resolving the individual endpoints
+        /// is separate, so a run covering several of them pays this only once.
+        /// </summary>
+        internal void LoadAssembly()
         {
             AppDomain.CurrentDomain.ResolveAssemblies();
-            AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
+            AssemblyObj = GeneratorHost.LoadTargetAssembly(AssemblyFile.ExistsOrThrow().FullName);
 
-            EndpointType = AssemblyObject.GetType(EndpointName) ??
-                AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndpointName) ??
-                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndpointName}.");
-
-            EndpointName = EndpointType.FullName; // Ensure it has full namespace 
+            Log.Detail("Loaded " + AssemblyObj.FullName);
         }
 
-        internal static void FindExposedTypes()
+        /// <summary>Points this context at one of the endpoints the run was asked to generate.</summary>
+        internal void Select(string endpoint)
+        {
+            EndpointType = AssemblyObj.GetType(endpoint) ??
+                AssemblyObj.GetTypes().FirstOrDefault(x => x.Name == endpoint) ??
+                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {endpoint}.");
+
+            EndpointName = EndpointType.FullName; // Ensure it has full namespace 
+            Log.Item = EndpointName;
+        }
+
+        internal void FindExposedTypes()
         {
             //================================================================================
             // If an InvalidCastException occurs here,
@@ -95,20 +82,23 @@ namespace OliveGenerator
 
             foreach (var type in ExposedTypes)
                 type.Define();
+
+            foreach (var type in ExposedTypes)
+                Log.Detail($"exposes {type.DomainType?.FullName} with {type.Fields.OrEmpty().Count()} field(s)");
         }
 
-        internal static FileInfo[] FindReferenceDataFiles()
+        internal FileInfo[] FindReferenceDataFiles()
         {
             const string key = "ReferenceData";
 
-            var current = Context.AssemblyFile.Directory;
+            var current = AssemblyFile.Directory;
             while (current != null && !current.GetSubDirectory(key).Exists())
                 current = current.Parent;
 
             if (current == null)
                 return Array.Empty<FileInfo>();
 
-            var endpointName = Context.EndpointName.Split('.', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            var endpointName = EndpointName.Split('.', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
             current = current.GetSubDirectory(key).GetSubDirectory(endpointName);
 
             if (current == null || !current.Exists())

@@ -1,19 +1,22 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Olive;
 
 namespace OliveGenerator
 {
-    class ParametersParser
+    class ParametersParser : ParametersParserBase
     {
-        static string[] Args;
+        ParametersParser(ContextBase context, string[] args) : base(context, args) { }
 
-        internal static bool Start(string[] args)
+        public static ParametersParser Current { get; private set; }
+
+        public static void SetArgs(string[] args) => Current = new ParametersParser(Context.Current, args);
+
+        public override bool Start()
         {
-            Args = args;
-            Context.Source = Environment.CurrentDirectory.AsDirectory();
-            Context.MSharp = Context.Source.SolutionDirectory().GetSubDirectory("M#");
+            base.Start();
+
+            Context.Current.MSharp = Context.Current.Source.SolutionDirectory().GetSubDirectory("M#");
 
             if (Param("assembly").IsEmpty() || Param("dataEndpoint").IsEmpty())
             {
@@ -21,32 +24,17 @@ namespace OliveGenerator
                 return false;
             }
 
-            return Param("assembly").HasValue() || Param("dataEndpoint").HasValue();
+            return true;
         }
 
-        public static void LoadParameters()
+        public override void LoadParameters(string defaultName)
         {
-            Context.EndpointName = Param("dataEndpoint");
-            Context.Output = Param("out")?.AsDirectory();
+            // Several endpoints may be listed, so that one invocation can generate all of them.
+            // A CI loop calling this once per endpoint pays the process start, the load context
+            // handover and the assembly load again every time.
+            Context.Current.EndpointNames = ParamList("dataEndpoint");
 
-            if (Context.Output?.Exists == false)
-                throw new Exception("The specified output folder does not exist.");
-
-            Context.NugetServer = Param("push");
-            Context.NugetApiKey = Param("apiKey");
-
-            Context.AssemblyFile = Context.Source
-                .GetFile(Param("assembly").Or("Website.dll"))
-                .ExistsOrThrow();
-
-            Context.TempPath = Path.GetTempPath().AsDirectory()
-                .GetOrCreateSubDirectory("dataendpoint-generator").CreateSubdirectory(Guid.NewGuid().ToString());
-        }
-
-        static string Param(string key)
-        {
-            var decorateKey = "/" + key + ":";
-            return Args.FirstOrDefault(x => x.StartsWith(decorateKey))?.TrimStart(decorateKey).OrNullIfEmpty();
+            base.LoadParameters(defaultName ?? "dataendpoint-generator");
         }
     }
 }
