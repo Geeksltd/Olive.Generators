@@ -16,10 +16,10 @@
     <NoWarn>1701;1702;1705;NU1701</NoWarn>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>accelerate-package-restore</ToolCommandName>
-    <Version>10.4.0</Version>
+    <Version>10.4.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Olive" Version="10.2.4" />
+    <PackageReference Include="Olive" Version="10.2.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedNew\Log.cs" Link="Log.cs" />

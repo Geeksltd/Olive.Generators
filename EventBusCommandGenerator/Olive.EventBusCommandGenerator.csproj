@@ -14,7 +14,7 @@
 		<PackageProjectUrl>http://licensing.msharp.co.uk/Images/OliveComponent.png</PackageProjectUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackAsTool>true</PackAsTool>
-		<Version>10.4.0</Version>
+		<Version>10.4.1</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702;1705;NU1701</NoWarn>
@@ -26,9 +26,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="NuGet.Packaging" Version="7.9.0" />
-		<PackageReference Include="Olive" Version="10.2.4" />
-		<PackageReference Include="Olive.Entities" Version="10.4.3" />
-		<PackageReference Include="Olive.Entities.Data" Version="10.7.3" />
+		<PackageReference Include="Olive" Version="10.2.5" />
+		<PackageReference Include="Olive.Entities" Version="10.4.4" />
+		<PackageReference Include="Olive.Entities.Data" Version="10.11.0" />
 		<PackageReference Include="Olive.EventBus" Version="10.2.0" />
 	</ItemGroup>
 	<Import Project="..\DTO\DTO.projitems" Label="Shared" />
