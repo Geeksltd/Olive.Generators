@@ -28,6 +28,6 @@
        define OliveGenerator.Program, Context and Log with identical full names in three
        assemblies. The harness drives the tools as processes and needs none of it. -->
   <ItemGroup>
-    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.13" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.14" />
   </ItemGroup>
 </Project>
