@@ -191,6 +191,11 @@ namespace OliveGenerator
                     mSharpCreator.Generate();
                     creators.Add(mSharpCreator);
                     nugets.Add(new NugetCreator(mSharpCreator).PrepareNuspec());
+
+                    var subscriptionCreator = new SubscriptionProjectCreator();
+                    subscriptionCreator.Generate();
+                    creators.Add(subscriptionCreator);
+                    nugets.Add(new SubscriptionNugetCreator(subscriptionCreator).PrepareNuspec());
                 }
 
                 reported.Note(creators.Count + " projects");

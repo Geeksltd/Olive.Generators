@@ -12,7 +12,7 @@ dotnet tool install -g generate-data-endpoint-proxy
 
 | Command      | Description |
 | ----------- | ----------- |
-| C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /out:"C:\...\PrivatePackages"` | Generate the nuget packages locally [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy) |
+| C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /out:"C:\...\PrivatePackages"` | Generate three nuget packages locally (Website proxy, `.MSharp`, `.Subscription`) [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy) |
 | C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /push:http://my-nuget-server.com/nuget /apiKey:12345`  | Generate and publish [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy)        |
 | C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:"MyNamespace.OrdersEndpoint;MyNamespace.CustomersEndpoint" /out:"C:\...\PrivatePackages"` | Generate several at once. Prefer this in CI: one run loads the target application once and builds every generated project in a single MSBuild invocation, where a loop of single runs repeats all of that per endpoint. |
 
