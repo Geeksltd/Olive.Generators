@@ -1,6 +1,8 @@
 using Olive;
+using Olive.Entities;
 using Olive.Entities.Replication;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace OliveGenerator
@@ -65,19 +67,34 @@ namespace OliveGenerator
             return line;
         }
 
-        static string ToMemberType(Type type)
+        /// <summary>
+        /// Writes a type as C# that compiles in the subscription project, which references nothing of
+        /// the publisher. An entity is written as the definition interface of the exposed type which
+        /// replicates it, and as <c>IEntity</c> when this endpoint doesn't expose it. A generic type is
+        /// written with its arguments, never as its reflection name, which C# can't parse.
+        /// </summary>
+        string ToMemberType(Type type)
         {
             if (type == null) return "object";
 
-            var nullable = false;
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            var underlying = Nullable.GetUnderlyingType(type);
+            if (underlying != null) return ToMemberType(underlying) + "?";
+
+            if (type.IsArray) return ToMemberType(type.GetElementType()) + "[]";
+
+            if (typeof(IEntity).IsAssignableFrom(type) && !type.IsInterface)
+                return Context.Current.ExposedTypes.FirstOrDefault(x => x.DomainType == type) is ExposedType exposed
+                    ? "I" + exposed.GetType().Name
+                    : nameof(IEntity);
+
+            if (type.IsGenericType)
             {
-                nullable = true;
-                type = type.GetGenericArguments()[0];
+                var definition = type.GetGenericTypeDefinition().FullName;
+                definition = definition.Remove(definition.IndexOf('`')).Replace('+', '.');
+                return definition + "<" + type.GetGenericArguments().Select(ToMemberType).ToString(", ") + ">";
             }
 
-            var name = PrimitiveOrTypeName(type);
-            return nullable ? name + "?" : name;
+            return PrimitiveOrTypeName(type);
         }
 
         static string PrimitiveOrTypeName(Type type)
@@ -101,9 +118,6 @@ namespace OliveGenerator
             if (type == typeof(DateTime)) return "DateTime";
             if (type == typeof(DateTimeOffset)) return "DateTimeOffset";
             if (type == typeof(TimeSpan)) return "TimeSpan";
-            if (type.IsEnum) return type.FullName.Replace('+', '.');
-            if (type.IsArray) return PrimitiveOrTypeName(type.GetElementType()) + "[]";
-
             return type.FullName?.Replace('+', '.') ?? type.Name;
         }
     }
