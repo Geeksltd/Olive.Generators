@@ -6,6 +6,9 @@ on:
 
 jobs:
  build:
+    permissions:
+      contents: write
+      id-token: write
     strategy:
       matrix:
         configuration: [Release]
@@ -14,24 +17,42 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-   
+
+    - name: Authenticate to NuGet using trusted publishing
+      uses: NuGet/login@v1
+      id: nuget-login-1
+      with:
+        user: GeeksLtd
+
     - name: Publish Olive Api Proxy Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
         PROJECT_FILE_PATH: ApiProxyGenerator/Olive.ApiProxyGenerator.csproj
         PACKAGE_NAME: generate-api-proxy
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-   
+        NUGET_KEY: ${{ steps.nuget-login-1.outputs.NUGET_API_KEY }}
+
+    - name: Authenticate to NuGet using trusted publishing
+      uses: NuGet/login@v1
+      id: nuget-login-2
+      with:
+        user: GeeksLtd
+
     - name: Publish Olive Data End Point Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
         PROJECT_FILE_PATH: DataEndPointGenerator/Olive.DataEndpointGenerator.csproj
         PACKAGE_NAME: generate-data-endpoint-proxy
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-   
+        NUGET_KEY: ${{ steps.nuget-login-2.outputs.NUGET_API_KEY }}
+
+    - name: Authenticate to NuGet using trusted publishing
+      uses: NuGet/login@v1
+      id: nuget-login-3
+      with:
+        user: GeeksLtd
+
     - name: Publish Olive EventBus Command Generator Package
       uses: Geeksltd/publish-nuget@v3.8.5
       with:
         PROJECT_FILE_PATH: EventBusCommandGenerator/Olive.EventBusCommandGenerator.csproj
         PACKAGE_NAME: generate-eventbus-command-proxy
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        NUGET_KEY: ${{ steps.nuget-login-3.outputs.NUGET_API_KEY }}
