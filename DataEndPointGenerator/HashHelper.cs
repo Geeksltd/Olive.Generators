@@ -18,7 +18,7 @@ namespace OliveGenerator
         /// consumers need. Every endpoint is republished once as a result, and only then: a release
         /// that leaves the generated packages as they were must not.
         /// </summary>
-        const int OutputVersion = 1;
+        const int OutputVersion = 2;
 
         /// <summary>
         /// Hashes everything which the endpoint and its M# models are generated from, so that any
@@ -64,7 +64,9 @@ namespace OliveGenerator
         /// </summary>
         static string BuildInputs()
         {
-            var packages = EndpointProjectCreator.Packages.Concat(MSharpProjectCreator.Packages)
+            var packages = EndpointProjectCreator.Packages
+                .Concat(MSharpProjectCreator.Packages)
+                .Concat(SubscriptionProjectCreator.Packages)
                 .Select(x => x.ForHash).ToString(",");
 
             string framework;
