@@ -53,6 +53,7 @@
         public static PackageReference Olive_Microservices => For(nameof(Olive_Microservices), fallback: "10.2.0");
         public static PackageReference Olive_Entities_Data_Replication => For(nameof(Olive_Entities_Data_Replication), fallback: "10.2.0");
         public static PackageReference Olive_Entities_Data_Replication_QueueUrlProvider => For(nameof(Olive_Entities_Data_Replication_QueueUrlProvider), fallback: "10.2.0");
+        public static PackageReference Olive_Entities_Data_EF_Replication => For(nameof(Olive_Entities_Data_EF_Replication), fallback: "10.2.6");
 
         /// <summary>
         /// Takes the version from the microservice being generated from, so the generated package
