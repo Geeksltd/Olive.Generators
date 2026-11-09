@@ -6,8 +6,10 @@ This repository provides a list of command line utilities for accelerating app d
 
 ## generate-data-endpoint-proxy
 
+Current package version: **10.4.7** (CI runs `dotnet tool update generate-data-endpoint-proxy -g` before replication builds).
+
 ```bat
-dotnet tool install -g generate-data-endpoint-proxy
+dotnet tool install -g generate-data-endpoint-proxy --version 10.4.7
 ```
 
 | Command      | Description |
@@ -18,9 +20,11 @@ The **`.Subscription`** package (non-M# consumers, AMP #182377) now includes:
 
 - `Definitions.I*` interfaces (CareServe / contracts)
 - Concrete `Entity<T>` types in the publisher namespace (EF import)
-- `{Endpoint}Ef` — `Olive.Entities.EF.Replication.DestinationEndpoint` with the same `Register(...)` as the Website proxy, plus `IsQueueConfigured` and `SubscribeAsync(DbContext, Assembly)`
+- `{Endpoint}Ef` — `Olive.Entities.EF.Replication.DestinationEndpoint` with the same `Register(...)` as the Website proxy, plus `DomainAssembly`, `ConfigureModel(ModelBuilder)`, `IsQueueConfigured`, and `SubscribeAsync(DbContext, Assembly, bool isRefreshMessageRequired = false)`
 
-Consumers still register AWS/IO EventBus, map replication tables on their `DbContext`, and call `SubscribeAsync` per publisher endpoint they consume. The Website proxy package remains for M# / `IDatabase` consumers unchanged.
+Consumers still register AWS/IO EventBus and call subscribe per publisher endpoint. EF table mapping can use `{Endpoint}Ef.ConfigureModel` when on a regenerated package, or `ModelBuilder.ConfigureReplicationEntity(s)` from **Olive.Entities.Data.EF.Replication** (fallback **10.2.7** in generated `.Subscription` projects when the publisher does not reference that package). The Website proxy package remains for M# / `IDatabase` consumers unchanged.
+
+**Republish behaviour:** bump the tool package version (e.g. **10.4.7**) so CI installs it via `dotnet tool update`. Bump `HashHelper.OutputVersion` only when every endpoint must republish immediately; template-only improvements should rely on the normal endpoint hash so existing publishers are not forced to rebuild.
 | C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:MyNamespace.OrdersEndpoint /push:http://my-nuget-server.com/nuget /apiKey:12345`  | Generate and publish [learn more](https://geeksltd.github.io/Olive/#/Api/Replication?id=generating-a-proxy)        |
 | C:\MyProject\Website\bin\debug\net8.0\> `generate-data-endpoint-proxy /assembly:"website.dll" /dataEndpoint:"MyNamespace.OrdersEndpoint;MyNamespace.CustomersEndpoint" /out:"C:\...\PrivatePackages"` | Generate several at once. Prefer this in CI: one run loads the target application once and builds every generated project in a single MSBuild invocation, where a loop of single runs repeats all of that per endpoint. |
 

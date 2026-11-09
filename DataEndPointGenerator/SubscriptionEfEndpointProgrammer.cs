@@ -1,4 +1,5 @@
 using Olive;
+using System.Linq;
 using System.Text;
 
 namespace OliveGenerator
@@ -40,16 +41,25 @@ namespace OliveGenerator
             r.AppendLine($"public {className}(Assembly domainAssembly, DbContext dbContext) : base(domainAssembly, dbContext)");
             r.AppendLine("{");
 
-            foreach (var item in Context.Current.ExposedTypes)
+            var exposedTypes = Context.Current.ExposedTypes.ToList();
+            var firstEntityName = exposedTypes.First().GetType().Name;
+
+            foreach (var item in exposedTypes)
                 r.AppendLine($"    Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
 
             r.AppendLine("}");
             r.AppendLine();
+            r.AppendLine($"public static Assembly DomainAssembly => typeof({firstEntityName}).Assembly;");
+            r.AppendLine();
+            r.AppendLine("public static void ConfigureModel(ModelBuilder modelBuilder) =>");
+            r.AppendLine("    modelBuilder.ConfigureReplicationEntities("
+                + string.Join(", ", exposedTypes.Select(x => "typeof(" + x.GetType().Name + ")")) + ");");
+            r.AppendLine();
             r.AppendLine("public static bool IsQueueConfigured =>");
             r.AppendLine("    ResolveQueueUrl().HasValue() && !ResolveQueueUrl().StartsWith(\"FOR_DEVELOPMENT_ONLY_\", StringComparison.Ordinal);");
             r.AppendLine();
-            r.AppendLine("public static Task SubscribeAsync(DbContext dbContext, Assembly domainAssembly) =>");
-            r.AppendLine($"    new {className}(domainAssembly, dbContext).Subscribe();");
+            r.AppendLine("public static Task SubscribeAsync(DbContext dbContext, Assembly domainAssembly, bool isRefreshMessageRequired = false) =>");
+            r.AppendLine($"    new {className}(domainAssembly, dbContext).Subscribe(isRefreshMessageRequired);");
             r.AppendLine("}");
             r.AppendLine("}");
 
